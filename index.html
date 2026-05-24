@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<title>Slumber — Sleep Tracker</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--color-background-tertiary,#f5f4f0);color:var(--color-text-primary,#1a1a1a);min-height:100vh;font-size:15px}
+:root{--teal:#1D9E75;--teal-light:#E1F5EE;--teal-mid:#5DCAA5;--amber:#BA7517;--amber-light:#FAEEDA;--amber-mid:#EF9F27;--lavender:#EEEDFE;--lavender-mid:#7F77DD;--coral:#D85A30;--coral-light:#FAECE7;--card-bg:#ffffff;--muted:#6b6b6b}
+.app{max-width:420px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:#f5f4f0}
+.screen{flex:1;display:none;flex-direction:column;padding-bottom:80px}
+.screen.active{display:flex}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#fff;border-top:0.5px solid rgba(0,0,0,0.12);display:flex;justify-content:space-around;padding:8px 0 12px;z-index:100}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 12px;border-radius:12px;color:#6b6b6b;font-family:'DM Sans',sans-serif;font-size:10px;transition:color 0.2s}
+.nav-btn.active{color:var(--teal)}
+.nav-btn i{font-size:22px}
+.screen-header{padding:20px 20px 12px;display:flex;justify-content:space-between;align-items:flex-start}
+.greeting{font-family:'DM Serif Display',serif;font-size:26px;line-height:1.2;color:#1a1a1a}
+.greeting span{color:var(--teal)}
+.date-pill{font-size:12px;background:var(--teal-light);color:#085041;padding:4px 10px;border-radius:20px;font-weight:500;margin-top:6px;display:inline-block}
+.card{background:var(--card-bg);border-radius:16px;border:0.5px solid rgba(0,0,0,0.1);padding:16px;margin:0 16px 12px}
+.card-label{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:8px}
+.energy-section{display:flex;align-items:center;gap:20px}
+.ring-wrap{position:relative;width:100px;height:100px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-size:22px;font-weight:500;line-height:1}
+.ring-label{font-size:10px;color:var(--muted)}
+.energy-details{flex:1}
+.e-row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px}
+.e-key{color:var(--muted)}
+.e-val{font-weight:500}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px}
+.stat-card{background:var(--card-bg);border:0.5px solid rgba(0,0,0,0.1);border-radius:14px;padding:14px}
+.stat-num{font-family:'DM Serif Display',serif;font-size:28px;color:var(--teal)}
+.stat-unit{font-size:12px;color:var(--muted)}
+.stat-name{font-size:12px;color:var(--muted);margin-top:2px}
+.log-header{padding:20px 20px 8px}
+.section-title{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;padding:8px 20px 6px}
+.log-group{margin:0 16px 12px;background:var(--card-bg);border-radius:16px;border:0.5px solid rgba(0,0,0,0.1);overflow:hidden}
+.log-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:0.5px solid rgba(0,0,0,0.08)}
+.log-item:last-child{border-bottom:none}
+.log-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.log-info{flex:1}
+.log-name{font-size:14px;font-weight:500}
+.log-time{font-size:12px;color:var(--muted)}
+.log-effect{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.effect-neg{background:var(--coral-light);color:#4A1B0C}
+.effect-pos{background:var(--teal-light);color:#04342C}
+.effect-neu{background:var(--amber-light);color:#412402}
+.fab{position:fixed;bottom:90px;right:calc(50% - 210px + 16px);width:54px;height:54px;border-radius:50%;background:var(--teal);border:none;color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(29,158,117,0.35);z-index:99;transition:transform 0.15s}
+.fab:active{transform:scale(0.95)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:flex;align-items:flex-end;justify-content:center;max-width:420px;left:50%;transform:translateX(-50%)}
+.modal{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-height:80vh;overflow-y:auto}
+.modal-title{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:20px}
+.modal-section{margin-bottom:20px}
+.modal-label{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:10px}
+.chip-group{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 14px;border-radius:20px;border:1px solid rgba(0,0,0,0.15);background:#f9f9f9;font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif;color:#1a1a1a}
+.chip.selected{background:var(--teal);color:#fff;border-color:var(--teal)}
+.time-input{width:100%;padding:12px;border:1px solid rgba(0,0,0,0.15);border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;background:#f9f9f9;color:#1a1a1a}
+.amount-row{display:flex;align-items:center;gap:12px;margin-top:10px}
+.amount-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(0,0,0,0.15);background:#f9f9f9;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1a1a1a}
+.amount-val{font-size:18px;font-weight:500;min-width:40px;text-align:center}
+.save-btn{width:100%;padding:14px;background:var(--teal);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;transition:opacity 0.15s}
+.save-btn:active{opacity:0.85}
+.close-btn{position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted)}
+.history-chart-wrap{margin:0 16px 12px;background:var(--card-bg);border-radius:16px;border:0.5px solid rgba(0,0,0,0.1);padding:16px}
+.chart-container{position:relative;height:180px;width:100%}
+.history-list{margin:0 16px 12px}
+.history-day{background:var(--card-bg);border-radius:14px;border:0.5px solid rgba(0,0,0,0.1);padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:14px}
+.day-bar-wrap{width:6px;height:48px;background:#f0f0f0;border-radius:3px;overflow:hidden;flex-shrink:0}
+.day-bar{background:var(--teal-mid);border-radius:3px;width:100%;transition:height 0.4s}
+.day-info{flex:1}
+.day-label{font-size:13px;font-weight:500}
+.day-sub{font-size:12px;color:var(--muted)}
+.day-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
+.badge-good{background:var(--teal-light);color:#04342C}
+.badge-low{background:var(--coral-light);color:#4A1B0C}
+.badge-high{background:var(--amber-light);color:#412402}
+.nap-hero{margin:0 16px 12px;background:var(--teal);border-radius:20px;padding:24px;color:#fff}
+.nap-hero-label{font-size:12px;opacity:0.75;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px}
+.nap-hero-time{font-family:'DM Serif Display',serif;font-size:48px;line-height:1}
+.nap-hero-sub{font-size:13px;opacity:0.85;margin-top:8px}
+.nap-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px}
+.nap-option{background:var(--card-bg);border:0.5px solid rgba(0,0,0,0.1);border-radius:14px;padding:16px;cursor:pointer;transition:border-color 0.15s}
+.nap-option.selected{border:2px solid var(--teal)}
+.nap-opt-time{font-family:'DM Serif Display',serif;font-size:24px;color:var(--teal)}
+.nap-opt-label{font-size:13px;font-weight:500;margin-top:2px}
+.nap-opt-desc{font-size:11px;color:var(--muted);margin-top:4px}
+.science-box{margin:0 16px 12px;background:var(--lavender);border-radius:14px;padding:16px;border:0.5px solid rgba(127,119,221,0.3)}
+.science-title{font-size:13px;font-weight:500;color:#3C3489;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.science-body{font-size:12px;color:#534AB7;line-height:1.6}
+.insight-card{margin:0 16px 12px;border-radius:16px;padding:16px;border:0.5px solid transparent}
+.insight-card.info{background:var(--teal-light);border-color:rgba(29,158,117,0.2)}
+.insight-card.warn{background:var(--amber-light);border-color:rgba(186,117,23,0.2)}
+.insight-card.alert{background:var(--coral-light);border-color:rgba(216,90,48,0.2)}
+.insight-icon{font-size:24px;margin-bottom:8px}
+.insight-title{font-size:14px;font-weight:500;margin-bottom:6px}
+.insight-title.info{color:#04342C}
+.insight-title.warn{color:#412402}
+.insight-title.alert{color:#4A1B0C}
+.insight-body{font-size:13px;line-height:1.6}
+.insight-body.info{color:#085041}
+.insight-body.warn{color:#633806}
+.insight-body.alert{color:#4A1B0C}
+.caffeine-bar-wrap{margin:0 16px 12px;background:var(--card-bg);border-radius:16px;border:0.5px solid rgba(0,0,0,0.1);padding:16px}
+.caf-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.caf-name{font-size:13px;color:var(--muted);width:70px;flex-shrink:0}
+.caf-bar-bg{flex:1;height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden}
+.caf-bar{height:100%;border-radius:4px;background:var(--amber-mid);transition:width 0.5s}
+.caf-val{font-size:12px;font-weight:500;width:36px;text-align:right}
+.sleep-input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sleep-field label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="screen active" id="screen-home">
+    <div class="screen-header">
+      <div>
+        <div class="greeting">Good <span id="time-greet">morning</span> 🌿</div>
+        <div class="date-pill" id="today-date"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Energy level today</div>
+      <div class="energy-section">
+        <div class="ring-wrap">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#E1F5EE" stroke-width="10"/>
+            <circle id="energy-ring" cx="50" cy="50" r="40" fill="none" stroke="#1D9E75" stroke-width="10" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="75.36"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-pct" id="energy-pct">70%</div>
+            <div class="ring-label">energy</div>
+          </div>
+        </div>
+        <div class="energy-details">
+          <div class="e-row"><span class="e-key">Last night</span><span class="e-val" id="dash-sleep">6h 30m</span></div>
+          <div class="e-row"><span class="e-key">Avg (7d)</span><span class="e-val" id="dash-avg">7h 10m</span></div>
+          <div class="e-row"><span class="e-key">Sleep debt</span><span class="e-val" id="dash-debt" style="color:#D85A30">–30m</span></div>
+          <div class="e-row"><span class="e-key">Nap needed</span><span class="e-val" id="dash-nap" style="color:#1D9E75">20 min</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-caffeine">0</div>
+        <div class="stat-unit">mg caffeine</div>
+        <div class="stat-name">today so far</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-items">0</div>
+        <div class="stat-unit">items logged</div>
+        <div class="stat-name">today</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Today's log</div>
+      <div id="dash-log-list" style="font-size:13px;color:#6b6b6b">No entries yet — tap + to log something.</div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-log">
+    <div class="log-header">
+      <div style="font-family:'DM Serif Display',serif;font-size:26px">Daily log</div>
+      <div style="font-size:13px;color:#6b6b6b;margin-top:4px">Track what affects your sleep</div>
+    </div>
+    <div class="section-title">Today's entries</div>
+    <div id="log-entries-container">
+      <div style="margin:0 16px;color:#6b6b6b;font-size:13px">Nothing logged yet. Tap + to add an entry.</div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-history">
+    <div class="screen-header">
+      <div>
+        <div class="greeting">Sleep history</div>
+        <div style="font-size:13px;color:#6b6b6b;margin-top:4px">Past 7 days</div>
+      </div>
+    </div>
+    <div class="history-chart-wrap">
+      <div class="card-label">Hours slept per night</div>
+      <div class="chart-container">
+        <canvas id="sleepChart" role="img" aria-label="Bar chart of sleep hours over the past 7 days">Sleep history chart</canvas>
+      </div>
+    </div>
+    <div class="section-title">Daily breakdown</div>
+    <div id="history-list" class="history-list"></div>
+  </div>
+
+  <div class="screen" id="screen-nap">
+    <div class="screen-header">
+      <div>
+        <div class="greeting">Nap advisor</div>
+        <div style="font-size:13px;color:#6b6b6b;margin-top:4px">Find your ideal nap length</div>
+      </div>
+    </div>
+    <div class="nap-hero">
+      <div class="nap-hero-label">Recommended nap</div>
+      <div class="nap-hero-time" id="nap-rec-time">20 min</div>
+      <div class="nap-hero-sub" id="nap-rec-sub">Boosts alertness without grogginess</div>
+    </div>
+    <div class="section-title" style="padding-top:4px">Choose a nap type</div>
+    <div class="nap-options">
+      <div class="nap-option selected" onclick="selectNap(this,'10–20 min','Boosts alertness fast')">
+        <div class="nap-opt-time">10–20m</div>
+        <div class="nap-opt-label">Power nap</div>
+        <div class="nap-opt-desc">Alertness boost, no grogginess</div>
+      </div>
+      <div class="nap-option" onclick="selectNap(this,'20–30 min','Deeper recovery, slight inertia')">
+        <div class="nap-opt-time">20–30m</div>
+        <div class="nap-opt-label">Full rest</div>
+        <div class="nap-opt-desc">Deeper recovery, slight inertia</div>
+      </div>
+      <div class="nap-option" onclick="selectNap(this,'90 min','Complete sleep cycle, wake refreshed')">
+        <div class="nap-opt-time">90m</div>
+        <div class="nap-opt-label">Full cycle</div>
+        <div class="nap-opt-desc">Includes REM, wake feeling fresh</div>
+      </div>
+      <div class="nap-option" onclick="selectNap(this,'No nap','Eyes closed, mind quiet')">
+        <div class="nap-opt-time">0m</div>
+        <div class="nap-opt-label">Rest only</div>
+        <div class="nap-opt-desc">Eyes closed, mind quiet</div>
+      </div>
+    </div>
+    <div class="science-box">
+      <div class="science-title"><i class="ti ti-flask" aria-hidden="true"></i> Why this works</div>
+      <div class="science-body" id="science-text">A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins, so there's no sleep inertia — just sharpened focus. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake (the "caffeine nap" technique).</div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-insights">
+    <div class="screen-header">
+      <div>
+        <div class="greeting">Insights</div>
+        <div style="font-size:13px;color:#6b6b6b;margin-top:4px">Personalised patterns</div>
+      </div>
+    </div>
+    <div id="insights-container"></div>
+    <div class="caffeine-bar-wrap">
+      <div class="card-label" style="margin-bottom:12px">Caffeine in your system (est.)</div>
+      <div id="caffeine-bars"></div>
+      <div style="font-size:11px;color:#6b6b6b;margin-top:8px">Caffeine half-life ~5–6 hours. Amounts shown are approximate.</div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="goTo('home',this)"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-btn" onclick="goTo('log',this)"><i class="ti ti-clipboard-list"></i><span>Log</span></button>
+    <button class="nav-btn" onclick="goTo('history',this)"><i class="ti ti-chart-bar"></i><span>History</span></button>
+    <button class="nav-btn" onclick="goTo('nap',this)"><i class="ti ti-moon"></i><span>Nap</span></button>
+    <button class="nav-btn" onclick="goTo('insights',this)"><i class="ti ti-bulb"></i><span>Insights</span></button>
+  </nav>
+
+  <button class="fab" id="fab-btn" aria-label="Add entry" onclick="openModal()"><i class="ti ti-plus"></i></button>
+
+  <div class="modal-overlay hidden" id="modal-overlay" onclick="closeModalIfBg(event)">
+    <div class="modal" style="position:relative">
+      <button class="close-btn" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      <div class="modal-title">Add entry</div>
+      <div class="modal-section">
+        <div class="modal-label">Type</div>
+        <div class="chip-group">
+          <div class="chip selected" onclick="selectType(this,'consume')">Consumed</div>
+          <div class="chip" onclick="selectType(this,'sleep')">Sleep</div>
+        </div>
+      </div>
+      <div id="consume-fields">
+        <div class="modal-section">
+          <div class="modal-label">What did you have?</div>
+          <div class="chip-group" id="item-chips">
+            <div class="chip" onclick="selectItem(this,'Coffee')">☕ Coffee</div>
+            <div class="chip" onclick="selectItem(this,'Tea')">🍵 Tea</div>
+            <div class="chip" onclick="selectItem(this,'Energy drink')">⚡ Energy drink</div>
+            <div class="chip" onclick="selectItem(this,'Alcohol')">🍺 Alcohol</div>
+            <div class="chip" onclick="selectItem(this,'Heavy meal')">🍲 Heavy meal</div>
+            <div class="chip" onclick="selectItem(this,'Light meal')">🥗 Light meal</div>
+            <div class="chip" onclick="selectItem(this,'Water')">💧 Water</div>
+            <div class="chip" onclick="selectItem(this,'Melatonin')">💊 Melatonin</div>
+          </div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-label">Quantity</div>
+          <div class="amount-row">
+            <button class="amount-btn" onclick="changeAmt(-1)">−</button>
+            <span class="amount-val" id="amt-display">1</span>
+            <button class="amount-btn" onclick="changeAmt(1)">+</button>
+            <span style="font-size:13px;color:#6b6b6b">serving(s)</span>
+          </div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-label">Time</div>
+          <input type="time" class="time-input" id="consume-time">
+        </div>
+      </div>
+      <div id="sleep-fields" class="hidden">
+        <div class="modal-section">
+          <div class="modal-label">Sleep window</div>
+          <div class="sleep-input-row">
+            <div class="sleep-field">
+              <label>Bedtime</label>
+              <input type="time" class="time-input" id="bed-time">
+            </div>
+            <div class="sleep-field">
+              <label>Wake time</label>
+              <input type="time" class="time-input" id="wake-time">
+            </div>
+          </div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-label">Quality</div>
+          <div class="chip-group" id="quality-chips">
+            <div class="chip" onclick="selectQuality(this,'Restless')">😴 Restless</div>
+            <div class="chip" onclick="selectQuality(this,'Okay')">😐 Okay</div>
+            <div class="chip selected" onclick="selectQuality(this,'Good')">😊 Good</div>
+            <div class="chip" onclick="selectQuality(this,'Great')">🌟 Great</div>
+          </div>
+        </div>
+      </div>
+      <button class="save-btn" onclick="saveEntry()">Save entry</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const ITEMS = {
+  'Coffee':{caf:95,effect:'neg',label:'Delays sleep ~1h'},
+  'Tea':{caf:40,effect:'neg',label:'Mild stimulant'},
+  'Energy drink':{caf:160,effect:'neg',label:'Disrupts deep sleep'},
+  'Alcohol':{caf:0,effect:'neg',label:'Fragments REM'},
+  'Heavy meal':{caf:0,effect:'neg',label:'May cause discomfort'},
+  'Light meal':{caf:0,effect:'pos',label:'Stable energy'},
+  'Water':{caf:0,effect:'pos',label:'Aids recovery'},
+  'Melatonin':{caf:0,effect:'pos',label:'Promotes sleep onset'},
+};
+
+let state = {
+  todayLog:[],
+  sleepHistory:[
+    {date:'Mon',hours:7.5,quality:'Good'},
+    {date:'Tue',hours:6.0,quality:'Okay'},
+    {date:'Wed',hours:8.0,quality:'Great'},
+    {date:'Thu',hours:5.5,quality:'Restless'},
+    {date:'Fri',hours:7.0,quality:'Good'},
+    {date:'Sat',hours:7.5,quality:'Good'},
+    {date:'Sun',hours:6.5,quality:'Okay'},
+  ],
+  selectedItem:null,
+  selectedType:'consume',
+  selectedQuality:'Good',
+  amount:1,
+};
+
+let sleepChartInstance = null;
+
+function goTo(name, btn) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const fab = document.getElementById('fab-btn');
+  fab.style.display = (name==='log'||name==='home') ? 'flex' : 'none';
+  if (name==='history') renderHistory();
+  if (name==='insights') renderInsights();
+  if (name==='nap') updateNapRec();
+  if (name==='home') updateDashboard();
+}
+
+function setGreet() {
+  const h = new Date().getHours();
+  document.getElementById('time-greet').textContent = h<12?'morning':h<17?'afternoon':'evening';
+  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  const t = new Date(); t.setMinutes(0,0,0);
+  document.getElementById('consume-time').value = t.toTimeString().slice(0,5);
+  const bt = new Date(t); bt.setHours(bt.getHours()-8);
+  document.getElementById('bed-time').value = bt.toTimeString().slice(0,5);
+  document.getElementById('wake-time').value = t.toTimeString().slice(0,5);
+}
+
+function calcEnergy() {
+  const avg = state.sleepHistory.reduce((a,d)=>a+d.hours,0)/state.sleepHistory.length;
+  const last = state.sleepHistory[state.sleepHistory.length-1].hours;
+  const pct = Math.min(100,Math.round((last/8)*100));
+  const debt = Math.round((last-8)*60);
+  const napMins = debt<0?Math.min(90,Math.abs(debt)):0;
+  return {avg,last,pct,debt,napMins};
+}
+
+function fmtH(h) {
+  const hr=Math.floor(h); const min=Math.round((h-hr)*60);
+  return min>0?`${hr}h ${min}m`:`${hr}h`;
+}
+
+function updateDashboard() {
+  const {avg,last,pct,debt,napMins}=calcEnergy();
+  document.getElementById('energy-ring').setAttribute('stroke-dashoffset',(251.2*(1-pct/100)).toFixed(1));
+  document.getElementById('energy-pct').textContent=pct+'%';
+  document.getElementById('dash-sleep').textContent=fmtH(last);
+  document.getElementById('dash-avg').textContent=fmtH(avg);
+  const debtEl=document.getElementById('dash-debt');
+  debtEl.textContent=debt>=0?`+${debt}m`:`${debt}m`;
+  debtEl.style.color=debt>=0?'#1D9E75':'#D85A30';
+  document.getElementById('dash-nap').textContent=napMins>0?`${napMins} min`:'None needed';
+  const caf=state.todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  document.getElementById('stat-caffeine').textContent=caf;
+  document.getElementById('stat-items').textContent=state.todayLog.length;
+  const list=document.getElementById('dash-log-list');
+  if(!state.todayLog.length){list.innerHTML='<span style="color:#6b6b6b">No entries yet — tap + to log something.</span>';return;}
+  list.innerHTML=state.todayLog.slice(-3).map(e=>{
+    const icon=e.type==='sleep'?'😴':(ITEMS[e.item]?.effect==='pos'?'✅':'⚠️');
+    const label=e.type==='sleep'?`Slept ${fmtH(e.hours)} (${e.quality})`:`${e.item} ×${e.amount} at ${e.time}`;
+    return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,0.08)"><span>${icon}</span><span>${label}</span></div>`;
+  }).join('');
+}
+
+function renderLogScreen() {
+  const container=document.getElementById('log-entries-container');
+  if(!state.todayLog.length){container.innerHTML='<div style="margin:0 16px;color:#6b6b6b;font-size:13px">Nothing logged yet. Tap + to add an entry.</div>';return;}
+  const groups={consume:[],sleep:[]};
+  state.todayLog.forEach(e=>groups[e.type].push(e));
+  let html='';
+  if(groups.sleep.length){
+    html+='<div class="section-title">Sleep</div><div class="log-group">';
+    groups.sleep.forEach(e=>{html+=`<div class="log-item"><div class="log-icon" style="background:#E1F5EE">😴</div><div class="log-info"><div class="log-name">Slept ${fmtH(e.hours)}</div><div class="log-time">${e.bedtime} → ${e.waketime} · ${e.quality}</div></div><span class="log-effect effect-pos">Sleep</span></div>`;});
+    html+='</div>';
+  }
+  if(groups.consume.length){
+    html+='<div class="section-title">Consumed</div><div class="log-group">';
+    const icons={'Coffee':'☕','Tea':'🍵','Energy drink':'⚡','Alcohol':'🍺','Heavy meal':'🍲','Light meal':'🥗','Water':'💧','Melatonin':'💊'};
+    groups.consume.forEach(e=>{
+      const info=ITEMS[e.item]||{};
+      const cls=info.effect==='pos'?'effect-pos':info.effect==='neg'?'effect-neg':'effect-neu';
+      html+=`<div class="log-item"><div class="log-icon" style="background:#E1F5EE">${icons[e.item]||'🍽'}</div><div class="log-info"><div class="log-name">${e.item} ×${e.amount}</div><div class="log-time">${e.time} · ${info.label||''}</div></div><span class="log-effect ${cls}">${info.caf?info.caf+'mg':info.effect==='pos'?'Helpful':'Note'}</span></div>`;
+    });
+    html+='</div>';
+  }
+  container.innerHTML=html;
+}
+
+function renderHistory() {
+  const data=state.sleepHistory;
+  if(sleepChartInstance){sleepChartInstance.destroy();}
+  sleepChartInstance=new Chart(document.getElementById('sleepChart').getContext('2d'),{
+    type:'bar',
+    data:{labels:data.map(d=>d.date),datasets:[{label:'Hours slept',data:data.map(d=>d.hours),backgroundColor:data.map(d=>d.hours>=7?'#5DCAA5':d.hours>=6?'#EF9F27':'#D85A30'),borderRadius:6,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:10,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},callback:v=>v+'h'}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
+  });
+  document.getElementById('history-list').innerHTML=data.map(d=>{
+    const pct=Math.min(100,(d.hours/10)*100);
+    const cls=d.hours>=7?'badge-good':d.hours>=6?'badge-high':'badge-low';
+    const lbl=d.hours>=7?'Good':d.hours>=6?'Short':'Low';
+    return `<div class="history-day"><div class="day-bar-wrap"><div class="day-bar" style="height:${pct}%"></div></div><div class="day-info"><div class="day-label">${d.date} — ${fmtH(d.hours)}</div><div class="day-sub">Quality: ${d.quality}</div></div><span class="day-badge ${cls}">${lbl}</span></div>`;
+  }).join('');
+}
+
+const scienceTexts={
+  '10–20 min':'A 10–20 min nap stays in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake (the "caffeine nap" technique).',
+  '20–30 min':'At 20–30 min you may enter stage 2 sleep more deeply. You might feel mild sleep inertia for a few minutes, but memory consolidation and motor learning improve significantly.',
+  '90 min':'A full 90-min cycle includes light sleep, deep sleep, and REM. Waking at the end of a full cycle means you surface naturally — refreshed without grogginess. Best for severe sleep debt.',
+  'No nap':'Even lying still with eyes closed reduces cortisol and gives your brain a reset. You won\'t get sleep benefits, but mental fatigue is reduced and focus can return within 10 minutes.',
+};
+
+function updateNapRec() {
+  const {napMins}=calcEnergy();
+  let rec,sub;
+  if(napMins===0){rec='None needed';sub='Your sleep debt is low — you\'re in good shape!';}
+  else if(napMins<=20){rec='10–20 min';sub='A power nap will restore your alertness';}
+  else if(napMins<=30){rec='20–30 min';sub='Moderate debt — a fuller rest helps';}
+  else{rec='90 min';sub='High sleep debt — a full sleep cycle is best';}
+  document.getElementById('nap-rec-time').textContent=rec;
+  document.getElementById('nap-rec-sub').textContent=sub;
+}
+
+function selectNap(el,time,desc){
+  document.querySelectorAll('.nap-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('nap-rec-time').textContent=time;
+  document.getElementById('nap-rec-sub').textContent=desc;
+  document.getElementById('science-text').textContent=scienceTexts[time]||scienceTexts['No nap'];
+}
+
+function renderInsights() {
+  const {avg,last,debt}=calcEnergy();
+  const cafToday=state.todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  const lateNight=state.todayLog.find(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0&&e.time>='18:00');
+  const insights=[];
+  if(debt<-60)insights.push({type:'alert',icon:'ti-alert-triangle',title:'Sleep deficit detected',body:`You're running ${Math.abs(debt)} min behind your ideal 8 hours. A ${Math.min(90,Math.abs(debt))}-min nap or earlier bedtime can help restore balance.`});
+  else if(debt<0)insights.push({type:'warn',icon:'ti-clock',title:'Slightly under-slept',body:`You got ${fmtH(last)} last night — about ${Math.abs(debt)} min short of 8 hours. A 20-min power nap this afternoon can compensate without disrupting tonight's sleep.`});
+  else insights.push({type:'info',icon:'ti-circle-check',title:'Well-rested today',body:`Great night! You hit ${fmtH(last)} — above your 7-day average of ${fmtH(avg)}. No nap needed today.`});
+  if(cafToday>200)insights.push({type:'warn',icon:'ti-coffee',title:'High caffeine intake',body:`You've had ~${cafToday}mg today. Consider stopping caffeine by 2 PM to protect tonight's sleep quality.`});
+  else if(cafToday>0)insights.push({type:'info',icon:'ti-coffee',title:'Caffeine on track',body:`${cafToday}mg today — a moderate amount. If taken before noon, it should clear your system before sleep.`});
+  if(lateNight)insights.push({type:'alert',icon:'ti-moon-off',title:'Late caffeine detected',body:`You had ${lateNight.item} at ${lateNight.time}. With a 5–6 hour half-life, this may delay sleep onset and reduce deep sleep.`});
+  const lowDays=state.sleepHistory.filter(d=>d.hours<6.5).length;
+  if(lowDays>=3)insights.push({type:'warn',icon:'ti-trending-down',title:'Pattern: frequent short nights',body:`${lowDays} of the past 7 nights were under 6.5 hours. Cumulative sleep debt affects reaction time, memory, and mood even when you feel okay.`});
+  document.getElementById('insights-container').innerHTML=insights.map(i=>`<div class="insight-card ${i.type}"><div class="insight-icon"><i class="ti ${i.icon}" aria-hidden="true" style="color:${i.type==='info'?'#1D9E75':i.type==='warn'?'#BA7517':'#D85A30'}"></i></div><div class="insight-title ${i.type}">${i.title}</div><div class="insight-body ${i.type}">${i.body}</div></div>`).join('');
+  const cafSources=state.todayLog.filter(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0);
+  const barsEl=document.getElementById('caffeine-bars');
+  if(!cafSources.length){barsEl.innerHTML='<div style="font-size:13px;color:#6b6b6b">No caffeine logged today.</div>';return;}
+  const maxCaf=Math.max(...cafSources.map(e=>(ITEMS[e.item].caf||1)*e.amount));
+  barsEl.innerHTML=cafSources.map(e=>{const mg=(ITEMS[e.item].caf||0)*e.amount;return `<div class="caf-row"><span class="caf-name">${e.item}</span><div class="caf-bar-bg"><div class="caf-bar" style="width:${Math.round((mg/maxCaf)*100)}%"></div></div><span class="caf-val">${mg}mg</span></div>`;}).join('');
+}
+
+function openModal(){
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  state.selectedItem=null;state.amount=1;state.selectedType='consume';state.selectedQuality='Good';
+  document.getElementById('amt-display').textContent='1';
+  document.querySelectorAll('#item-chips .chip').forEach(c=>c.classList.remove('selected'));
+  document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('selected'));
+  document.querySelector('#quality-chips .chip:nth-child(3)').classList.add('selected');
+  switchFields('consume');
+  document.querySelectorAll('.modal .chip-group')[0].querySelectorAll('.chip').forEach((c,i)=>{c.classList.toggle('selected',i===0);});
+}
+function closeModal(){document.getElementById('modal-overlay').classList.add('hidden');}
+function closeModalIfBg(e){if(e.target.id==='modal-overlay')closeModal();}
+function selectType(el,type){
+  document.querySelectorAll('.modal .chip-group')[0].querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');state.selectedType=type;switchFields(type);
+}
+function switchFields(type){
+  document.getElementById('consume-fields').classList.toggle('hidden',type==='sleep');
+  document.getElementById('sleep-fields').classList.toggle('hidden',type==='consume');
+}
+function selectItem(el,name){document.querySelectorAll('#item-chips .chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');state.selectedItem=name;}
+function selectQuality(el,q){document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');state.selectedQuality=q;}
+function changeAmt(d){state.amount=Math.max(1,Math.min(10,state.amount+d));document.getElementById('amt-display').textContent=state.amount;}
+
+function saveEntry(){
+  if(state.selectedType==='consume'){
+    if(!state.selectedItem){alert('Please select an item.');return;}
+    const time=document.getElementById('consume-time').value||'12:00';
+    state.todayLog.push({type:'consume',item:state.selectedItem,amount:state.amount,time});
+  } else {
+    const bed=document.getElementById('bed-time').value;
+    const wake=document.getElementById('wake-time').value;
+    if(!bed||!wake){alert('Please enter bed and wake times.');return;}
+    const bedM=parseInt(bed.split(':')[0])*60+parseInt(bed.split(':')[1]);
+    let wakeM=parseInt(wake.split(':')[0])*60+parseInt(wake.split(':')[1]);
+    if(wakeM<bedM)wakeM+=1440;
+    const hours=parseFloat(((wakeM-bedM)/60).toFixed(1));
+    state.todayLog.push({type:'sleep',bedtime:bed,waketime:wake,hours,quality:state.selectedQuality});
+    const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const today=days[new Date().getDay()];
+    const existing=state.sleepHistory.findIndex(d=>d.date===today);
+    if(existing>=0)state.sleepHistory[existing]={date:today,hours,quality:state.selectedQuality};
+    else{state.sleepHistory.push({date:today,hours,quality:state.selectedQuality});if(state.sleepHistory.length>7)state.sleepHistory.shift();}
+  }
+  closeModal();renderLogScreen();updateDashboard();
+}
+
+setGreet();
+updateDashboard();
+</script>
+</body>
+</html>
