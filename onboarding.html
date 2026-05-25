@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Slumber — Welcome</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0B0F1A;--bg2:#131929;--bg3:#1A2235;
+  --card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --text:#F0F4FF;--muted:rgba(255,255,255,0.4);--muted2:rgba(255,255,255,0.2);
+  --green:#00E5A0;--green2:#00B87A;--purple:#A78BFA;--purple2:#7C5CFC;
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.app{width:100%;max-width:420px;min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;opacity:0.15}
+.orb1{width:300px;height:300px;background:var(--purple2);top:-80px;right:-60px}
+.orb2{width:250px;height:250px;background:var(--green2);bottom:80px;left:-80px}
+
+/* PROGRESS */
+.prog-wrap{padding:24px 20px 0;position:relative;z-index:1}
+.prog-meta{display:flex;justify-content:space-between;margin-bottom:8px}
+.prog-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+.prog-count{font-size:11px;font-weight:700;color:var(--green)}
+.prog-track{height:3px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--purple2));transition:width 0.5s cubic-bezier(.4,0,.2,1)}
+
+/* SLIDES */
+.slide{display:none;flex-direction:column;flex:1;padding:32px 20px 24px;position:relative;z-index:1;animation:fadeUp 0.35s ease}
+.slide.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.slide-emoji{font-size:48px;margin-bottom:18px}
+.slide-q{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-0.5px;line-height:1.25;margin-bottom:8px}
+.slide-sub{font-size:13px;color:var(--muted);font-weight:500;line-height:1.65;margin-bottom:28px}
+.opts{display:flex;flex-direction:column;gap:10px;flex:1}
+.opt{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px 18px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:14px}
+.opt:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.14)}
+.opt.sel{background:rgba(0,229,160,0.08);border-color:rgba(0,229,160,0.35)}
+.opt-ico{width:42px;height:42px;border-radius:13px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:background 0.2s}
+.opt.sel .opt-ico{background:rgba(0,229,160,0.13)}
+.opt-txt{flex:1}
+.opt-lbl{font-size:14px;font-weight:700;color:var(--text)}
+.opt-desc{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+.opt-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(167,139,250,0.12);color:var(--purple);border:1px solid rgba(167,139,250,0.2);flex-shrink:0;transition:all 0.2s}
+.opt.sel .opt-badge{background:rgba(0,229,160,0.12);color:var(--green);border-color:rgba(0,229,160,0.25)}
+.chk{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
+.opt.sel .chk{background:var(--green);border-color:var(--green)}
+.chk-dot{width:8px;height:8px;border-radius:50%;background:#0B1A12;opacity:0;transition:opacity 0.2s}
+.opt.sel .chk-dot{opacity:1}
+.name-inp{width:100%;padding:16px 18px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:16px;font-size:16px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);outline:none;font-weight:600;transition:border-color 0.2s;margin-bottom:8px}
+.name-inp::placeholder{color:var(--muted2)}
+.name-inp:focus{border-color:rgba(0,229,160,0.4);background:rgba(0,229,160,0.04)}
+.next-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--green),var(--green2));color:#0B1A12;border:none;border-radius:16px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:20px;letter-spacing:0.02em;transition:opacity 0.2s;opacity:0.3;pointer-events:none}
+.next-btn.on{opacity:1;pointer-events:all}
+.next-btn.on:active{opacity:0.85}
+
+/* DONE SCREEN */
+.done{display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:32px 20px;text-align:center;position:relative;z-index:1;animation:fadeUp 0.4s ease}
+.done.active{display:flex}
+.done-ring{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,rgba(0,229,160,0.15),rgba(124,92,252,0.15));border:2px solid rgba(0,229,160,0.25);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:44px}
+.done-title{font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:10px}
+.done-sub{font-size:13px;color:var(--muted);line-height:1.7;font-weight:500;margin-bottom:28px;max-width:290px}
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-bottom:24px}
+.sum-card{background:var(--card);border:0.5px solid var(--border);border-radius:14px;padding:14px 12px;text-align:left}
+.sum-lbl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:5px}
+.sum-val{font-size:13px;font-weight:700;color:var(--text)}
+.sum-val.g{color:var(--green)}
+.launch-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--green),var(--green2));color:#0B1A12;border:none;border-radius:16px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:0.02em}
+.launch-btn:active{opacity:0.85}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="prog-wrap" id="prog-wrap">
+    <div class="prog-meta">
+      <span class="prog-label">Setting up your profile</span>
+      <span class="prog-count" id="prog-count">1 of 5</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:20%"></div></div>
+  </div>
+
+  <!-- Q1: Name -->
+  <div class="slide active" id="s1">
+    <div class="slide-emoji">👋</div>
+    <div class="slide-q">What should we call you?</div>
+    <div class="slide-sub">This is how we'll greet you in the app every day.</div>
+    <input class="name-inp" id="name-inp" type="text" placeholder="Your first name..." oninput="chkName()">
+    <div style="flex:1"></div>
+    <button class="next-btn" id="btn1" onclick="goNext(1)">Continue →</button>
+  </div>
+
+  <!-- Q2: Age -->
+  <div class="slide" id="s2">
+    <div class="slide-emoji">🎂</div>
+    <div class="slide-q">How old are you?</div>
+    <div class="slide-sub">Your age group sets the right sleep goal — science recommends different amounts at different life stages.</div>
+    <div class="opts">
+      <div class="opt" onclick="pick(this,2,'13-17',9,'Teen')">
+        <div class="opt-ico">🧒</div>
+        <div class="opt-txt"><div class="opt-lbl">13 – 17 years old</div><div class="opt-desc">Teenager</div></div>
+        <div class="opt-badge">9h goal</div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,2,'18-25',8,'Young adult')">
+        <div class="opt-ico">🧑</div>
+        <div class="opt-txt"><div class="opt-lbl">18 – 25 years old</div><div class="opt-desc">Young adult</div></div>
+        <div class="opt-badge">8h goal</div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,2,'26-64',8,'Adult')">
+        <div class="opt-ico">🧔</div>
+        <div class="opt-txt"><div class="opt-lbl">26 – 64 years old</div><div class="opt-desc">Adult</div></div>
+        <div class="opt-badge">8h goal</div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,2,'65+',7,'Older adult')">
+        <div class="opt-ico">🧓</div>
+        <div class="opt-txt"><div class="opt-lbl">65+ years old</div><div class="opt-desc">Older adult</div></div>
+        <div class="opt-badge">7h goal</div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+    </div>
+    <button class="next-btn" id="btn2" onclick="goNext(2)">Continue →</button>
+  </div>
+
+  <!-- Q3: Schedule -->
+  <div class="slide" id="s3">
+    <div class="slide-emoji">⏰</div>
+    <div class="slide-q">What's your work schedule?</div>
+    <div class="slide-sub">This helps us time your nap and bedtime recommendations correctly.</div>
+    <div class="opts">
+      <div class="opt" onclick="pick(this,3,'9-to-5',0,'Standard 9–5')">
+        <div class="opt-ico">🏢</div>
+        <div class="opt-txt"><div class="opt-lbl">Standard 9 to 5</div><div class="opt-desc">Regular office or work hours</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,3,'shift',0,'Shift work')">
+        <div class="opt-ico">🔄</div>
+        <div class="opt-txt"><div class="opt-lbl">Shift work</div><div class="opt-desc">Rotating or irregular hours</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,3,'flexible',0,'Flexible')">
+        <div class="opt-ico">🏠</div>
+        <div class="opt-txt"><div class="opt-lbl">Flexible / remote</div><div class="opt-desc">Work from home, own schedule</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,3,'student',0,'Student')">
+        <div class="opt-ico">📚</div>
+        <div class="opt-txt"><div class="opt-lbl">Student</div><div class="opt-desc">Classes and study schedule</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+    </div>
+    <button class="next-btn" id="btn3" onclick="goNext(3)">Continue →</button>
+  </div>
+
+  <!-- Q4: Goal -->
+  <div class="slide" id="s4">
+    <div class="slide-emoji">🎯</div>
+    <div class="slide-q">What's your main goal?</div>
+    <div class="slide-sub">We'll tailor the AI advisor's advice and insights around what matters most to you.</div>
+    <div class="opts">
+      <div class="opt" onclick="pick(this,4,'productivity',0,'Productivity')">
+        <div class="opt-ico">🚀</div>
+        <div class="opt-txt"><div class="opt-lbl">Stay productive</div><div class="opt-desc">Focus, output, deep work</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,4,'energy',0,'More energy')">
+        <div class="opt-ico">⚡</div>
+        <div class="opt-txt"><div class="opt-lbl">More energy</div><div class="opt-desc">Feel awake and alert all day</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,4,'reduce-tiredness',0,'Reduce tiredness')">
+        <div class="opt-ico">😴</div>
+        <div class="opt-txt"><div class="opt-lbl">Reduce tiredness</div><div class="opt-desc">Stop feeling exhausted midday</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,4,'overall-health',0,'Overall wellbeing')">
+        <div class="opt-ico">❤️</div>
+        <div class="opt-txt"><div class="opt-lbl">Overall wellbeing</div><div class="opt-desc">Mood, health, long-term sleep</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+    </div>
+    <button class="next-btn" id="btn4" onclick="goNext(4)">Continue →</button>
+  </div>
+
+  <!-- Q5: Caffeine -->
+  <div class="slide" id="s5">
+    <div class="slide-emoji">☕</div>
+    <div class="slide-q">How sensitive are you to caffeine?</div>
+    <div class="slide-sub">This changes when we warn you about late caffeine and how we calculate its effect on your sleep.</div>
+    <div class="opts">
+      <div class="opt" onclick="pick(this,5,'low',0,'Low')">
+        <div class="opt-ico">😎</div>
+        <div class="opt-txt"><div class="opt-lbl">Low sensitivity</div><div class="opt-desc">Coffee doesn't affect my sleep much</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,5,'medium',0,'Medium')">
+        <div class="opt-ico">🙂</div>
+        <div class="opt-txt"><div class="opt-lbl">Medium sensitivity</div><div class="opt-desc">Late coffee sometimes keeps me up</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+      <div class="opt" onclick="pick(this,5,'high',0,'High')">
+        <div class="opt-ico">😬</div>
+        <div class="opt-txt"><div class="opt-lbl">High sensitivity</div><div class="opt-desc">Even afternoon coffee disrupts sleep</div></div>
+        <div class="chk"><div class="chk-dot"></div></div>
+      </div>
+    </div>
+    <button class="next-btn" id="btn5" onclick="goNext(5)">Continue →</button>
+  </div>
+
+  <!-- Done -->
+  <div class="done" id="done">
+    <div class="done-ring">🌙</div>
+    <div class="done-title" id="done-title">You're all set!</div>
+    <div class="done-sub">Here's your personalised sleep profile. We'll use this to give you smarter recommendations every single day.</div>
+    <div class="sum-grid">
+      <div class="sum-card"><div class="sum-lbl">Sleep goal</div><div class="sum-val g" id="sum-goal">8h / night</div></div>
+      <div class="sum-card"><div class="sum-lbl">Age group</div><div class="sum-val" id="sum-age">Adult</div></div>
+      <div class="sum-card"><div class="sum-lbl">Schedule</div><div class="sum-val" id="sum-sched">Standard</div></div>
+      <div class="sum-card"><div class="sum-lbl">Main goal</div><div class="sum-val" id="sum-main">Productivity</div></div>
+    </div>
+    <button class="launch-btn" onclick="launch()">Start tracking my sleep →</button>
+  </div>
+</div>
+
+<script>
+const A = {name:'',age_group:'',sleep_goal:8,age_label:'',work_schedule:'',sched_label:'',main_goal:'',goal_label:'',caffeine_sensitivity:''};
+
+function chkName(){
+  const v = document.getElementById('name-inp').value.trim();
+  A.name = v;
+  document.getElementById('btn1').classList.toggle('on', v.length > 0);
+}
+
+function pick(el, step, value, goal, label){
+  document.querySelectorAll('#s'+step+' .opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  if(step===2){A.age_group=value;A.sleep_goal=goal;A.age_label=label;}
+  if(step===3){A.work_schedule=value;A.sched_label=label;}
+  if(step===4){A.main_goal=value;A.goal_label=label;}
+  if(step===5){A.caffeine_sensitivity=value;}
+  document.getElementById('btn'+step).classList.add('on');
+}
+
+function goNext(step){
+  document.getElementById('s'+step).classList.remove('active');
+  const next = step + 1;
+  if(next <= 5){
+    document.getElementById('s'+next).classList.add('active');
+    const pct = Math.round((next/5)*100);
+    document.getElementById('prog-fill').style.width = pct+'%';
+    document.getElementById('prog-count').textContent = next+' of 5';
+  } else {
+    showDone();
+  }
+}
+
+function showDone(){
+  document.getElementById('prog-wrap').style.display='none';
+  document.getElementById('done').classList.add('active');
+  document.getElementById('done-title').textContent = 'You\'re all set, '+A.name+'! 🎉';
+  document.getElementById('sum-goal').textContent = A.sleep_goal+'h / night';
+  document.getElementById('sum-age').textContent = A.age_label;
+  document.getElementById('sum-sched').textContent = A.sched_label;
+  document.getElementById('sum-main').textContent = A.goal_label;
+  localStorage.setItem('slumber_profile', JSON.stringify({
+    display_name: A.name,
+    age_group: A.age_group,
+    sleep_goal_hours: A.sleep_goal,
+    work_schedule: A.work_schedule,
+    main_goal: A.main_goal,
+    caffeine_sensitivity: A.caffeine_sensitivity,
+    onboarding_complete: true
+  }));
+}
+
+function launch(){
+  window.location.href = 'index.html';
+}
+
+window.addEventListener('load', ()=>{
+  const p = localStorage.getItem('slumber_profile');
+  if(p){
+    try{
+      const profile = JSON.parse(p);
+      if(profile.onboarding_complete) window.location.href = 'index.html';
+    }catch(e){}
+  }
+});
+</script>
+</body>
+</html>
