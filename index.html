@@ -430,7 +430,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </div>
  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL = 'https://edewdvjaefbwisvnuoyq.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkZXdkdmphZWZid2lzdm51b3lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2ODA3OTgsImV4cCI6MjA5NTI1Njc5OH0.ICW3fXz0Rxc7mPqcl_wvPTcDntqSdmQwZ0D5Mg87FF8';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 const ITEMS={
   'Coffee':{caf:95,effect:'neg',label:'Delays sleep ~1h'},
   'Tea':{caf:40,effect:'neg',label:'Mild stimulant'},
