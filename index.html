@@ -2,334 +2,436 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <title>Slumber — Sleep Tracker</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--color-background-tertiary,#f5f4f0);color:var(--color-text-primary,#1a1a1a);min-height:100vh;font-size:15px}
-:root{--teal:#1D9E75;--teal-light:#E1F5EE;--teal-mid:#5DCAA5;--amber:#BA7517;--amber-light:#FAEEDA;--amber-mid:#EF9F27;--lavender:#EEEDFE;--lavender-mid:#7F77DD;--coral:#D85A30;--coral-light:#FAECE7;--card-bg:#ffffff;--muted:#6b6b6b}
-.app{max-width:420px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:#f5f4f0}
-.screen{flex:1;display:none;flex-direction:column;padding-bottom:80px}
+:root{
+  --bg:#0B0F1A;--bg2:#131929;--bg3:#1A2235;
+  --card:#1E2A40;--card2:#243050;--border:rgba(255,255,255,0.07);
+  --text:#F0F4FF;--muted:#7B8DB0;--muted2:#4A5878;
+  --green:#00E5A0;--green2:#00B87A;--green-dim:rgba(0,229,160,0.12);
+  --purple:#A78BFA;--purple2:#7C5CFC;--purple-dim:rgba(167,139,250,0.12);
+  --amber:#FFBE3D;--amber-dim:rgba(255,190,61,0.12);--amber-mid:#EF9F27;
+  --coral:#FF6B6B;--coral-dim:rgba(255,107,107,0.12);
+  --grad-green:linear-gradient(135deg,#00E5A0,#00B87A);
+  --grad-purple:linear-gradient(135deg,#A78BFA,#7C5CFC);
+  --grad-card:linear-gradient(135deg,rgba(30,42,64,0.9),rgba(20,30,50,0.9));
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
+.screen{flex:1;display:none;flex-direction:column;padding-bottom:90px;overflow-y:auto}
 .screen.active{display:flex}
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#fff;border-top:0.5px solid rgba(0,0,0,0.12);display:flex;justify-content:space-around;padding:8px 0 12px;z-index:100}
-.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 12px;border-radius:12px;color:#6b6b6b;font-family:'DM Sans',sans-serif;font-size:10px;transition:color 0.2s}
-.nav-btn.active{color:var(--teal)}
-.nav-btn i{font-size:22px}
-.screen-header{padding:20px 20px 12px;display:flex;justify-content:space-between;align-items:flex-start}
-.greeting{font-family:'DM Serif Display',serif;font-size:26px;line-height:1.2;color:#1a1a1a}
-.greeting span{color:var(--teal)}
-.date-pill{font-size:12px;background:var(--teal-light);color:#085041;padding:4px 10px;border-radius:20px;font-weight:500;margin-top:6px;display:inline-block}
-.card{background:var(--card-bg);border-radius:16px;border:0.5px solid rgba(0,0,0,0.1);padding:16px;margin:0 16px 12px}
-.card-label{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:8px}
-.energy-section{display:flex;align-items:center;gap:20px}
-.ring-wrap{position:relative;width:100px;height:100px;flex-shrink:0}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;opacity:0.18}
+.orb1{width:300px;height:300px;background:#7C5CFC;top:-80px;right:-60px}
+.orb2{width:250px;height:250px;background:#00B87A;bottom:100px;left:-80px}
+.orb3{width:200px;height:200px;background:#3B82F6;top:40%;right:-80px;opacity:0.12}
+ 
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:100;padding:0 16px 20px}
+.nav-inner{background:rgba(19,25,41,0.85);backdrop-filter:blur(20px);border:0.5px solid var(--border);border-radius:24px;display:flex;justify-content:space-around;padding:10px 8px}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:16px;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.03em;transition:all 0.2s;text-transform:uppercase}
+.nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn.active{color:var(--green);background:var(--green-dim)}
+ 
+/* HEADER */
+.screen-header{padding:20px 20px 8px;position:relative;z-index:1}
+.greet-lbl{font-size:13px;color:var(--muted);font-weight:500}
+.greet-name{font-size:26px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#F0F4FF,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.date-chip{font-size:11px;background:var(--green-dim);color:var(--green);padding:5px 12px;border-radius:20px;font-weight:600;border:1px solid rgba(0,229,160,0.2);display:inline-block;margin-top:6px}
+ 
+/* CARDS */
+.card{background:var(--grad-card);border:0.5px solid var(--border);border-radius:20px;padding:18px;margin:0 16px 12px;position:relative;z-index:1;overflow:hidden}
+.card::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,0.04),transparent);pointer-events:none}
+.card-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
+ 
+/* ENERGY HERO */
+.energy-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:linear-gradient(135deg,#1B2A4A,#0F1E35)}
+.energy-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,160,0.2),transparent 70%)}
+.energy-top{display:flex;align-items:center;gap:20px}
+.ring-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
 .ring-wrap svg{transform:rotate(-90deg)}
 .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-pct{font-size:22px;font-weight:500;line-height:1}
-.ring-label{font-size:10px;color:var(--muted)}
-.energy-details{flex:1}
-.e-row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px}
-.e-key{color:var(--muted)}
-.e-val{font-weight:500}
-.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px}
-.stat-card{background:var(--card-bg);border:0.5px solid rgba(0,0,0,0.1);border-radius:14px;padding:14px}
-.stat-num{font-family:'DM Serif Display',serif;font-size:28px;color:var(--teal)}
-.stat-unit{font-size:12px;color:var(--muted)}
-.stat-name{font-size:12px;color:var(--muted);margin-top:2px}
-.log-header{padding:20px 20px 8px}
-.section-title{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;padding:8px 20px 6px}
-.log-group{margin:0 16px 12px;background:var(--card-bg);border-radius:16px;border:0.5px solid rgba(0,0,0,0.1);overflow:hidden}
-.log-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:0.5px solid rgba(0,0,0,0.08)}
+.ring-pct{font-size:24px;font-weight:800;background:var(--grad-green);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ring-lbl{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:0.05em;text-transform:uppercase}
+.e-stats{flex:1}
+.e-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:0.5px solid var(--border)}
+.e-row:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.e-key{font-size:12px;color:var(--muted);font-weight:500}
+.e-val{font-size:13px;font-weight:700}
+ 
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px;position:relative;z-index:1}
+.stat-card{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:18px 18px 0 0}
+.stat-card.green::before{background:var(--grad-green)}
+.stat-card.purple::before{background:var(--grad-purple)}
+.stat-num{font-size:30px;font-weight:800;line-height:1;letter-spacing:-1px}
+.stat-card.green .stat-num{background:var(--grad-green);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card.purple .stat-num{background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-unit{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
+.stat-name{font-size:11px;color:var(--muted2);font-weight:500;margin-top:2px}
+ 
+/* SECTION TITLE */
+.sec-title{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;padding:4px 20px 8px;position:relative;z-index:1}
+ 
+/* LOG */
+.log-group{margin:0 16px 12px;border-radius:20px;overflow:hidden;border:0.5px solid var(--border);position:relative;z-index:1}
+.log-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid var(--border);background:var(--grad-card)}
 .log-item:last-child{border-bottom:none}
-.log-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.log-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .log-info{flex:1}
-.log-name{font-size:14px;font-weight:500}
-.log-time{font-size:12px;color:var(--muted)}
-.log-effect{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
-.effect-neg{background:var(--coral-light);color:#4A1B0C}
-.effect-pos{background:var(--teal-light);color:#04342C}
-.effect-neu{background:var(--amber-light);color:#412402}
-.fab{position:fixed;bottom:90px;right:calc(50% - 210px + 16px);width:54px;height:54px;border-radius:50%;background:var(--teal);border:none;color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(29,158,117,0.35);z-index:99;transition:transform 0.15s}
-.fab:active{transform:scale(0.95)}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:flex;align-items:flex-end;justify-content:center;max-width:420px;left:50%;transform:translateX(-50%)}
-.modal{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-height:80vh;overflow-y:auto}
-.modal-title{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:20px}
-.modal-section{margin-bottom:20px}
-.modal-label{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:10px}
+.log-name{font-size:14px;font-weight:600}
+.log-time{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+.log-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;letter-spacing:0.03em}
+.badge-bad{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(255,107,107,0.2)}
+.badge-good{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,0.2)}
+.badge-neu{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,190,61,0.2)}
+.badge-sleep{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,0.2)}
+ 
+/* FAB */
+.fab{position:fixed;bottom:96px;right:calc(50% - 215px + 16px);width:52px;height:52px;border-radius:50%;background:var(--grad-green);border:none;color:#0B1A12;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(0,229,160,0.4);z-index:99;transition:transform 0.15s,box-shadow 0.15s;font-weight:700}
+.fab:active{transform:scale(0.94);box-shadow:0 4px 12px rgba(0,229,160,0.3)}
+ 
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:flex-end;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%)}
+.modal{background:var(--bg2);border:0.5px solid var(--border);border-radius:28px 28px 0 0;padding:28px 20px 36px;width:100%;max-height:82vh;overflow-y:auto;position:relative}
+.modal-handle{width:36px;height:4px;background:var(--muted2);border-radius:4px;margin:0 auto 20px}
+.modal-title{font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:20px}
+.modal-sec{margin-bottom:20px}
+.modal-lbl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
 .chip-group{display:flex;flex-wrap:wrap;gap:8px}
-.chip{padding:8px 14px;border-radius:20px;border:1px solid rgba(0,0,0,0.15);background:#f9f9f9;font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif;color:#1a1a1a}
-.chip.selected{background:var(--teal);color:#fff;border-color:var(--teal)}
-.time-input{width:100%;padding:12px;border:1px solid rgba(0,0,0,0.15);border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;background:#f9f9f9;color:#1a1a1a}
-.amount-row{display:flex;align-items:center;gap:12px;margin-top:10px}
-.amount-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(0,0,0,0.15);background:#f9f9f9;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1a1a1a}
-.amount-val{font-size:18px;font-weight:500;min-width:40px;text-align:center}
-.save-btn{width:100%;padding:14px;background:var(--teal);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;transition:opacity 0.15s}
-.save-btn:active{opacity:0.85}
-.close-btn{position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted)}
-.history-chart-wrap{margin:0 16px 12px;background:var(--card-bg);border-radius:16px;border:0.5px solid rgba(0,0,0,0.1);padding:16px}
-.chart-container{position:relative;height:180px;width:100%}
-.history-list{margin:0 16px 12px}
-.history-day{background:var(--card-bg);border-radius:14px;border:0.5px solid rgba(0,0,0,0.1);padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:14px}
-.day-bar-wrap{width:6px;height:48px;background:#f0f0f0;border-radius:3px;overflow:hidden;flex-shrink:0}
-.day-bar{background:var(--teal-mid);border-radius:3px;width:100%;transition:height 0.4s}
-.day-info{flex:1}
-.day-label{font-size:13px;font-weight:500}
-.day-sub{font-size:12px;color:var(--muted)}
-.day-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
-.badge-good{background:var(--teal-light);color:#04342C}
-.badge-low{background:var(--coral-light);color:#4A1B0C}
-.badge-high{background:var(--amber-light);color:#412402}
-.nap-hero{margin:0 16px 12px;background:var(--teal);border-radius:20px;padding:24px;color:#fff}
-.nap-hero-label{font-size:12px;opacity:0.75;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px}
-.nap-hero-time{font-family:'DM Serif Display',serif;font-size:48px;line-height:1}
-.nap-hero-sub{font-size:13px;opacity:0.85;margin-top:8px}
-.nap-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px}
-.nap-option{background:var(--card-bg);border:0.5px solid rgba(0,0,0,0.1);border-radius:14px;padding:16px;cursor:pointer;transition:border-color 0.15s}
-.nap-option.selected{border:2px solid var(--teal)}
-.nap-opt-time{font-family:'DM Serif Display',serif;font-size:24px;color:var(--teal)}
-.nap-opt-label{font-size:13px;font-weight:500;margin-top:2px}
-.nap-opt-desc{font-size:11px;color:var(--muted);margin-top:4px}
-.science-box{margin:0 16px 12px;background:var(--lavender);border-radius:14px;padding:16px;border:0.5px solid rgba(127,119,221,0.3)}
-.science-title{font-size:13px;font-weight:500;color:#3C3489;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.science-body{font-size:12px;color:#534AB7;line-height:1.6}
-.insight-card{margin:0 16px 12px;border-radius:16px;padding:16px;border:0.5px solid transparent}
-.insight-card.info{background:var(--teal-light);border-color:rgba(29,158,117,0.2)}
-.insight-card.warn{background:var(--amber-light);border-color:rgba(186,117,23,0.2)}
-.insight-card.alert{background:var(--coral-light);border-color:rgba(216,90,48,0.2)}
-.insight-icon{font-size:24px;margin-bottom:8px}
-.insight-title{font-size:14px;font-weight:500;margin-bottom:6px}
-.insight-title.info{color:#04342C}
-.insight-title.warn{color:#412402}
-.insight-title.alert{color:#4A1B0C}
-.insight-body{font-size:13px;line-height:1.6}
-.insight-body.info{color:#085041}
-.insight-body.warn{color:#633806}
-.insight-body.alert{color:#4A1B0C}
-.caffeine-bar-wrap{margin:0 16px 12px;background:var(--card-bg);border-radius:16px;border:0.5px solid rgba(0,0,0,0.1);padding:16px}
-.caf-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.caf-name{font-size:13px;color:var(--muted);width:70px;flex-shrink:0}
-.caf-bar-bg{flex:1;height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden}
-.caf-bar{height:100%;border-radius:4px;background:var(--amber-mid);transition:width 0.5s}
-.caf-val{font-size:12px;font-weight:500;width:36px;text-align:right}
-.sleep-input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.sleep-field label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+.chip{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--bg3);font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Plus Jakarta Sans',sans-serif;color:var(--muted);font-weight:600}
+.chip.sel{background:var(--green-dim);color:var(--green);border-color:rgba(0,229,160,0.3)}
+.time-inp{width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:14px;font-size:15px;font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg3);color:var(--text);outline:none}
+.time-inp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,229,160,0.1)}
+.amt-row{display:flex;align-items:center;gap:14px;margin-top:10px}
+.amt-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif}
+.amt-val{font-size:20px;font-weight:700;min-width:40px;text-align:center}
+.save-btn{width:100%;padding:15px;background:var(--grad-green);color:#0B1A12;border:none;border-radius:16px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px}
+.close-btn{position:absolute;top:20px;right:20px;background:var(--bg3);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center}
+.sleep-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sleep-field label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:6px;letter-spacing:0.04em;text-transform:uppercase}
 .hidden{display:none}
+ 
+/* HISTORY */
+.chart-wrap{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:20px;padding:18px;position:relative;z-index:1}
+.chart-container{position:relative;height:180px}
+.hist-item{display:flex;align-items:center;gap:14px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:16px;padding:14px 16px;margin:0 16px 8px;position:relative;z-index:1}
+.hbar-wrap{width:5px;height:52px;background:var(--bg3);border-radius:4px;overflow:hidden;flex-shrink:0}
+.hbar{width:100%;border-radius:4px}
+.hbar.good{background:var(--grad-green)}
+.hbar.mid{background:linear-gradient(135deg,var(--amber),#FF8C00)}
+.hbar.low{background:linear-gradient(135deg,var(--coral),#E63946)}
+.hday-info{flex:1}
+.hday-lbl{font-size:13px;font-weight:700}
+.hday-sub{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+ 
+/* NAP */
+.nap-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:linear-gradient(135deg,#1C1640,#0F0B2A)}
+.nap-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,0.25),transparent 70%)}
+.nap-lbl{font-size:10px;color:rgba(167,139,250,0.7);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.nap-time{font-size:52px;font-weight:800;letter-spacing:-2px;background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.nap-sub{font-size:13px;color:rgba(167,139,250,0.8);font-weight:500;margin-top:8px}
+.nap-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px;position:relative;z-index:1}
+.nap-opt{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;cursor:pointer;transition:all 0.15s}
+.nap-opt.sel{border:1.5px solid var(--purple);background:var(--purple-dim)}
+.nap-opt-time{font-size:22px;font-weight:800;color:var(--purple);letter-spacing:-0.5px}
+.nap-opt-label{font-size:13px;font-weight:600;margin-top:2px}
+.nap-opt-desc{font-size:11px;color:var(--muted);font-weight:500;margin-top:4px}
+.sci-card{margin:0 16px 12px;background:var(--purple-dim);border:1px solid rgba(167,139,250,0.15);border-radius:18px;padding:16px;position:relative;z-index:1}
+.sci-head{font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px}
+.sci-body{font-size:12px;color:rgba(167,139,250,0.85);line-height:1.7;font-weight:500}
+ 
+/* INSIGHTS */
+.insight-card{margin:0 16px 12px;border-radius:18px;padding:16px;position:relative;z-index:1}
+.insight-card.info{background:linear-gradient(135deg,rgba(0,229,160,0.1),rgba(0,184,122,0.05));border:1px solid rgba(0,229,160,0.15)}
+.insight-card.warn{background:linear-gradient(135deg,rgba(255,190,61,0.1),rgba(255,140,0,0.05));border:1px solid rgba(255,190,61,0.15)}
+.insight-card.alert{background:linear-gradient(135deg,rgba(255,107,107,0.1),rgba(230,57,70,0.05));border:1px solid rgba(255,107,107,0.15)}
+.insight-title{font-size:14px;font-weight:700;margin-bottom:6px}
+.insight-title.info{color:var(--green)}
+.insight-title.warn{color:var(--amber)}
+.insight-title.alert{color:var(--coral)}
+.insight-body{font-size:12px;line-height:1.7;font-weight:500}
+.insight-body.info{color:rgba(0,229,160,0.85)}
+.insight-body.warn{color:rgba(255,190,61,0.85)}
+.insight-body.alert{color:rgba(255,107,107,0.85)}
+.caf-wrap{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1}
+.caf-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.caf-row:last-child{margin-bottom:0}
+.caf-name{font-size:12px;color:var(--muted);font-weight:600;width:72px;flex-shrink:0}
+.caf-bg{flex:1;height:7px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.caf-bar{height:100%;border-radius:4px;background:linear-gradient(135deg,var(--amber),#FF8C00)}
+.caf-val{font-size:11px;font-weight:700;color:var(--amber);width:38px;text-align:right}
+ 
+/* AI */
+.ai-intro{margin:0 16px 12px;border-radius:20px;padding:20px;position:relative;overflow:hidden;z-index:1;background:linear-gradient(135deg,#0F1E35,#1A1040)}
+.ai-intro::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,252,0.2),transparent 70%)}
+.ai-intro-title{font-size:14px;font-weight:700;color:var(--purple);margin-bottom:8px}
+.ai-intro-body{font-size:12px;color:rgba(167,139,250,0.8);line-height:1.7;font-weight:500}
+.qbtns{margin:0 16px 12px;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
+.qbtn{background:var(--grad-card);border:0.5px solid var(--border);border-radius:14px;padding:13px 16px;text-align:left;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--text);font-weight:500;display:flex;align-items:center;gap:10px;transition:border-color 0.15s}
+.qbtn:hover{border-color:var(--purple)}
+.qbtn-ico{width:32px;height:32px;border-radius:10px;background:var(--purple-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.chat-area{margin:0 16px;display:flex;flex-direction:column;gap:10px;margin-bottom:12px;position:relative;z-index:1}
+.msg{max-width:86%;padding:13px 16px;border-radius:18px;font-size:13px;line-height:1.65;font-weight:500}
+.msg.user{background:linear-gradient(135deg,var(--green2),var(--green));color:#0B1A12;align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
+.msg.ai{background:var(--card);color:var(--text);align-self:flex-start;border:0.5px solid var(--border);border-bottom-left-radius:4px}
+.msg.typing{background:var(--card);border:0.5px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;padding:14px 16px}
+.dots{display:flex;gap:4px;align-items:center}
+.dots span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:dot 1.3s infinite}
+.dots span:nth-child(2){animation-delay:0.2s}
+.dots span:nth-child(3){animation-delay:0.4s}
+@keyframes dot{0%,80%,100%{opacity:0.3;transform:scale(0.8)}40%{opacity:1;transform:scale(1)}}
+.chat-input-wrap{position:sticky;bottom:90px;padding:0 16px 8px;z-index:10}
+.chat-row{display:flex;gap:10px;align-items:flex-end;background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:10px 10px 10px 16px}
+.chat-ta{flex:1;border:none;background:transparent;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;color:var(--text);resize:none;outline:none;max-height:100px;line-height:1.5;font-weight:500}
+.chat-ta::placeholder{color:var(--muted2)}
+.chat-send{width:38px;height:38px;border-radius:12px;background:var(--grad-green);border:none;color:#0B1A12;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;transition:opacity 0.15s}
+.chat-send:disabled{opacity:0.35;cursor:not-allowed}
+.ai-disc{margin:0 16px 8px;font-size:10px;color:var(--muted2);text-align:center;font-weight:500;position:relative;z-index:1}
+ 
+/* PROFILE BANNER */
+.profile-banner{margin:0 16px 12px;background:linear-gradient(135deg,rgba(124,92,252,0.15),rgba(0,229,160,0.1));border:1px solid rgba(167,139,250,0.2);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.profile-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--purple2),var(--green2));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0}
+.profile-info{flex:1}
+.profile-name{font-size:16px;font-weight:800;color:var(--text)}
+.profile-goal{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px}
+.profile-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,0.2)}
 </style>
 </head>
 <body>
-<div class="app" id="app">
+<div class="app">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+ 
+  <!-- HOME -->
   <div class="screen active" id="screen-home">
     <div class="screen-header">
-      <div>
-        <div class="greeting">Good <span id="time-greet">morning</span> 🌿</div>
-        <div class="date-pill" id="today-date"></div>
-      </div>
+      <div class="greet-lbl" id="greet-lbl">Good morning</div>
+      <div class="greet-name" id="greet-name">Sleep Tracker 🌙</div>
+      <div class="date-chip" id="today-date"></div>
     </div>
-    <div class="card">
-      <div class="card-label">Energy level today</div>
-      <div class="energy-section">
+    <div class="profile-banner" id="profile-banner">
+      <div class="profile-avatar" id="profile-avatar">S</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profile-name">Slumber User</div>
+        <div class="profile-goal" id="profile-goal">Sleep goal: 8h · Adult</div>
+      </div>
+      <div class="profile-badge" id="profile-badge">On track</div>
+    </div>
+    <div class="energy-hero">
+      <div class="energy-top">
         <div class="ring-wrap">
-          <svg width="100" height="100" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="40" fill="none" stroke="#E1F5EE" stroke-width="10"/>
-            <circle id="energy-ring" cx="50" cy="50" r="40" fill="none" stroke="#1D9E75" stroke-width="10" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="75.36"/>
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="44" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="11"/>
+            <circle id="energy-ring" cx="55" cy="55" r="44" fill="none" stroke="url(#rg)" stroke-width="11" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="82.9"/>
+            <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00E5A0"/><stop offset="100%" stop-color="#00B87A"/></linearGradient></defs>
           </svg>
           <div class="ring-center">
             <div class="ring-pct" id="energy-pct">70%</div>
-            <div class="ring-label">energy</div>
+            <div class="ring-lbl">energy</div>
           </div>
         </div>
-        <div class="energy-details">
-          <div class="e-row"><span class="e-key">Last night</span><span class="e-val" id="dash-sleep">6h 30m</span></div>
-          <div class="e-row"><span class="e-key">Avg (7d)</span><span class="e-val" id="dash-avg">7h 10m</span></div>
-          <div class="e-row"><span class="e-key">Sleep debt</span><span class="e-val" id="dash-debt" style="color:#D85A30">–30m</span></div>
-          <div class="e-row"><span class="e-key">Nap needed</span><span class="e-val" id="dash-nap" style="color:#1D9E75">20 min</span></div>
+        <div class="e-stats">
+          <div class="e-row"><span class="e-key">Last night</span><span class="e-val" id="dash-sleep" style="color:var(--green)">6h 30m</span></div>
+          <div class="e-row"><span class="e-key">7d average</span><span class="e-val" id="dash-avg">7h 10m</span></div>
+          <div class="e-row"><span class="e-key">Sleep debt</span><span class="e-val" id="dash-debt" style="color:var(--coral)">–30m</span></div>
+          <div class="e-row"><span class="e-key">Nap needed</span><span class="e-val" id="dash-nap" style="color:var(--purple)">20 min</span></div>
         </div>
       </div>
     </div>
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-num" id="stat-caffeine">0</div>
-        <div class="stat-unit">mg caffeine</div>
-        <div class="stat-name">today so far</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num" id="stat-items">0</div>
-        <div class="stat-unit">items logged</div>
-        <div class="stat-name">today</div>
-      </div>
+    <div class="stats-grid">
+      <div class="stat-card green"><div class="stat-num" id="stat-caf">0</div><div class="stat-unit">mg caffeine</div><div class="stat-name">today so far</div></div>
+      <div class="stat-card purple"><div class="stat-num" id="stat-items">0</div><div class="stat-unit">items logged</div><div class="stat-name">today</div></div>
     </div>
     <div class="card">
       <div class="card-label">Today's log</div>
-      <div id="dash-log-list" style="font-size:13px;color:#6b6b6b">No entries yet — tap + to log something.</div>
+      <div id="dash-log-list" style="font-size:13px;color:var(--muted);font-weight:500">No entries yet — tap + to log something.</div>
     </div>
   </div>
-
+ 
+  <!-- LOG -->
   <div class="screen" id="screen-log">
-    <div class="log-header">
-      <div style="font-family:'DM Serif Display',serif;font-size:26px">Daily log</div>
-      <div style="font-size:13px;color:#6b6b6b;margin-top:4px">Track what affects your sleep</div>
+    <div class="screen-header">
+      <div class="greet-name" style="margin-bottom:4px">Daily Log</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Track what affects your sleep</div>
     </div>
-    <div class="section-title">Today's entries</div>
-    <div id="log-entries-container">
-      <div style="margin:0 16px;color:#6b6b6b;font-size:13px">Nothing logged yet. Tap + to add an entry.</div>
-    </div>
+    <div class="sec-title">Today's entries</div>
+    <div id="log-entries"></div>
   </div>
-
+ 
+  <!-- HISTORY -->
   <div class="screen" id="screen-history">
     <div class="screen-header">
-      <div>
-        <div class="greeting">Sleep history</div>
-        <div style="font-size:13px;color:#6b6b6b;margin-top:4px">Past 7 days</div>
-      </div>
+      <div class="greet-name" style="margin-bottom:4px">Sleep History</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Past 7 days</div>
     </div>
-    <div class="history-chart-wrap">
+    <div class="chart-wrap">
       <div class="card-label">Hours slept per night</div>
-      <div class="chart-container">
-        <canvas id="sleepChart" role="img" aria-label="Bar chart of sleep hours over the past 7 days">Sleep history chart</canvas>
-      </div>
+      <div class="chart-container"><canvas id="sleepChart"></canvas></div>
     </div>
-    <div class="section-title">Daily breakdown</div>
-    <div id="history-list" class="history-list"></div>
+    <div class="sec-title">Daily breakdown</div>
+    <div id="history-list"></div>
   </div>
-
+ 
+  <!-- NAP -->
   <div class="screen" id="screen-nap">
     <div class="screen-header">
-      <div>
-        <div class="greeting">Nap advisor</div>
-        <div style="font-size:13px;color:#6b6b6b;margin-top:4px">Find your ideal nap length</div>
-      </div>
+      <div class="greet-name" style="margin-bottom:4px">Nap Advisor</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Find your ideal nap length</div>
     </div>
     <div class="nap-hero">
-      <div class="nap-hero-label">Recommended nap</div>
-      <div class="nap-hero-time" id="nap-rec-time">20 min</div>
-      <div class="nap-hero-sub" id="nap-rec-sub">Boosts alertness without grogginess</div>
+      <div class="nap-lbl">Recommended nap</div>
+      <div class="nap-time" id="nap-rec-time">20 min</div>
+      <div class="nap-sub" id="nap-rec-sub">Boosts alertness without grogginess</div>
     </div>
-    <div class="section-title" style="padding-top:4px">Choose a nap type</div>
-    <div class="nap-options">
-      <div class="nap-option selected" onclick="selectNap(this,'10–20 min','Boosts alertness fast')">
-        <div class="nap-opt-time">10–20m</div>
-        <div class="nap-opt-label">Power nap</div>
-        <div class="nap-opt-desc">Alertness boost, no grogginess</div>
-      </div>
-      <div class="nap-option" onclick="selectNap(this,'20–30 min','Deeper recovery, slight inertia')">
-        <div class="nap-opt-time">20–30m</div>
-        <div class="nap-opt-label">Full rest</div>
-        <div class="nap-opt-desc">Deeper recovery, slight inertia</div>
-      </div>
-      <div class="nap-option" onclick="selectNap(this,'90 min','Complete sleep cycle, wake refreshed')">
-        <div class="nap-opt-time">90m</div>
-        <div class="nap-opt-label">Full cycle</div>
-        <div class="nap-opt-desc">Includes REM, wake feeling fresh</div>
-      </div>
-      <div class="nap-option" onclick="selectNap(this,'No nap','Eyes closed, mind quiet')">
-        <div class="nap-opt-time">0m</div>
-        <div class="nap-opt-label">Rest only</div>
-        <div class="nap-opt-desc">Eyes closed, mind quiet</div>
-      </div>
+    <div class="sec-title">Choose a nap type</div>
+    <div class="nap-grid">
+      <div class="nap-opt sel" onclick="selNap(this,'10–20 min','Boosts alertness fast')"><div class="nap-opt-time">10–20m</div><div class="nap-opt-label">Power nap</div><div class="nap-opt-desc">No grogginess, fast boost</div></div>
+      <div class="nap-opt" onclick="selNap(this,'20–30 min','Deeper recovery, slight inertia')"><div class="nap-opt-time">20–30m</div><div class="nap-opt-label">Full rest</div><div class="nap-opt-desc">Deeper recovery</div></div>
+      <div class="nap-opt" onclick="selNap(this,'90 min','Complete sleep cycle, wake refreshed')"><div class="nap-opt-time">90m</div><div class="nap-opt-label">Full cycle</div><div class="nap-opt-desc">Includes REM sleep</div></div>
+      <div class="nap-opt" onclick="selNap(this,'No nap','Eyes closed, mind quiet')"><div class="nap-opt-time">0m</div><div class="nap-opt-label">Rest only</div><div class="nap-opt-desc">Eyes closed, relax</div></div>
     </div>
-    <div class="science-box">
-      <div class="science-title"><i class="ti ti-flask" aria-hidden="true"></i> Why this works</div>
-      <div class="science-body" id="science-text">A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins, so there's no sleep inertia — just sharpened focus. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake (the "caffeine nap" technique).</div>
+    <div class="sci-card">
+      <div class="sci-head">🔬 Why this works</div>
+      <div class="sci-body" id="sci-text">A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake (the "caffeine nap" technique).</div>
     </div>
   </div>
-
+ 
+  <!-- INSIGHTS -->
   <div class="screen" id="screen-insights">
     <div class="screen-header">
-      <div>
-        <div class="greeting">Insights</div>
-        <div style="font-size:13px;color:#6b6b6b;margin-top:4px">Personalised patterns</div>
-      </div>
+      <div class="greet-name" style="margin-bottom:4px">Insights</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Personalised patterns</div>
     </div>
     <div id="insights-container"></div>
-    <div class="caffeine-bar-wrap">
-      <div class="card-label" style="margin-bottom:12px">Caffeine in your system (est.)</div>
-      <div id="caffeine-bars"></div>
-      <div style="font-size:11px;color:#6b6b6b;margin-top:8px">Caffeine half-life ~5–6 hours. Amounts shown are approximate.</div>
+    <div class="sec-title">Caffeine breakdown</div>
+    <div class="caf-wrap"><div id="caf-bars"><div style="font-size:13px;color:var(--muted);font-weight:500">No caffeine logged today.</div></div><div style="font-size:10px;color:var(--muted2);margin-top:10px;font-weight:500">Caffeine half-life ~5–6 hours. Amounts are approximate.</div></div>
+  </div>
+ 
+  <!-- AI -->
+  <div class="screen" id="screen-ai">
+    <div class="screen-header">
+      <div class="greet-name" style="margin-bottom:4px">AI Advisor ✨</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Science-backed, personalised advice</div>
+    </div>
+    <div class="ai-intro">
+      <div class="ai-intro-title">🧠 Deep sleep science</div>
+      <div class="ai-intro-body">Your logs and profile are shared with the AI so it gives advice based on your real patterns — not generic tips.</div>
+    </div>
+    <div class="sec-title">Quick questions</div>
+    <div class="qbtns">
+      <button class="qbtn" onclick="sendQuick('Why do I feel tired even after 7+ hours of sleep?')"><div class="qbtn-ico">😴</div>Why am I tired after 7+ hours?</button>
+      <button class="qbtn" onclick="sendQuick('Based on my caffeine intake today, when is the best time to nap?')"><div class="qbtn-ico">☕</div>When should I nap given my caffeine?</button>
+      <button class="qbtn" onclick="sendQuick('Looking at my sleep history, what patterns do you notice?')"><div class="qbtn-ico">📊</div>What patterns do you see in my history?</button>
+      <button class="qbtn" onclick="sendQuick('How can I improve my sleep quality this week?')"><div class="qbtn-ico">🚀</div>How do I improve my sleep this week?</button>
+    </div>
+    <div class="sec-title">Chat</div>
+    <div class="chat-area" id="chat-area"></div>
+    <div class="ai-disc">Responses may take a few seconds · Not medical advice</div>
+    <div class="chat-input-wrap">
+      <div class="chat-row">
+        <textarea class="chat-ta" id="chat-inp" placeholder="Ask anything about your sleep..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="chat-send" id="send-btn" onclick="sendMsg()" aria-label="Send">➤</button>
+      </div>
     </div>
   </div>
-
+ 
+  <!-- NAV -->
   <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="goTo('home',this)"><i class="ti ti-home"></i><span>Home</span></button>
-    <button class="nav-btn" onclick="goTo('log',this)"><i class="ti ti-clipboard-list"></i><span>Log</span></button>
-    <button class="nav-btn" onclick="goTo('history',this)"><i class="ti ti-chart-bar"></i><span>History</span></button>
-    <button class="nav-btn" onclick="goTo('nap',this)"><i class="ti ti-moon"></i><span>Nap</span></button>
-    <button class="nav-btn" onclick="goTo('insights',this)"><i class="ti ti-bulb"></i><span>Insights</span></button>
+    <div class="nav-inner">
+      <button class="nav-btn active" onclick="goTo('home',this)">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
+      </button>
+      <button class="nav-btn" onclick="goTo('log',this)">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Log
+      </button>
+      <button class="nav-btn" onclick="goTo('history',this)">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>History
+      </button>
+      <button class="nav-btn" onclick="goTo('nap',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>Nap
+      </button>
+      <button class="nav-btn" onclick="goTo('insights',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Insights
+      </button>
+      <button class="nav-btn" onclick="goTo('ai',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Advisor
+      </button>
+    </div>
   </nav>
-
-  <button class="fab" id="fab-btn" aria-label="Add entry" onclick="openModal()"><i class="ti ti-plus"></i></button>
-
-  <div class="modal-overlay hidden" id="modal-overlay" onclick="closeModalIfBg(event)">
-    <div class="modal" style="position:relative">
-      <button class="close-btn" onclick="closeModal()"><i class="ti ti-x"></i></button>
+ 
+  <button class="fab" id="fab-btn" aria-label="Add entry" onclick="openModal()">+</button>
+ 
+  <!-- MODAL -->
+  <div class="modal-overlay hidden" id="modal-overlay" onclick="closeBg(event)">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
       <div class="modal-title">Add entry</div>
-      <div class="modal-section">
-        <div class="modal-label">Type</div>
-        <div class="chip-group">
-          <div class="chip selected" onclick="selectType(this,'consume')">Consumed</div>
-          <div class="chip" onclick="selectType(this,'sleep')">Sleep</div>
+      <div class="modal-sec">
+        <div class="modal-lbl">Type</div>
+        <div class="chip-group" id="type-chips">
+          <div class="chip sel" onclick="selType(this,'consume')">Consumed</div>
+          <div class="chip" onclick="selType(this,'sleep')">Sleep</div>
         </div>
       </div>
       <div id="consume-fields">
-        <div class="modal-section">
-          <div class="modal-label">What did you have?</div>
+        <div class="modal-sec">
+          <div class="modal-lbl">What did you have?</div>
           <div class="chip-group" id="item-chips">
-            <div class="chip" onclick="selectItem(this,'Coffee')">☕ Coffee</div>
-            <div class="chip" onclick="selectItem(this,'Tea')">🍵 Tea</div>
-            <div class="chip" onclick="selectItem(this,'Energy drink')">⚡ Energy drink</div>
-            <div class="chip" onclick="selectItem(this,'Alcohol')">🍺 Alcohol</div>
-            <div class="chip" onclick="selectItem(this,'Heavy meal')">🍲 Heavy meal</div>
-            <div class="chip" onclick="selectItem(this,'Light meal')">🥗 Light meal</div>
-            <div class="chip" onclick="selectItem(this,'Water')">💧 Water</div>
-            <div class="chip" onclick="selectItem(this,'Melatonin')">💊 Melatonin</div>
+            <div class="chip" onclick="selItem(this,'Coffee')">☕ Coffee</div>
+            <div class="chip" onclick="selItem(this,'Tea')">🍵 Tea</div>
+            <div class="chip" onclick="selItem(this,'Energy drink')">⚡ Energy drink</div>
+            <div class="chip" onclick="selItem(this,'Alcohol')">🍺 Alcohol</div>
+            <div class="chip" onclick="selItem(this,'Heavy meal')">🍲 Heavy meal</div>
+            <div class="chip" onclick="selItem(this,'Light meal')">🥗 Light meal</div>
+            <div class="chip" onclick="selItem(this,'Water')">💧 Water</div>
+            <div class="chip" onclick="selItem(this,'Melatonin')">💊 Melatonin</div>
           </div>
         </div>
-        <div class="modal-section">
-          <div class="modal-label">Quantity</div>
-          <div class="amount-row">
-            <button class="amount-btn" onclick="changeAmt(-1)">−</button>
-            <span class="amount-val" id="amt-display">1</span>
-            <button class="amount-btn" onclick="changeAmt(1)">+</button>
-            <span style="font-size:13px;color:#6b6b6b">serving(s)</span>
+        <div class="modal-sec">
+          <div class="modal-lbl">Quantity</div>
+          <div class="amt-row">
+            <button class="amt-btn" onclick="chgAmt(-1)">−</button>
+            <span class="amt-val" id="amt-display">1</span>
+            <button class="amt-btn" onclick="chgAmt(1)">+</button>
+            <span style="font-size:13px;color:var(--muted);font-weight:500">serving(s)</span>
           </div>
         </div>
-        <div class="modal-section">
-          <div class="modal-label">Time</div>
-          <input type="time" class="time-input" id="consume-time">
+        <div class="modal-sec">
+          <div class="modal-lbl">Time</div>
+          <input type="time" class="time-inp" id="consume-time">
         </div>
       </div>
       <div id="sleep-fields" class="hidden">
-        <div class="modal-section">
-          <div class="modal-label">Sleep window</div>
-          <div class="sleep-input-row">
-            <div class="sleep-field">
-              <label>Bedtime</label>
-              <input type="time" class="time-input" id="bed-time">
-            </div>
-            <div class="sleep-field">
-              <label>Wake time</label>
-              <input type="time" class="time-input" id="wake-time">
-            </div>
+        <div class="modal-sec">
+          <div class="modal-lbl">Sleep window</div>
+          <div class="sleep-row">
+            <div class="sleep-field"><label>Bedtime</label><input type="time" class="time-inp" id="bed-time"></div>
+            <div class="sleep-field"><label>Wake time</label><input type="time" class="time-inp" id="wake-time"></div>
           </div>
         </div>
-        <div class="modal-section">
-          <div class="modal-label">Quality</div>
+        <div class="modal-sec">
+          <div class="modal-lbl">Quality</div>
           <div class="chip-group" id="quality-chips">
-            <div class="chip" onclick="selectQuality(this,'Restless')">😴 Restless</div>
-            <div class="chip" onclick="selectQuality(this,'Okay')">😐 Okay</div>
-            <div class="chip selected" onclick="selectQuality(this,'Good')">😊 Good</div>
-            <div class="chip" onclick="selectQuality(this,'Great')">🌟 Great</div>
+            <div class="chip" onclick="selQuality(this,'Restless')">😴 Restless</div>
+            <div class="chip" onclick="selQuality(this,'Okay')">😐 Okay</div>
+            <div class="chip sel" onclick="selQuality(this,'Good')">😊 Good</div>
+            <div class="chip" onclick="selQuality(this,'Great')">🌟 Great</div>
           </div>
         </div>
       </div>
-      <button class="save-btn" onclick="saveEntry()">Save entry</button>
+      <button class="save-btn" onclick="saveEntry()">Save Entry</button>
     </div>
   </div>
 </div>
-
+ 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-const ITEMS = {
+const ITEMS={
   'Coffee':{caf:95,effect:'neg',label:'Delays sleep ~1h'},
   'Tea':{caf:40,effect:'neg',label:'Mild stimulant'},
   'Energy drink':{caf:160,effect:'neg',label:'Disrupts deep sleep'},
@@ -339,135 +441,142 @@ const ITEMS = {
   'Water':{caf:0,effect:'pos',label:'Aids recovery'},
   'Melatonin':{caf:0,effect:'pos',label:'Promotes sleep onset'},
 };
-
-let state = {
-  todayLog:[],
-  sleepHistory:[
-    {date:'Mon',hours:7.5,quality:'Good'},
-    {date:'Tue',hours:6.0,quality:'Okay'},
-    {date:'Wed',hours:8.0,quality:'Great'},
-    {date:'Thu',hours:5.5,quality:'Restless'},
-    {date:'Fri',hours:7.0,quality:'Good'},
-    {date:'Sat',hours:7.5,quality:'Good'},
-    {date:'Sun',hours:6.5,quality:'Okay'},
-  ],
-  selectedItem:null,
-  selectedType:'consume',
-  selectedQuality:'Good',
-  amount:1,
-};
-
-let sleepChartInstance = null;
-
-function goTo(name, btn) {
+ 
+let profile = {display_name:'',sleep_goal_hours:8,age_group:'',work_schedule:'',main_goal:'',caffeine_sensitivity:'medium'};
+let state={todayLog:[],sleepHistory:[
+  {date:'Mon',hours:7.5,quality:'Good'},{date:'Tue',hours:6.0,quality:'Okay'},
+  {date:'Wed',hours:8.0,quality:'Great'},{date:'Thu',hours:5.5,quality:'Restless'},
+  {date:'Fri',hours:7.0,quality:'Good'},{date:'Sat',hours:7.5,quality:'Good'},
+  {date:'Sun',hours:6.5,quality:'Okay'},
+],selectedItem:null,selectedType:'consume',selectedQuality:'Good',amount:1,chatHistory:[],aiLoading:false};
+let chartInst=null;
+ 
+function loadProfile(){
+  try{
+    const p=localStorage.getItem('slumber_profile');
+    if(p){
+      const parsed=JSON.parse(p);
+      if(!parsed.onboarding_complete){ window.location.href='onboarding.html'; return; }
+      profile=parsed;
+    } else {
+      window.location.href='onboarding.html'; return;
+    }
+  }catch(e){}
+  applyProfile();
+}
+ 
+function applyProfile(){
+  const n=profile.display_name||'there';
+  const h=new Date().getHours();
+  const g=h<12?'Good morning':'Good afternoon';
+  document.getElementById('greet-lbl').textContent=g;
+  document.getElementById('greet-name').textContent='Hey, '+n+' 🌙';
+  document.getElementById('profile-avatar').textContent=n.charAt(0).toUpperCase();
+  document.getElementById('profile-name').textContent=n;
+  document.getElementById('profile-goal').textContent='Sleep goal: '+profile.sleep_goal_hours+'h · '+(profile.age_group||'');
+  document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  const t=new Date();t.setMinutes(0,0,0);
+  document.getElementById('consume-time').value=t.toTimeString().slice(0,5);
+  const bt=new Date(t);bt.setHours(bt.getHours()-8);
+  document.getElementById('bed-time').value=bt.toTimeString().slice(0,5);
+  document.getElementById('wake-time').value=t.toTimeString().slice(0,5);
+  updateDash();
+}
+ 
+function goTo(name,btn){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  const fab = document.getElementById('fab-btn');
-  fab.style.display = (name==='log'||name==='home') ? 'flex' : 'none';
-  if (name==='history') renderHistory();
-  if (name==='insights') renderInsights();
-  if (name==='nap') updateNapRec();
-  if (name==='home') updateDashboard();
+  document.getElementById('fab-btn').style.display=(name==='log'||name==='home')?'flex':'none';
+  if(name==='history')renderHistory();
+  if(name==='insights')renderInsights();
+  if(name==='nap')updateNapRec();
+  if(name==='home')updateDash();
 }
-
-function setGreet() {
-  const h = new Date().getHours();
-  document.getElementById('time-greet').textContent = h<12?'morning':h<17?'afternoon':'evening';
-  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  const t = new Date(); t.setMinutes(0,0,0);
-  document.getElementById('consume-time').value = t.toTimeString().slice(0,5);
-  const bt = new Date(t); bt.setHours(bt.getHours()-8);
-  document.getElementById('bed-time').value = bt.toTimeString().slice(0,5);
-  document.getElementById('wake-time').value = t.toTimeString().slice(0,5);
+ 
+function calcEnergy(){
+  const goal=profile.sleep_goal_hours||8;
+  const avg=state.sleepHistory.reduce((a,d)=>a+d.hours,0)/state.sleepHistory.length;
+  const last=state.sleepHistory[state.sleepHistory.length-1].hours;
+  const pct=Math.min(100,Math.round((last/goal)*100));
+  const debt=Math.round((last-goal)*60);
+  const napMins=debt<0?Math.min(90,Math.abs(debt)):0;
+  return{avg,last,pct,debt,napMins,goal};
 }
-
-function calcEnergy() {
-  const avg = state.sleepHistory.reduce((a,d)=>a+d.hours,0)/state.sleepHistory.length;
-  const last = state.sleepHistory[state.sleepHistory.length-1].hours;
-  const pct = Math.min(100,Math.round((last/8)*100));
-  const debt = Math.round((last-8)*60);
-  const napMins = debt<0?Math.min(90,Math.abs(debt)):0;
-  return {avg,last,pct,debt,napMins};
-}
-
-function fmtH(h) {
-  const hr=Math.floor(h); const min=Math.round((h-hr)*60);
-  return min>0?`${hr}h ${min}m`:`${hr}h`;
-}
-
-function updateDashboard() {
-  const {avg,last,pct,debt,napMins}=calcEnergy();
-  document.getElementById('energy-ring').setAttribute('stroke-dashoffset',(251.2*(1-pct/100)).toFixed(1));
+function fmtH(h){const hr=Math.floor(h);const m=Math.round((h-hr)*60);return m>0?`${hr}h ${m}m`:`${hr}h`;}
+ 
+function updateDash(){
+  const{avg,last,pct,debt,napMins}=calcEnergy();
+  const circ=276.5;
+  document.getElementById('energy-ring').setAttribute('stroke-dashoffset',(circ*(1-pct/100)).toFixed(1));
   document.getElementById('energy-pct').textContent=pct+'%';
   document.getElementById('dash-sleep').textContent=fmtH(last);
   document.getElementById('dash-avg').textContent=fmtH(avg);
-  const debtEl=document.getElementById('dash-debt');
-  debtEl.textContent=debt>=0?`+${debt}m`:`${debt}m`;
-  debtEl.style.color=debt>=0?'#1D9E75':'#D85A30';
+  const de=document.getElementById('dash-debt');
+  de.textContent=debt>=0?`+${debt}m`:`${debt}m`;
+  de.style.color=debt>=0?'var(--green)':'var(--coral)';
   document.getElementById('dash-nap').textContent=napMins>0?`${napMins} min`:'None needed';
+  const badge=document.getElementById('profile-badge');
+  if(debt>=0){badge.textContent='On track';badge.style.background='var(--green-dim)';badge.style.color='var(--green)';}
+  else{badge.textContent='Sleep debt';badge.style.background='var(--coral-dim)';badge.style.color='var(--coral)';}
   const caf=state.todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
-  document.getElementById('stat-caffeine').textContent=caf;
+  document.getElementById('stat-caf').textContent=caf;
   document.getElementById('stat-items').textContent=state.todayLog.length;
   const list=document.getElementById('dash-log-list');
-  if(!state.todayLog.length){list.innerHTML='<span style="color:#6b6b6b">No entries yet — tap + to log something.</span>';return;}
+  if(!state.todayLog.length){list.innerHTML='<span>No entries yet — tap + to log something.</span>';return;}
   list.innerHTML=state.todayLog.slice(-3).map(e=>{
     const icon=e.type==='sleep'?'😴':(ITEMS[e.item]?.effect==='pos'?'✅':'⚠️');
     const label=e.type==='sleep'?`Slept ${fmtH(e.hours)} (${e.quality})`:`${e.item} ×${e.amount} at ${e.time}`;
-    return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,0.08)"><span>${icon}</span><span>${label}</span></div>`;
+    return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:13px;font-weight:500"><span>${icon}</span><span>${label}</span></div>`;
   }).join('');
 }
-
-function renderLogScreen() {
-  const container=document.getElementById('log-entries-container');
-  if(!state.todayLog.length){container.innerHTML='<div style="margin:0 16px;color:#6b6b6b;font-size:13px">Nothing logged yet. Tap + to add an entry.</div>';return;}
-  const groups={consume:[],sleep:[]};
-  state.todayLog.forEach(e=>groups[e.type].push(e));
+ 
+function renderLogScreen(){
+  const c=document.getElementById('log-entries');
+  if(!state.todayLog.length){c.innerHTML='<div style="margin:0 16px;color:var(--muted);font-size:13px;font-weight:500">Nothing logged yet. Tap + to add.</div>';return;}
+  const g={consume:[],sleep:[]};state.todayLog.forEach(e=>g[e.type].push(e));
+  const icons={'Coffee':'☕','Tea':'🍵','Energy drink':'⚡','Alcohol':'🍺','Heavy meal':'🍲','Light meal':'🥗','Water':'💧','Melatonin':'💊'};
   let html='';
-  if(groups.sleep.length){
-    html+='<div class="section-title">Sleep</div><div class="log-group">';
-    groups.sleep.forEach(e=>{html+=`<div class="log-item"><div class="log-icon" style="background:#E1F5EE">😴</div><div class="log-info"><div class="log-name">Slept ${fmtH(e.hours)}</div><div class="log-time">${e.bedtime} → ${e.waketime} · ${e.quality}</div></div><span class="log-effect effect-pos">Sleep</span></div>`;});
+  if(g.sleep.length){
+    html+='<div class="sec-title">Sleep</div><div class="log-group">';
+    g.sleep.forEach(e=>{html+=`<div class="log-item"><div class="log-ico" style="background:var(--purple-dim)">😴</div><div class="log-info"><div class="log-name">${fmtH(e.hours)} sleep</div><div class="log-time">${e.bedtime} → ${e.waketime} · ${e.quality}</div></div><span class="log-badge badge-sleep">Sleep</span></div>`;});
     html+='</div>';
   }
-  if(groups.consume.length){
-    html+='<div class="section-title">Consumed</div><div class="log-group">';
-    const icons={'Coffee':'☕','Tea':'🍵','Energy drink':'⚡','Alcohol':'🍺','Heavy meal':'🍲','Light meal':'🥗','Water':'💧','Melatonin':'💊'};
-    groups.consume.forEach(e=>{
+  if(g.consume.length){
+    html+='<div class="sec-title">Consumed</div><div class="log-group">';
+    g.consume.forEach(e=>{
       const info=ITEMS[e.item]||{};
-      const cls=info.effect==='pos'?'effect-pos':info.effect==='neg'?'effect-neg':'effect-neu';
-      html+=`<div class="log-item"><div class="log-icon" style="background:#E1F5EE">${icons[e.item]||'🍽'}</div><div class="log-info"><div class="log-name">${e.item} ×${e.amount}</div><div class="log-time">${e.time} · ${info.label||''}</div></div><span class="log-effect ${cls}">${info.caf?info.caf+'mg':info.effect==='pos'?'Helpful':'Note'}</span></div>`;
+      const cls=info.effect==='pos'?'badge-good':info.effect==='neg'?'badge-bad':'badge-neu';
+      html+=`<div class="log-item"><div class="log-ico" style="background:var(--green-dim)">${icons[e.item]||'🍽'}</div><div class="log-info"><div class="log-name">${e.item} ×${e.amount}</div><div class="log-time">${e.time} · ${info.label||''}</div></div><span class="log-badge ${cls}">${info.caf?info.caf+'mg':info.effect==='pos'?'Good':'Note'}</span></div>`;
     });
     html+='</div>';
   }
-  container.innerHTML=html;
+  c.innerHTML=html;
 }
-
-function renderHistory() {
-  const data=state.sleepHistory;
-  if(sleepChartInstance){sleepChartInstance.destroy();}
-  sleepChartInstance=new Chart(document.getElementById('sleepChart').getContext('2d'),{
+ 
+function renderHistory(){
+  const d=state.sleepHistory;
+  if(chartInst)chartInst.destroy();
+  chartInst=new Chart(document.getElementById('sleepChart').getContext('2d'),{
     type:'bar',
-    data:{labels:data.map(d=>d.date),datasets:[{label:'Hours slept',data:data.map(d=>d.hours),backgroundColor:data.map(d=>d.hours>=7?'#5DCAA5':d.hours>=6?'#EF9F27':'#D85A30'),borderRadius:6,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:10,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},callback:v=>v+'h'}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
+    data:{labels:d.map(x=>x.date),datasets:[{data:d.map(x=>x.hours),backgroundColor:d.map(x=>x.hours>=(profile.sleep_goal_hours||8)?'rgba(0,229,160,0.8)':x.hours>=6?'rgba(255,190,61,0.8)':'rgba(255,107,107,0.8)'),borderRadius:8,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(19,25,41,0.95)',titleColor:'#F0F4FF',bodyColor:'#7B8DB0',borderColor:'rgba(255,255,255,0.07)',borderWidth:1,cornerRadius:10,callbacks:{label:v=>` ${v.raw}h`}}},scales:{y:{min:0,max:10,grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#7B8DB0',font:{size:11,family:'Plus Jakarta Sans'},callback:v=>v+'h'}},x:{grid:{display:false},ticks:{color:'#7B8DB0',font:{size:11,family:'Plus Jakarta Sans'}}}}}
   });
-  document.getElementById('history-list').innerHTML=data.map(d=>{
-    const pct=Math.min(100,(d.hours/10)*100);
-    const cls=d.hours>=7?'badge-good':d.hours>=6?'badge-high':'badge-low';
-    const lbl=d.hours>=7?'Good':d.hours>=6?'Short':'Low';
-    return `<div class="history-day"><div class="day-bar-wrap"><div class="day-bar" style="height:${pct}%"></div></div><div class="day-info"><div class="day-label">${d.date} — ${fmtH(d.hours)}</div><div class="day-sub">Quality: ${d.quality}</div></div><span class="day-badge ${cls}">${lbl}</span></div>`;
+  const goal=profile.sleep_goal_hours||8;
+  document.getElementById('history-list').innerHTML=d.map(x=>{
+    const pct=Math.min(100,(x.hours/10)*100);
+    const cls=x.hours>=goal?'good':x.hours>=6?'mid':'low';
+    const lbl=x.hours>=goal?'Good':x.hours>=6?'Short':'Low';
+    const badgeCls=x.hours>=goal?'badge-good':x.hours>=6?'badge-neu':'badge-bad';
+    return `<div class="hist-item"><div class="hbar-wrap"><div class="hbar ${cls}" style="height:${pct}%"></div></div><div class="hday-info"><div class="hday-lbl">${x.date} — ${fmtH(x.hours)}</div><div class="hday-sub">Quality: ${x.quality}</div></div><span class="log-badge ${badgeCls}">${lbl}</span></div>`;
   }).join('');
 }
-
-const scienceTexts={
-  '10–20 min':'A 10–20 min nap stays in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake (the "caffeine nap" technique).',
-  '20–30 min':'At 20–30 min you may enter stage 2 sleep more deeply. You might feel mild sleep inertia for a few minutes, but memory consolidation and motor learning improve significantly.',
-  '90 min':'A full 90-min cycle includes light sleep, deep sleep, and REM. Waking at the end of a full cycle means you surface naturally — refreshed without grogginess. Best for severe sleep debt.',
-  'No nap':'Even lying still with eyes closed reduces cortisol and gives your brain a reset. You won\'t get sleep benefits, but mental fatigue is reduced and focus can return within 10 minutes.',
-};
-
-function updateNapRec() {
-  const {napMins}=calcEnergy();
+ 
+const SCI={'10–20 min':'A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake (the "caffeine nap" technique).','20–30 min':'At 20–30 min you may enter stage 2 sleep more deeply. You might feel mild sleep inertia for a few minutes, but memory consolidation and motor learning improve significantly.','90 min':'A full 90-min cycle includes light sleep, deep sleep, and REM. Waking at the end of a full cycle means you surface naturally — refreshed without grogginess. Best for severe sleep debt.','No nap':'Even lying still with eyes closed reduces cortisol and gives your brain a reset. Mental fatigue is reduced and focus can return within 10 minutes.'};
+ 
+function updateNapRec(){
+  const{napMins}=calcEnergy();
   let rec,sub;
   if(napMins===0){rec='None needed';sub='Your sleep debt is low — you\'re in good shape!';}
   else if(napMins<=20){rec='10–20 min';sub='A power nap will restore your alertness';}
@@ -476,85 +585,123 @@ function updateNapRec() {
   document.getElementById('nap-rec-time').textContent=rec;
   document.getElementById('nap-rec-sub').textContent=sub;
 }
-
-function selectNap(el,time,desc){
-  document.querySelectorAll('.nap-option').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected');
+function selNap(el,time,desc){
+  document.querySelectorAll('.nap-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
   document.getElementById('nap-rec-time').textContent=time;
   document.getElementById('nap-rec-sub').textContent=desc;
-  document.getElementById('science-text').textContent=scienceTexts[time]||scienceTexts['No nap'];
+  document.getElementById('sci-text').textContent=SCI[time]||SCI['No nap'];
 }
-
-function renderInsights() {
-  const {avg,last,debt}=calcEnergy();
-  const cafToday=state.todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
-  const lateNight=state.todayLog.find(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0&&e.time>='18:00');
-  const insights=[];
-  if(debt<-60)insights.push({type:'alert',icon:'ti-alert-triangle',title:'Sleep deficit detected',body:`You're running ${Math.abs(debt)} min behind your ideal 8 hours. A ${Math.min(90,Math.abs(debt))}-min nap or earlier bedtime can help restore balance.`});
-  else if(debt<0)insights.push({type:'warn',icon:'ti-clock',title:'Slightly under-slept',body:`You got ${fmtH(last)} last night — about ${Math.abs(debt)} min short of 8 hours. A 20-min power nap this afternoon can compensate without disrupting tonight's sleep.`});
-  else insights.push({type:'info',icon:'ti-circle-check',title:'Well-rested today',body:`Great night! You hit ${fmtH(last)} — above your 7-day average of ${fmtH(avg)}. No nap needed today.`});
-  if(cafToday>200)insights.push({type:'warn',icon:'ti-coffee',title:'High caffeine intake',body:`You've had ~${cafToday}mg today. Consider stopping caffeine by 2 PM to protect tonight's sleep quality.`});
-  else if(cafToday>0)insights.push({type:'info',icon:'ti-coffee',title:'Caffeine on track',body:`${cafToday}mg today — a moderate amount. If taken before noon, it should clear your system before sleep.`});
-  if(lateNight)insights.push({type:'alert',icon:'ti-moon-off',title:'Late caffeine detected',body:`You had ${lateNight.item} at ${lateNight.time}. With a 5–6 hour half-life, this may delay sleep onset and reduce deep sleep.`});
-  const lowDays=state.sleepHistory.filter(d=>d.hours<6.5).length;
-  if(lowDays>=3)insights.push({type:'warn',icon:'ti-trending-down',title:'Pattern: frequent short nights',body:`${lowDays} of the past 7 nights were under 6.5 hours. Cumulative sleep debt affects reaction time, memory, and mood even when you feel okay.`});
-  document.getElementById('insights-container').innerHTML=insights.map(i=>`<div class="insight-card ${i.type}"><div class="insight-icon"><i class="ti ${i.icon}" aria-hidden="true" style="color:${i.type==='info'?'#1D9E75':i.type==='warn'?'#BA7517':'#D85A30'}"></i></div><div class="insight-title ${i.type}">${i.title}</div><div class="insight-body ${i.type}">${i.body}</div></div>`).join('');
-  const cafSources=state.todayLog.filter(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0);
-  const barsEl=document.getElementById('caffeine-bars');
-  if(!cafSources.length){barsEl.innerHTML='<div style="font-size:13px;color:#6b6b6b">No caffeine logged today.</div>';return;}
-  const maxCaf=Math.max(...cafSources.map(e=>(ITEMS[e.item].caf||1)*e.amount));
-  barsEl.innerHTML=cafSources.map(e=>{const mg=(ITEMS[e.item].caf||0)*e.amount;return `<div class="caf-row"><span class="caf-name">${e.item}</span><div class="caf-bar-bg"><div class="caf-bar" style="width:${Math.round((mg/maxCaf)*100)}%"></div></div><span class="caf-val">${mg}mg</span></div>`;}).join('');
+ 
+function renderInsights(){
+  const{avg,last,debt}=calcEnergy();
+  const cafSens=profile.caffeine_sensitivity||'medium';
+  const cafCutoff=cafSens==='high'?14:cafSens==='low'?20:18;
+  const caf=state.todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  const lateC=state.todayLog.find(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0&&parseInt(e.time.split(':')[0])>=cafCutoff);
+  const ins=[];
+  if(debt<-60)ins.push({t:'alert',title:'Sleep deficit detected',body:`You're running ${Math.abs(debt)} min behind your ${profile.sleep_goal_hours||8}h goal. A ${Math.min(90,Math.abs(debt))}-min nap or earlier bedtime tonight can help.`});
+  else if(debt<0)ins.push({t:'warn',title:'Slightly under-slept',body:`You got ${fmtH(last)} — about ${Math.abs(debt)} min short of your ${profile.sleep_goal_hours||8}h goal. A 20-min power nap this afternoon can compensate.`});
+  else ins.push({t:'info',title:'Well-rested today',body:`Great night! You hit ${fmtH(last)} — above your 7-day average of ${fmtH(avg)}. No nap needed today.`});
+  if(caf>200)ins.push({t:'warn',title:'High caffeine intake',body:`~${caf}mg today. With ${cafSens} caffeine sensitivity, consider stopping by ${cafCutoff}:00 to protect tonight's sleep.`});
+  else if(caf>0)ins.push({t:'info',title:'Caffeine on track',body:`${caf}mg today — manageable for your sensitivity level.`});
+  if(lateC)ins.push({t:'alert',title:'Late caffeine detected',body:`You had ${lateC.item} after ${cafCutoff}:00. With your ${cafSens} caffeine sensitivity, this may delay sleep onset tonight.`});
+  const lowD=state.sleepHistory.filter(d=>d.hours<6.5).length;
+  if(lowD>=3)ins.push({t:'warn',title:'Frequent short nights',body:`${lowD} of 7 nights under 6.5h. This pattern affects ${profile.main_goal||'your daily performance'} — try banking extra sleep this weekend.`});
+  document.getElementById('insights-container').innerHTML=ins.map(i=>`<div class="insight-card ${i.t}"><div class="insight-title ${i.t}">${i.t==='info'?'✅':i.t==='warn'?'⚠️':'🚨'} ${i.title}</div><div class="insight-body ${i.t}">${i.body}</div></div>`).join('');
+  const cafS=state.todayLog.filter(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0);
+  if(!cafS.length){document.getElementById('caf-bars').innerHTML='<div style="font-size:13px;color:var(--muted);font-weight:500">No caffeine logged today.</div>';return;}
+  const maxC=Math.max(...cafS.map(e=>(ITEMS[e.item].caf||1)*e.amount));
+  document.getElementById('caf-bars').innerHTML=cafS.map(e=>{const mg=(ITEMS[e.item].caf||0)*e.amount;return `<div class="caf-row"><span class="caf-name">${e.item}</span><div class="caf-bg"><div class="caf-bar" style="width:${Math.round((mg/maxC)*100)}%"></div></div><span class="caf-val">${mg}mg</span></div>`;}).join('');
 }
-
+ 
 function openModal(){
   document.getElementById('modal-overlay').classList.remove('hidden');
   state.selectedItem=null;state.amount=1;state.selectedType='consume';state.selectedQuality='Good';
   document.getElementById('amt-display').textContent='1';
-  document.querySelectorAll('#item-chips .chip').forEach(c=>c.classList.remove('selected'));
-  document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('selected'));
-  document.querySelector('#quality-chips .chip:nth-child(3)').classList.add('selected');
+  document.querySelectorAll('#item-chips .chip').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('sel'));
+  document.querySelector('#quality-chips .chip:nth-child(3)').classList.add('sel');
+  document.querySelectorAll('#type-chips .chip').forEach((c,i)=>c.classList.toggle('sel',i===0));
   switchFields('consume');
-  document.querySelectorAll('.modal .chip-group')[0].querySelectorAll('.chip').forEach((c,i)=>{c.classList.toggle('selected',i===0);});
 }
 function closeModal(){document.getElementById('modal-overlay').classList.add('hidden');}
-function closeModalIfBg(e){if(e.target.id==='modal-overlay')closeModal();}
-function selectType(el,type){
-  document.querySelectorAll('.modal .chip-group')[0].querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');state.selectedType=type;switchFields(type);
-}
-function switchFields(type){
-  document.getElementById('consume-fields').classList.toggle('hidden',type==='sleep');
-  document.getElementById('sleep-fields').classList.toggle('hidden',type==='consume');
-}
-function selectItem(el,name){document.querySelectorAll('#item-chips .chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');state.selectedItem=name;}
-function selectQuality(el,q){document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');state.selectedQuality=q;}
-function changeAmt(d){state.amount=Math.max(1,Math.min(10,state.amount+d));document.getElementById('amt-display').textContent=state.amount;}
-
+function closeBg(e){if(e.target.id==='modal-overlay')closeModal();}
+function selType(el,t){document.querySelectorAll('#type-chips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');state.selectedType=t;switchFields(t);}
+function switchFields(t){document.getElementById('consume-fields').classList.toggle('hidden',t==='sleep');document.getElementById('sleep-fields').classList.toggle('hidden',t==='consume');}
+function selItem(el,name){document.querySelectorAll('#item-chips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');state.selectedItem=name;}
+function selQuality(el,q){document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');state.selectedQuality=q;}
+function chgAmt(d){state.amount=Math.max(1,Math.min(10,state.amount+d));document.getElementById('amt-display').textContent=state.amount;}
+ 
 function saveEntry(){
   if(state.selectedType==='consume'){
     if(!state.selectedItem){alert('Please select an item.');return;}
-    const time=document.getElementById('consume-time').value||'12:00';
-    state.todayLog.push({type:'consume',item:state.selectedItem,amount:state.amount,time});
+    state.todayLog.push({type:'consume',item:state.selectedItem,amount:state.amount,time:document.getElementById('consume-time').value||'12:00'});
   } else {
-    const bed=document.getElementById('bed-time').value;
-    const wake=document.getElementById('wake-time').value;
+    const bed=document.getElementById('bed-time').value,wake=document.getElementById('wake-time').value;
     if(!bed||!wake){alert('Please enter bed and wake times.');return;}
-    const bedM=parseInt(bed.split(':')[0])*60+parseInt(bed.split(':')[1]);
-    let wakeM=parseInt(wake.split(':')[0])*60+parseInt(wake.split(':')[1]);
-    if(wakeM<bedM)wakeM+=1440;
-    const hours=parseFloat(((wakeM-bedM)/60).toFixed(1));
+    const bM=parseInt(bed.split(':')[0])*60+parseInt(bed.split(':')[1]);
+    let wM=parseInt(wake.split(':')[0])*60+parseInt(wake.split(':')[1]);
+    if(wM<bM)wM+=1440;
+    const hours=parseFloat(((wM-bM)/60).toFixed(1));
     state.todayLog.push({type:'sleep',bedtime:bed,waketime:wake,hours,quality:state.selectedQuality});
     const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     const today=days[new Date().getDay()];
-    const existing=state.sleepHistory.findIndex(d=>d.date===today);
-    if(existing>=0)state.sleepHistory[existing]={date:today,hours,quality:state.selectedQuality};
+    const ex=state.sleepHistory.findIndex(d=>d.date===today);
+    if(ex>=0)state.sleepHistory[ex]={date:today,hours,quality:state.selectedQuality};
     else{state.sleepHistory.push({date:today,hours,quality:state.selectedQuality});if(state.sleepHistory.length>7)state.sleepHistory.shift();}
   }
-  closeModal();renderLogScreen();updateDashboard();
+  closeModal();renderLogScreen();updateDash();
 }
-
-setGreet();
-updateDashboard();
+ 
+function buildCtx(){
+  const{avg,last,debt,napMins,goal}=calcEnergy();
+  const caf=state.todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  const cl=state.todayLog.filter(e=>e.type==='consume').map(e=>`${e.item} x${e.amount} at ${e.time}`).join(', ')||'none';
+  const sl=state.todayLog.filter(e=>e.type==='sleep').map(e=>`${fmtH(e.hours)} (${e.quality})`).join(', ')||'none today';
+  const hist=state.sleepHistory.map(d=>`${d.date}:${d.hours}h(${d.quality})`).join(', ');
+  return `You are an expert sleep science advisor in a sleep tracking app. You have deep knowledge of sleep physiology, circadian rhythms, adenosine, REM cycles, caffeine pharmacology, sleep debt, and productivity science. Give warm, personalised, science-backed advice. Be concise. Never diagnose medically.\n\nUSER PROFILE:\n- Name: ${profile.display_name}\n- Age group: ${profile.age_group}\n- Sleep goal: ${goal}h/night\n- Work schedule: ${profile.work_schedule}\n- Main goal: ${profile.main_goal}\n- Caffeine sensitivity: ${profile.caffeine_sensitivity}\n\nTODAY'S DATA:\n- Last night: ${fmtH(last)}\n- 7d avg: ${fmtH(avg)}\n- Sleep debt: ${debt}min\n- Rec nap: ${napMins>0?napMins+'min':'none'}\n- Caffeine: ${caf}mg\n- Consumed: ${cl}\n- Sleep logged: ${sl}\n- 7d history: ${hist}`;
+}
+ 
+function appendMsg(role,text){
+  const d=document.createElement('div');d.className=`msg ${role}`;d.textContent=text;
+  document.getElementById('chat-area').appendChild(d);d.scrollIntoView({behavior:'smooth',block:'end'});return d;
+}
+function showTyping(){
+  const d=document.createElement('div');d.className='msg typing';d.id='typing';
+  d.innerHTML='<div class="dots"><span></span><span></span><span></span></div>';
+  document.getElementById('chat-area').appendChild(d);d.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function rmTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+ 
+async function sendMsg(){
+  const inp=document.getElementById('chat-inp');
+  const text=inp.value.trim();
+  if(!text||state.aiLoading)return;
+  inp.value='';inp.style.height='auto';
+  state.chatHistory.push({role:'user',content:text});
+  appendMsg('user',text);await callAI();
+}
+async function sendQuick(text){
+  if(state.aiLoading)return;
+  state.chatHistory.push({role:'user',content:text});
+  appendMsg('user',text);await callAI();
+}
+async function callAI(){
+  state.aiLoading=true;document.getElementById('send-btn').disabled=true;showTyping();
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildCtx(),messages:state.chatHistory})});
+    const d=await r.json();
+    const reply=d.content?.find(b=>b.type==='text')?.text||'Sorry, could not generate a response.';
+    rmTyping();appendMsg('ai',reply);state.chatHistory.push({role:'assistant',content:reply});
+  }catch{rmTyping();appendMsg('ai','Connection error. Please try again.');}
+  state.aiLoading=false;document.getElementById('send-btn').disabled=false;
+}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
+ 
+loadProfile();
 </script>
 </body>
 </html>
+ 
