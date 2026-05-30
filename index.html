@@ -649,7 +649,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 
   <!-- PLANET NAME MODAL -->
-  <div class="pname-modal hidden" id="pname-modal">
+  <div class="pname-modal" id="pname-modal" style="display:none">
+
     <div class="pname-box">
       <div class="pname-title">Name your planet 🪐</div>
       <input class="pname-inp" id="pname-inp" type="text" placeholder="e.g. Nova, Zephyr, Lumis..." maxlength="20">
@@ -1030,16 +1031,16 @@ function openPlanetNameModal(){
   const defaultName=(profile.display_name||'Your')+"'s Planet";
   document.getElementById('pname-inp').value=planetData.name||'';
   document.getElementById('pname-inp').placeholder=defaultName;
-  document.getElementById('pname-modal').classList.remove('hidden');
+  document.getElementById('pname-modal').style.display='flex';
 }
 
 function savePlanetName(){
   const name=document.getElementById('pname-inp').value.trim();
-  if(!name){showToast('Please enter a name','err');return;}
-  planetData.name=name;
+  const defaultName=(profile.display_name||'Your')+"'s Planet";
+  planetData.name=name||defaultName;
   savePlanetDataLocal();
   document.getElementById('pname-inp').value='';
-  document.getElementById('pname-modal').classList.add('hidden');
+  document.getElementById('pname-modal').style.display='none';
   renderPlanetScreen();
   showToast('✅ Planet renamed!');
 }
