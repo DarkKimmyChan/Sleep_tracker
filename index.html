@@ -1025,21 +1025,23 @@ function generateMiniPlanetSVG(c1,c2){
 // =============================================
 // PLANET NAME MODAL
 // =============================================
+
 function openPlanetNameModal(){
+  const defaultName=(profile.display_name||'Your')+"'s Planet";
   document.getElementById('pname-inp').value=planetData.name||'';
-  document.getElementById('pname-inp').value='';
-  document.getElementById('pname-modal').classList.add('hidden');
-  renderPlanetScreen();
-  showToast('✅ Planet renamed!');
+  document.getElementById('pname-inp').placeholder=defaultName;
+  document.getElementById('pname-modal').classList.remove('hidden');
 }
+
 function savePlanetName(){
   const name=document.getElementById('pname-inp').value.trim();
   if(!name){showToast('Please enter a name','err');return;}
   planetData.name=name;
   savePlanetDataLocal();
+  document.getElementById('pname-inp').value='';
   document.getElementById('pname-modal').classList.add('hidden');
   renderPlanetScreen();
-  showToast('✅ Planet named!');
+  showToast('✅ Planet renamed!');
 }
 
 // =============================================
