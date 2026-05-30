@@ -8,11 +8,11 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0B0F1A;--bg2:#131929;--bg3:#1A2235;
-  --card:#1E2A40;--card2:#243050;--border:rgba(255,255,255,0.07);
+  --card:#1E2A40;--border:rgba(255,255,255,0.07);
   --text:#F0F4FF;--muted:#7B8DB0;--muted2:#4A5878;
   --green:#00E5A0;--green2:#00B87A;--green-dim:rgba(0,229,160,0.12);
   --purple:#A78BFA;--purple2:#7C5CFC;--purple-dim:rgba(167,139,250,0.12);
-  --amber:#FFBE3D;--amber-dim:rgba(255,190,61,0.12);--amber-mid:#EF9F27;
+  --amber:#FFBE3D;--amber-dim:rgba(255,190,61,0.12);
   --coral:#FF6B6B;--coral-dim:rgba(255,107,107,0.12);
   --grad-green:linear-gradient(135deg,#00E5A0,#00B87A);
   --grad-purple:linear-gradient(135deg,#A78BFA,#7C5CFC);
@@ -26,26 +26,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .orb1{width:300px;height:300px;background:#7C5CFC;top:-80px;right:-60px}
 .orb2{width:250px;height:250px;background:#00B87A;bottom:100px;left:-80px}
 .orb3{width:200px;height:200px;background:#3B82F6;top:40%;right:-80px;opacity:0.12}
- 
-/* NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:100;padding:0 16px 20px}
 .nav-inner{background:rgba(19,25,41,0.85);backdrop-filter:blur(20px);border:0.5px solid var(--border);border-radius:24px;display:flex;justify-content:space-around;padding:10px 8px}
 .nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:16px;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.03em;transition:all 0.2s;text-transform:uppercase}
 .nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .nav-btn.active{color:var(--green);background:var(--green-dim)}
- 
-/* HEADER */
 .screen-header{padding:20px 20px 8px;position:relative;z-index:1}
 .greet-lbl{font-size:13px;color:var(--muted);font-weight:500}
 .greet-name{font-size:26px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#F0F4FF,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .date-chip{font-size:11px;background:var(--green-dim);color:var(--green);padding:5px 12px;border-radius:20px;font-weight:600;border:1px solid rgba(0,229,160,0.2);display:inline-block;margin-top:6px}
- 
-/* CARDS */
 .card{background:var(--grad-card);border:0.5px solid var(--border);border-radius:20px;padding:18px;margin:0 16px 12px;position:relative;z-index:1;overflow:hidden}
 .card::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,0.04),transparent);pointer-events:none}
 .card-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
- 
-/* ENERGY HERO */
 .energy-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:linear-gradient(135deg,#1B2A4A,#0F1E35)}
 .energy-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,160,0.2),transparent 70%)}
 .energy-top{display:flex;align-items:center;gap:20px}
@@ -59,8 +51,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .e-row:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
 .e-key{font-size:12px;color:var(--muted);font-weight:500}
 .e-val{font-size:13px;font-weight:700}
- 
-/* STATS */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px;position:relative;z-index:1}
 .stat-card{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;overflow:hidden}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:18px 18px 0 0}
@@ -71,11 +61,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .stat-card.purple .stat-num{background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stat-unit{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
 .stat-name{font-size:11px;color:var(--muted2);font-weight:500;margin-top:2px}
- 
-/* SECTION TITLE */
 .sec-title{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;padding:4px 20px 8px;position:relative;z-index:1}
- 
-/* LOG */
 .log-group{margin:0 16px 12px;border-radius:20px;overflow:hidden;border:0.5px solid var(--border);position:relative;z-index:1}
 .log-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid var(--border);background:var(--grad-card)}
 .log-item:last-child{border-bottom:none}
@@ -88,12 +74,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .badge-good{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,0.2)}
 .badge-neu{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,190,61,0.2)}
 .badge-sleep{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,0.2)}
- 
-/* FAB */
-.fab{position:fixed;bottom:96px;right:calc(50% - 215px + 16px);width:52px;height:52px;border-radius:50%;background:var(--grad-green);border:none;color:#0B1A12;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(0,229,160,0.4);z-index:99;transition:transform 0.15s,box-shadow 0.15s;font-weight:700}
-.fab:active{transform:scale(0.94);box-shadow:0 4px 12px rgba(0,229,160,0.3)}
- 
-/* MODAL */
+.fab{position:fixed;bottom:96px;right:calc(50% - 215px + 16px);width:52px;height:52px;border-radius:50%;background:var(--grad-green);border:none;color:#0B1A12;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(0,229,160,0.4);z-index:99;font-weight:700}
+.fab:active{transform:scale(0.94)}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:flex-end;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%)}
 .modal{background:var(--bg2);border:0.5px solid var(--border);border-radius:28px 28px 0 0;padding:28px 20px 36px;width:100%;max-height:82vh;overflow-y:auto;position:relative}
 .modal-handle{width:36px;height:4px;background:var(--muted2);border-radius:4px;margin:0 auto 20px}
@@ -104,17 +86,16 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .chip{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--bg3);font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Plus Jakarta Sans',sans-serif;color:var(--muted);font-weight:600}
 .chip.sel{background:var(--green-dim);color:var(--green);border-color:rgba(0,229,160,0.3)}
 .time-inp{width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:14px;font-size:15px;font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg3);color:var(--text);outline:none}
-.time-inp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,229,160,0.1)}
+.time-inp:focus{border-color:var(--green)}
 .amt-row{display:flex;align-items:center;gap:14px;margin-top:10px}
 .amt-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif}
 .amt-val{font-size:20px;font-weight:700;min-width:40px;text-align:center}
 .save-btn{width:100%;padding:15px;background:var(--grad-green);color:#0B1A12;border:none;border-radius:16px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px}
+.save-btn:disabled{opacity:0.5;cursor:not-allowed}
 .close-btn{position:absolute;top:20px;right:20px;background:var(--bg3);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center}
 .sleep-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .sleep-field label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:6px;letter-spacing:0.04em;text-transform:uppercase}
 .hidden{display:none}
- 
-/* HISTORY */
 .chart-wrap{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:20px;padding:18px;position:relative;z-index:1}
 .chart-container{position:relative;height:180px}
 .hist-item{display:flex;align-items:center;gap:14px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:16px;padding:14px 16px;margin:0 16px 8px;position:relative;z-index:1}
@@ -126,15 +107,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .hday-info{flex:1}
 .hday-lbl{font-size:13px;font-weight:700}
 .hday-sub{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
- 
-/* NAP */
 .nap-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:linear-gradient(135deg,#1C1640,#0F0B2A)}
 .nap-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,0.25),transparent 70%)}
 .nap-lbl{font-size:10px;color:rgba(167,139,250,0.7);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
 .nap-time{font-size:52px;font-weight:800;letter-spacing:-2px;background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
 .nap-sub{font-size:13px;color:rgba(167,139,250,0.8);font-weight:500;margin-top:8px}
 .nap-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px;position:relative;z-index:1}
-.nap-opt{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;cursor:pointer;transition:all 0.15s}
+.nap-opt{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;cursor:pointer}
 .nap-opt.sel{border:1.5px solid var(--purple);background:var(--purple-dim)}
 .nap-opt-time{font-size:22px;font-weight:800;color:var(--purple);letter-spacing:-0.5px}
 .nap-opt-label{font-size:13px;font-weight:600;margin-top:2px}
@@ -142,8 +121,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .sci-card{margin:0 16px 12px;background:var(--purple-dim);border:1px solid rgba(167,139,250,0.15);border-radius:18px;padding:16px;position:relative;z-index:1}
 .sci-head{font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px}
 .sci-body{font-size:12px;color:rgba(167,139,250,0.85);line-height:1.7;font-weight:500}
- 
-/* INSIGHTS */
 .insight-card{margin:0 16px 12px;border-radius:18px;padding:16px;position:relative;z-index:1}
 .insight-card.info{background:linear-gradient(135deg,rgba(0,229,160,0.1),rgba(0,184,122,0.05));border:1px solid rgba(0,229,160,0.15)}
 .insight-card.warn{background:linear-gradient(135deg,rgba(255,190,61,0.1),rgba(255,140,0,0.05));border:1px solid rgba(255,190,61,0.15)}
@@ -163,15 +140,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .caf-bg{flex:1;height:7px;background:var(--bg3);border-radius:4px;overflow:hidden}
 .caf-bar{height:100%;border-radius:4px;background:linear-gradient(135deg,var(--amber),#FF8C00)}
 .caf-val{font-size:11px;font-weight:700;color:var(--amber);width:38px;text-align:right}
- 
-/* AI */
 .ai-intro{margin:0 16px 12px;border-radius:20px;padding:20px;position:relative;overflow:hidden;z-index:1;background:linear-gradient(135deg,#0F1E35,#1A1040)}
 .ai-intro::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,252,0.2),transparent 70%)}
 .ai-intro-title{font-size:14px;font-weight:700;color:var(--purple);margin-bottom:8px}
 .ai-intro-body{font-size:12px;color:rgba(167,139,250,0.8);line-height:1.7;font-weight:500}
 .qbtns{margin:0 16px 12px;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
-.qbtn{background:var(--grad-card);border:0.5px solid var(--border);border-radius:14px;padding:13px 16px;text-align:left;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--text);font-weight:500;display:flex;align-items:center;gap:10px;transition:border-color 0.15s}
-.qbtn:hover{border-color:var(--purple)}
+.qbtn{background:var(--grad-card);border:0.5px solid var(--border);border-radius:14px;padding:13px 16px;text-align:left;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--text);font-weight:500;display:flex;align-items:center;gap:10px}
 .qbtn-ico{width:32px;height:32px;border-radius:10px;background:var(--purple-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
 .chat-area{margin:0 16px;display:flex;flex-direction:column;gap:10px;margin-bottom:12px;position:relative;z-index:1}
 .msg{max-width:86%;padding:13px 16px;border-radius:18px;font-size:13px;line-height:1.65;font-weight:500}
@@ -187,17 +161,30 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .chat-row{display:flex;gap:10px;align-items:flex-end;background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:10px 10px 10px 16px}
 .chat-ta{flex:1;border:none;background:transparent;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;color:var(--text);resize:none;outline:none;max-height:100px;line-height:1.5;font-weight:500}
 .chat-ta::placeholder{color:var(--muted2)}
-.chat-send{width:38px;height:38px;border-radius:12px;background:var(--grad-green);border:none;color:#0B1A12;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;transition:opacity 0.15s}
+.chat-send{width:38px;height:38px;border-radius:12px;background:var(--grad-green);border:none;color:#0B1A12;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
 .chat-send:disabled{opacity:0.35;cursor:not-allowed}
 .ai-disc{margin:0 16px 8px;font-size:10px;color:var(--muted2);text-align:center;font-weight:500;position:relative;z-index:1}
- 
-/* PROFILE BANNER */
 .profile-banner{margin:0 16px 12px;background:linear-gradient(135deg,rgba(124,92,252,0.15),rgba(0,229,160,0.1));border:1px solid rgba(167,139,250,0.2);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;position:relative;z-index:1}
 .profile-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--purple2),var(--green2));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0}
 .profile-info{flex:1}
-.profile-name{font-size:16px;font-weight:800;color:var(--text)}
+.profile-name{font-size:16px;font-weight:800}
 .profile-goal{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px}
 .profile-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,0.2)}
+
+/* TOAST */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1E2A40;border:1px solid var(--border);border-radius:14px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--text);z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.toast.ok{border-color:rgba(0,229,160,0.3);color:var(--green)}
+.toast.err{border-color:rgba(255,107,107,0.3);color:var(--coral)}
+
+/* LOADING */
+.loading-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.loading-icon{font-size:48px;animation:pulse 1.5s ease infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:0.7}}
+.loading-text{font-size:14px;color:var(--muted);font-weight:500}
+
+/* SIGN OUT BTN */
+.signout-btn{margin:0 16px 12px;background:var(--coral-dim);border:1px solid rgba(255,107,107,0.2);border-radius:14px;padding:13px 16px;color:var(--coral);font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:calc(100% - 32px);position:relative;z-index:1}
 </style>
 </head>
 <body>
@@ -205,7 +192,16 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   <div class="orb orb1"></div>
   <div class="orb orb2"></div>
   <div class="orb orb3"></div>
- 
+
+  <!-- LOADING -->
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-icon">🌙</div>
+    <div class="loading-text">Loading your sleep data...</div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
   <!-- HOME -->
   <div class="screen active" id="screen-home">
     <div class="screen-header">
@@ -213,11 +209,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <div class="greet-name" id="greet-name">Sleep Tracker 🌙</div>
       <div class="date-chip" id="today-date"></div>
     </div>
-    <div class="profile-banner" id="profile-banner">
+    <div class="profile-banner">
       <div class="profile-avatar" id="profile-avatar">S</div>
       <div class="profile-info">
-        <div class="profile-name" id="profile-name">Slumber User</div>
-        <div class="profile-goal" id="profile-goal">Sleep goal: 8h · Adult</div>
+        <div class="profile-name" id="profile-name">Loading...</div>
+        <div class="profile-goal" id="profile-goal">Sleep goal: 8h</div>
       </div>
       <div class="profile-badge" id="profile-badge">On track</div>
     </div>
@@ -226,19 +222,19 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
         <div class="ring-wrap">
           <svg width="110" height="110" viewBox="0 0 110 110">
             <circle cx="55" cy="55" r="44" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="11"/>
-            <circle id="energy-ring" cx="55" cy="55" r="44" fill="none" stroke="url(#rg)" stroke-width="11" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="82.9"/>
+            <circle id="energy-ring" cx="55" cy="55" r="44" fill="none" stroke="url(#rg)" stroke-width="11" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
             <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00E5A0"/><stop offset="100%" stop-color="#00B87A"/></linearGradient></defs>
           </svg>
           <div class="ring-center">
-            <div class="ring-pct" id="energy-pct">70%</div>
+            <div class="ring-pct" id="energy-pct">0%</div>
             <div class="ring-lbl">energy</div>
           </div>
         </div>
         <div class="e-stats">
-          <div class="e-row"><span class="e-key">Last night</span><span class="e-val" id="dash-sleep" style="color:var(--green)">6h 30m</span></div>
-          <div class="e-row"><span class="e-key">7d average</span><span class="e-val" id="dash-avg">7h 10m</span></div>
-          <div class="e-row"><span class="e-key">Sleep debt</span><span class="e-val" id="dash-debt" style="color:var(--coral)">–30m</span></div>
-          <div class="e-row"><span class="e-key">Nap needed</span><span class="e-val" id="dash-nap" style="color:var(--purple)">20 min</span></div>
+          <div class="e-row"><span class="e-key">Last night</span><span class="e-val" id="dash-sleep" style="color:var(--green)">—</span></div>
+          <div class="e-row"><span class="e-key">7d average</span><span class="e-val" id="dash-avg">—</span></div>
+          <div class="e-row"><span class="e-key">Sleep debt</span><span class="e-val" id="dash-debt">—</span></div>
+          <div class="e-row"><span class="e-key">Nap needed</span><span class="e-val" id="dash-nap" style="color:var(--purple)">—</span></div>
         </div>
       </div>
     </div>
@@ -250,8 +246,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <div class="card-label">Today's log</div>
       <div id="dash-log-list" style="font-size:13px;color:var(--muted);font-weight:500">No entries yet — tap + to log something.</div>
     </div>
+    <button class="signout-btn" onclick="signOut()">Sign out</button>
   </div>
- 
+
   <!-- LOG -->
   <div class="screen" id="screen-log">
     <div class="screen-header">
@@ -261,7 +258,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <div class="sec-title">Today's entries</div>
     <div id="log-entries"></div>
   </div>
- 
+
   <!-- HISTORY -->
   <div class="screen" id="screen-history">
     <div class="screen-header">
@@ -275,7 +272,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <div class="sec-title">Daily breakdown</div>
     <div id="history-list"></div>
   </div>
- 
+
   <!-- NAP -->
   <div class="screen" id="screen-nap">
     <div class="screen-header">
@@ -284,8 +281,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     </div>
     <div class="nap-hero">
       <div class="nap-lbl">Recommended nap</div>
-      <div class="nap-time" id="nap-rec-time">20 min</div>
-      <div class="nap-sub" id="nap-rec-sub">Boosts alertness without grogginess</div>
+      <div class="nap-time" id="nap-rec-time">—</div>
+      <div class="nap-sub" id="nap-rec-sub">Loading your data...</div>
     </div>
     <div class="sec-title">Choose a nap type</div>
     <div class="nap-grid">
@@ -296,10 +293,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     </div>
     <div class="sci-card">
       <div class="sci-head">🔬 Why this works</div>
-      <div class="sci-body" id="sci-text">A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake (the "caffeine nap" technique).</div>
+      <div class="sci-body" id="sci-text">A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess.</div>
     </div>
   </div>
- 
+
   <!-- INSIGHTS -->
   <div class="screen" id="screen-insights">
     <div class="screen-header">
@@ -310,7 +307,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <div class="sec-title">Caffeine breakdown</div>
     <div class="caf-wrap"><div id="caf-bars"><div style="font-size:13px;color:var(--muted);font-weight:500">No caffeine logged today.</div></div><div style="font-size:10px;color:var(--muted2);margin-top:10px;font-weight:500">Caffeine half-life ~5–6 hours. Amounts are approximate.</div></div>
   </div>
- 
+
   <!-- AI -->
   <div class="screen" id="screen-ai">
     <div class="screen-header">
@@ -334,11 +331,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <div class="chat-input-wrap">
       <div class="chat-row">
         <textarea class="chat-ta" id="chat-inp" placeholder="Ask anything about your sleep..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-        <button class="chat-send" id="send-btn" onclick="sendMsg()" aria-label="Send">➤</button>
+        <button class="chat-send" id="send-btn" onclick="sendMsg()">➤</button>
       </div>
     </div>
   </div>
- 
+
   <!-- NAV -->
   <nav class="bottom-nav">
     <div class="nav-inner">
@@ -362,9 +359,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       </button>
     </div>
   </nav>
- 
-  <button class="fab" id="fab-btn" aria-label="Add entry" onclick="openModal()">+</button>
- 
+
+  <button class="fab" id="fab-btn" onclick="openModal()">+</button>
+
   <!-- MODAL -->
   <div class="modal-overlay hidden" id="modal-overlay" onclick="closeBg(event)">
     <div class="modal">
@@ -424,18 +421,24 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
           </div>
         </div>
       </div>
-      <button class="save-btn" onclick="saveEntry()">Save Entry</button>
+      <button class="save-btn" id="save-btn" onclick="saveEntry()">Save Entry</button>
     </div>
   </div>
 </div>
- 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = 'https://edewdvjaefbwisvnuoyq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkZXdkdmphZWZid2lzdm51b3lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2ODA3OTgsImV4cCI6MjA5NTI1Njc5OH0.ICW3fXz0Rxc7mPqcl_wvPTcDntqSdmQwZ0D5Mg87FF8';
+// ============================================
+// SUPABASE CONFIG — replace with your values
+// ============================================
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// ============================================
+// ITEM DEFINITIONS
+// ============================================
 const ITEMS={
   'Coffee':{caf:95,effect:'neg',label:'Delays sleep ~1h'},
   'Tea':{caf:40,effect:'neg',label:'Mild stimulant'},
@@ -446,48 +449,226 @@ const ITEMS={
   'Water':{caf:0,effect:'pos',label:'Aids recovery'},
   'Melatonin':{caf:0,effect:'pos',label:'Promotes sleep onset'},
 };
- 
+
+// ============================================
+// APP STATE
+// ============================================
+let currentUser = null;
 let profile = {display_name:'',sleep_goal_hours:8,age_group:'',work_schedule:'',main_goal:'',caffeine_sensitivity:'medium'};
-let state={todayLog:[],sleepHistory:[
-  {date:'Mon',hours:7.5,quality:'Good'},{date:'Tue',hours:6.0,quality:'Okay'},
-  {date:'Wed',hours:8.0,quality:'Great'},{date:'Thu',hours:5.5,quality:'Restless'},
-  {date:'Fri',hours:7.0,quality:'Good'},{date:'Sat',hours:7.5,quality:'Good'},
-  {date:'Sun',hours:6.5,quality:'Okay'},
-],selectedItem:null,selectedType:'consume',selectedQuality:'Good',amount:1,chatHistory:[],aiLoading:false};
-let chartInst=null;
- 
-function loadProfile(){
-  try{
-    const p=localStorage.getItem('slumber_profile');
-    if(p){
-      const parsed=JSON.parse(p);
-      if(!parsed.onboarding_complete){ window.location.href='onboarding.html'; return; }
-      profile=parsed;
-    } else {
-      window.location.href='onboarding.html'; return;
-    }
-  }catch(e){}
-  applyProfile();
+let sleepHistory = [];
+let todayLog = [];
+let state = {selectedItem:null,selectedType:'consume',selectedQuality:'Good',amount:1,chatHistory:[],aiLoading:false};
+let chartInst = null;
+
+// ============================================
+// TOAST NOTIFICATION
+// ============================================
+function showToast(msg, type='ok'){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'), 3000);
 }
- 
-function applyProfile(){
-  const n=profile.display_name||'there';
-  const h=new Date().getHours();
-  const g=h<12?'Good morning':'Good afternoon';
-  document.getElementById('greet-lbl').textContent=g;
-  document.getElementById('greet-name').textContent='Hey, '+n+' 🌙';
-  document.getElementById('profile-avatar').textContent=n.charAt(0).toUpperCase();
-  document.getElementById('profile-name').textContent=n;
-  document.getElementById('profile-goal').textContent='Sleep goal: '+profile.sleep_goal_hours+'h · '+(profile.age_group||'');
-  document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  const t=new Date();t.setMinutes(0,0,0);
-  document.getElementById('consume-time').value=t.toTimeString().slice(0,5);
-  const bt=new Date(t);bt.setHours(bt.getHours()-8);
-  document.getElementById('bed-time').value=bt.toTimeString().slice(0,5);
-  document.getElementById('wake-time').value=t.toTimeString().slice(0,5);
+
+// ============================================
+// AUTH CHECK — runs first on page load
+// ============================================
+async function init(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){
+    window.location.href = 'auth.html';
+    return;
+  }
+  currentUser = session.user;
+  await loadProfile();
+  await loadTodayData();
+  document.getElementById('loading-screen').style.display = 'none';
+  setupHeader();
   updateDash();
 }
- 
+
+// ============================================
+// LOAD PROFILE FROM SUPABASE
+// ============================================
+async function loadProfile(){
+  const { data, error } = await sb
+    .from('profiles')
+    .select('*')
+    .eq('id', currentUser.id)
+    .single();
+
+  if(error || !data){
+    // No profile yet — check localStorage from onboarding
+    const local = localStorage.getItem('slumber_profile');
+    if(local){
+      try{
+        const p = JSON.parse(local);
+        // Save onboarding answers to Supabase
+        await sb.from('profiles').upsert({
+          id: currentUser.id,
+          display_name: p.display_name,
+          sleep_goal_hours: p.sleep_goal_hours,
+          age_group: p.age_group,
+          work_schedule: p.work_schedule,
+          main_goal: p.main_goal,
+          caffeine_sensitivity: p.caffeine_sensitivity,
+          onboarding_complete: true
+        });
+        profile = p;
+      }catch(e){}
+    } else {
+      window.location.href = 'onboarding.html';
+    }
+  } else {
+    profile = data;
+    if(!data.onboarding_complete){
+      window.location.href = 'onboarding.html';
+    }
+  }
+}
+
+// ============================================
+// LOAD TODAY'S DATA FROM SUPABASE
+// ============================================
+async function loadTodayData(){
+  const today = new Date().toISOString().split('T')[0];
+
+  // Load today's sleep entries
+  const { data: sleepData } = await sb
+    .from('sleep_entries')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .eq('entry_date', today)
+    .order('created_at', { ascending: false });
+
+  // Load today's consumption entries
+  const { data: consumeData } = await sb
+    .from('consumption_entries')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .eq('entry_date', today)
+    .order('consumed_at', { ascending: true });
+
+  // Load last 7 days of sleep for history
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+  const fromDate = sevenDaysAgo.toISOString().split('T')[0];
+
+  const { data: historyData } = await sb
+    .from('sleep_entries')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .gte('entry_date', fromDate)
+    .order('entry_date', { ascending: true });
+
+  // Format data for the app
+  const sleepEntries = (sleepData||[]).map(s=>({
+    type:'sleep',
+    bedtime: s.bedtime?.slice(0,5)||'',
+    waketime: s.wake_time?.slice(0,5)||'',
+    hours: s.hours_slept,
+    quality: s.quality,
+    id: s.id
+  }));
+
+  const consumeEntries = (consumeData||[]).map(c=>({
+    type:'consume',
+    item: c.item_name,
+    amount: c.quantity,
+    time: c.consumed_at?.slice(0,5)||'',
+    id: c.id
+  }));
+
+  todayLog = [...sleepEntries, ...consumeEntries];
+
+  // Build 7-day history
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  sleepHistory = (historyData||[]).map(s=>({
+    date: days[new Date(s.entry_date+'T12:00:00').getDay()],
+    hours: s.hours_slept,
+    quality: s.quality,
+    entry_date: s.entry_date
+  }));
+
+  // If no history yet add placeholder
+  if(sleepHistory.length === 0){
+    sleepHistory = [{date: days[new Date().getDay()], hours: 0, quality: 'Good', entry_date: today}];
+  }
+}
+
+// ============================================
+// SAVE SLEEP ENTRY TO SUPABASE
+// ============================================
+async function saveSleepToSupabase(entry){
+  const today = new Date().toISOString().split('T')[0];
+  const { data, error } = await sb.from('sleep_entries').insert({
+    user_id: currentUser.id,
+    entry_date: today,
+    bedtime: entry.bedtime,
+    wake_time: entry.waketime,
+    hours_slept: entry.hours,
+    quality: entry.quality,
+    sleep_debt_minutes: Math.round((entry.hours - (profile.sleep_goal_hours||8)) * 60)
+  }).select().single();
+
+  if(error){ showToast('Failed to save sleep entry', 'err'); return null; }
+  showToast('✅ Sleep entry saved!');
+  return data;
+}
+
+// ============================================
+// SAVE CONSUMPTION ENTRY TO SUPABASE
+// ============================================
+async function saveConsumeToSupabase(entry){
+  const today = new Date().toISOString().split('T')[0];
+  const info = ITEMS[entry.item]||{};
+  const { data, error } = await sb.from('consumption_entries').insert({
+    user_id: currentUser.id,
+    entry_date: today,
+    item_name: entry.item,
+    quantity: entry.amount,
+    caffeine_mg: (info.caf||0) * entry.amount,
+    effect_type: info.effect||'neu',
+    consumed_at: entry.time
+  }).select().single();
+
+  if(error){ showToast('Failed to save entry', 'err'); return null; }
+  showToast('✅ Entry saved!');
+  return data;
+}
+
+// ============================================
+// SIGN OUT
+// ============================================
+async function signOut(){
+  await sb.auth.signOut();
+  localStorage.removeItem('slumber_profile');
+  window.location.href = 'auth.html';
+}
+
+// ============================================
+// HEADER SETUP
+// ============================================
+function setupHeader(){
+  const h = new Date().getHours();
+  const g = h<12?'Good morning ☀️':h<17?'Good afternoon 🌤':'Good evening 🌙';
+  document.getElementById('greet-lbl').textContent = g;
+  const n = profile.display_name||'there';
+  document.getElementById('greet-name').textContent = 'Hey, '+n+' 🌙';
+  document.getElementById('profile-avatar').textContent = n.charAt(0).toUpperCase();
+  document.getElementById('profile-name').textContent = n;
+  document.getElementById('profile-goal').textContent = 'Sleep goal: '+(profile.sleep_goal_hours||8)+'h · '+(profile.age_group||'');
+  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  const t = new Date(); t.setMinutes(0,0,0);
+  document.getElementById('consume-time').value = t.toTimeString().slice(0,5);
+  const bt = new Date(t); bt.setHours(bt.getHours()-8);
+  document.getElementById('bed-time').value = bt.toTimeString().slice(0,5);
+  document.getElementById('wake-time').value = t.toTimeString().slice(0,5);
+}
+
+// ============================================
+// NAVIGATION
+// ============================================
 function goTo(name,btn){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
@@ -498,19 +679,31 @@ function goTo(name,btn){
   if(name==='insights')renderInsights();
   if(name==='nap')updateNapRec();
   if(name==='home')updateDash();
+  if(name==='log')renderLogScreen();
 }
- 
+
+// ============================================
+// ENERGY CALCULATIONS
+// ============================================
 function calcEnergy(){
-  const goal=profile.sleep_goal_hours||8;
-  const avg=state.sleepHistory.reduce((a,d)=>a+d.hours,0)/state.sleepHistory.length;
-  const last=state.sleepHistory[state.sleepHistory.length-1].hours;
-  const pct=Math.min(100,Math.round((last/goal)*100));
-  const debt=Math.round((last-goal)*60);
-  const napMins=debt<0?Math.min(90,Math.abs(debt)):0;
+  const goal = profile.sleep_goal_hours||8;
+  const avg = sleepHistory.length ? sleepHistory.reduce((a,d)=>a+d.hours,0)/sleepHistory.length : 0;
+  const last = sleepHistory.length ? sleepHistory[sleepHistory.length-1].hours : 0;
+  const pct = last ? Math.min(100,Math.round((last/goal)*100)) : 0;
+  const debt = last ? Math.round((last-goal)*60) : 0;
+  const napMins = debt<0 ? Math.min(90,Math.abs(debt)) : 0;
   return{avg,last,pct,debt,napMins,goal};
 }
-function fmtH(h){const hr=Math.floor(h);const m=Math.round((h-hr)*60);return m>0?`${hr}h ${m}m`:`${hr}h`;}
- 
+
+function fmtH(h){
+  if(!h) return '—';
+  const hr=Math.floor(h); const m=Math.round((h-hr)*60);
+  return m>0?`${hr}h ${m}m`:`${hr}h`;
+}
+
+// ============================================
+// DASHBOARD UPDATE
+// ============================================
 function updateDash(){
   const{avg,last,pct,debt,napMins}=calcEnergy();
   const circ=276.5;
@@ -519,28 +712,31 @@ function updateDash(){
   document.getElementById('dash-sleep').textContent=fmtH(last);
   document.getElementById('dash-avg').textContent=fmtH(avg);
   const de=document.getElementById('dash-debt');
-  de.textContent=debt>=0?`+${debt}m`:`${debt}m`;
+  de.textContent=last?(debt>=0?`+${debt}m`:`${debt}m`):'—';
   de.style.color=debt>=0?'var(--green)':'var(--coral)';
-  document.getElementById('dash-nap').textContent=napMins>0?`${napMins} min`:'None needed';
+  document.getElementById('dash-nap').textContent=last?(napMins>0?`${napMins} min`:'None needed'):'—';
   const badge=document.getElementById('profile-badge');
   if(debt>=0){badge.textContent='On track';badge.style.background='var(--green-dim)';badge.style.color='var(--green)';}
   else{badge.textContent='Sleep debt';badge.style.background='var(--coral-dim)';badge.style.color='var(--coral)';}
-  const caf=state.todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  const caf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
   document.getElementById('stat-caf').textContent=caf;
-  document.getElementById('stat-items').textContent=state.todayLog.length;
+  document.getElementById('stat-items').textContent=todayLog.length;
   const list=document.getElementById('dash-log-list');
-  if(!state.todayLog.length){list.innerHTML='<span>No entries yet — tap + to log something.</span>';return;}
-  list.innerHTML=state.todayLog.slice(-3).map(e=>{
+  if(!todayLog.length){list.innerHTML='<span>No entries yet — tap + to log something.</span>';return;}
+  list.innerHTML=todayLog.slice(-3).map(e=>{
     const icon=e.type==='sleep'?'😴':(ITEMS[e.item]?.effect==='pos'?'✅':'⚠️');
     const label=e.type==='sleep'?`Slept ${fmtH(e.hours)} (${e.quality})`:`${e.item} ×${e.amount} at ${e.time}`;
     return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:13px;font-weight:500"><span>${icon}</span><span>${label}</span></div>`;
   }).join('');
 }
- 
+
+// ============================================
+// LOG SCREEN
+// ============================================
 function renderLogScreen(){
   const c=document.getElementById('log-entries');
-  if(!state.todayLog.length){c.innerHTML='<div style="margin:0 16px;color:var(--muted);font-size:13px;font-weight:500">Nothing logged yet. Tap + to add.</div>';return;}
-  const g={consume:[],sleep:[]};state.todayLog.forEach(e=>g[e.type].push(e));
+  if(!todayLog.length){c.innerHTML='<div style="margin:0 16px;color:var(--muted);font-size:13px;font-weight:500">Nothing logged yet. Tap + to add.</div>';return;}
+  const g={consume:[],sleep:[]};todayLog.forEach(e=>g[e.type].push(e));
   const icons={'Coffee':'☕','Tea':'🍵','Energy drink':'⚡','Alcohol':'🍺','Heavy meal':'🍲','Light meal':'🥗','Water':'💧','Melatonin':'💊'};
   let html='';
   if(g.sleep.length){
@@ -559,9 +755,16 @@ function renderLogScreen(){
   }
   c.innerHTML=html;
 }
- 
+
+// ============================================
+// HISTORY
+// ============================================
 function renderHistory(){
-  const d=state.sleepHistory;
+  if(!sleepHistory.length){
+    document.getElementById('history-list').innerHTML='<div style="margin:0 16px;color:var(--muted);font-size:13px;font-weight:500">No sleep data yet. Log your first night!</div>';
+    return;
+  }
+  const d=sleepHistory;
   if(chartInst)chartInst.destroy();
   chartInst=new Chart(document.getElementById('sleepChart').getContext('2d'),{
     type:'bar',
@@ -572,14 +775,21 @@ function renderHistory(){
   document.getElementById('history-list').innerHTML=d.map(x=>{
     const pct=Math.min(100,(x.hours/10)*100);
     const cls=x.hours>=goal?'good':x.hours>=6?'mid':'low';
-    const lbl=x.hours>=goal?'Good':x.hours>=6?'Short':'Low';
     const badgeCls=x.hours>=goal?'badge-good':x.hours>=6?'badge-neu':'badge-bad';
+    const lbl=x.hours>=goal?'Good':x.hours>=6?'Short':'Low';
     return `<div class="hist-item"><div class="hbar-wrap"><div class="hbar ${cls}" style="height:${pct}%"></div></div><div class="hday-info"><div class="hday-lbl">${x.date} — ${fmtH(x.hours)}</div><div class="hday-sub">Quality: ${x.quality}</div></div><span class="log-badge ${badgeCls}">${lbl}</span></div>`;
   }).join('');
 }
- 
-const SCI={'10–20 min':'A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake (the "caffeine nap" technique).','20–30 min':'At 20–30 min you may enter stage 2 sleep more deeply. You might feel mild sleep inertia for a few minutes, but memory consolidation and motor learning improve significantly.','90 min':'A full 90-min cycle includes light sleep, deep sleep, and REM. Waking at the end of a full cycle means you surface naturally — refreshed without grogginess. Best for severe sleep debt.','No nap':'Even lying still with eyes closed reduces cortisol and gives your brain a reset. Mental fatigue is reduced and focus can return within 10 minutes.'};
- 
+
+// ============================================
+// NAP ADVISOR
+// ============================================
+const SCI={
+  '10–20 min':'A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake.',
+  '20–30 min':'At 20–30 min you may enter stage 2 sleep more deeply. You might feel mild sleep inertia for a few minutes, but memory consolidation and motor learning improve significantly.',
+  '90 min':'A full 90-min cycle includes light sleep, deep sleep, and REM. Waking at the end of a full cycle means you surface naturally — refreshed without grogginess. Best for severe sleep debt.',
+  'No nap':'Even lying still with eyes closed reduces cortisol and gives your brain a reset. Mental fatigue is reduced and focus can return within 10 minutes.'
+};
 function updateNapRec(){
   const{napMins}=calcEnergy();
   let rec,sub;
@@ -597,29 +807,39 @@ function selNap(el,time,desc){
   document.getElementById('nap-rec-sub').textContent=desc;
   document.getElementById('sci-text').textContent=SCI[time]||SCI['No nap'];
 }
- 
+
+// ============================================
+// INSIGHTS
+// ============================================
 function renderInsights(){
   const{avg,last,debt}=calcEnergy();
   const cafSens=profile.caffeine_sensitivity||'medium';
   const cafCutoff=cafSens==='high'?14:cafSens==='low'?20:18;
-  const caf=state.todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
-  const lateC=state.todayLog.find(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0&&parseInt(e.time.split(':')[0])>=cafCutoff);
+  const caf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  const lateC=todayLog.find(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0&&parseInt(e.time.split(':')[0])>=cafCutoff);
   const ins=[];
-  if(debt<-60)ins.push({t:'alert',title:'Sleep deficit detected',body:`You're running ${Math.abs(debt)} min behind your ${profile.sleep_goal_hours||8}h goal. A ${Math.min(90,Math.abs(debt))}-min nap or earlier bedtime tonight can help.`});
-  else if(debt<0)ins.push({t:'warn',title:'Slightly under-slept',body:`You got ${fmtH(last)} — about ${Math.abs(debt)} min short of your ${profile.sleep_goal_hours||8}h goal. A 20-min power nap this afternoon can compensate.`});
-  else ins.push({t:'info',title:'Well-rested today',body:`Great night! You hit ${fmtH(last)} — above your 7-day average of ${fmtH(avg)}. No nap needed today.`});
-  if(caf>200)ins.push({t:'warn',title:'High caffeine intake',body:`~${caf}mg today. With ${cafSens} caffeine sensitivity, consider stopping by ${cafCutoff}:00 to protect tonight's sleep.`});
+  if(!last){
+    ins.push({t:'info',title:'Log your first sleep entry',body:'Once you log tonight\'s sleep, you\'ll see personalised insights here based on your patterns.'});
+  } else {
+    if(debt<-60)ins.push({t:'alert',title:'Sleep deficit detected',body:`You're running ${Math.abs(debt)} min behind your ${profile.sleep_goal_hours||8}h goal. A ${Math.min(90,Math.abs(debt))}-min nap or earlier bedtime tonight can help.`});
+    else if(debt<0)ins.push({t:'warn',title:'Slightly under-slept',body:`You got ${fmtH(last)} — about ${Math.abs(debt)} min short. A 20-min power nap this afternoon can compensate.`});
+    else ins.push({t:'info',title:'Well-rested today',body:`Great night! You hit ${fmtH(last)} — above your 7-day average of ${fmtH(avg)}. No nap needed today.`});
+  }
+  if(caf>200)ins.push({t:'warn',title:'High caffeine intake',body:`~${caf}mg today. With ${cafSens} sensitivity, consider stopping by ${cafCutoff}:00.`});
   else if(caf>0)ins.push({t:'info',title:'Caffeine on track',body:`${caf}mg today — manageable for your sensitivity level.`});
-  if(lateC)ins.push({t:'alert',title:'Late caffeine detected',body:`You had ${lateC.item} after ${cafCutoff}:00. With your ${cafSens} caffeine sensitivity, this may delay sleep onset tonight.`});
-  const lowD=state.sleepHistory.filter(d=>d.hours<6.5).length;
-  if(lowD>=3)ins.push({t:'warn',title:'Frequent short nights',body:`${lowD} of 7 nights under 6.5h. This pattern affects ${profile.main_goal||'your daily performance'} — try banking extra sleep this weekend.`});
+  if(lateC)ins.push({t:'alert',title:'Late caffeine detected',body:`You had ${lateC.item} after ${cafCutoff}:00. This may delay sleep onset tonight.`});
+  const lowD=sleepHistory.filter(d=>d.hours<6.5).length;
+  if(lowD>=3)ins.push({t:'warn',title:'Frequent short nights',body:`${lowD} of 7 nights under 6.5h. This affects ${profile.main_goal||'your performance'} — try banking extra sleep this weekend.`});
   document.getElementById('insights-container').innerHTML=ins.map(i=>`<div class="insight-card ${i.t}"><div class="insight-title ${i.t}">${i.t==='info'?'✅':i.t==='warn'?'⚠️':'🚨'} ${i.title}</div><div class="insight-body ${i.t}">${i.body}</div></div>`).join('');
-  const cafS=state.todayLog.filter(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0);
+  const cafS=todayLog.filter(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0);
   if(!cafS.length){document.getElementById('caf-bars').innerHTML='<div style="font-size:13px;color:var(--muted);font-weight:500">No caffeine logged today.</div>';return;}
   const maxC=Math.max(...cafS.map(e=>(ITEMS[e.item].caf||1)*e.amount));
   document.getElementById('caf-bars').innerHTML=cafS.map(e=>{const mg=(ITEMS[e.item].caf||0)*e.amount;return `<div class="caf-row"><span class="caf-name">${e.item}</span><div class="caf-bg"><div class="caf-bar" style="width:${Math.round((mg/maxC)*100)}%"></div></div><span class="caf-val">${mg}mg</span></div>`;}).join('');
 }
- 
+
+// ============================================
+// MODAL
+// ============================================
 function openModal(){
   document.getElementById('modal-overlay').classList.remove('hidden');
   state.selectedItem=null;state.amount=1;state.selectedType='consume';state.selectedQuality='Good';
@@ -637,37 +857,61 @@ function switchFields(t){document.getElementById('consume-fields').classList.tog
 function selItem(el,name){document.querySelectorAll('#item-chips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');state.selectedItem=name;}
 function selQuality(el,q){document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');state.selectedQuality=q;}
 function chgAmt(d){state.amount=Math.max(1,Math.min(10,state.amount+d));document.getElementById('amt-display').textContent=state.amount;}
- 
-function saveEntry(){
+
+// ============================================
+// SAVE ENTRY — saves to Supabase + updates UI
+// ============================================
+async function saveEntry(){
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
   if(state.selectedType==='consume'){
-    if(!state.selectedItem){alert('Please select an item.');return;}
-    state.todayLog.push({type:'consume',item:state.selectedItem,amount:state.amount,time:document.getElementById('consume-time').value||'12:00'});
+    if(!state.selectedItem){showToast('Please select an item','err');btn.disabled=false;btn.textContent='Save Entry';return;}
+    const time = document.getElementById('consume-time').value||'12:00';
+    const entry = {type:'consume',item:state.selectedItem,amount:state.amount,time};
+    const saved = await saveConsumeToSupabase(entry);
+    if(saved){ entry.id=saved.id; todayLog.push(entry); }
   } else {
-    const bed=document.getElementById('bed-time').value,wake=document.getElementById('wake-time').value;
-    if(!bed||!wake){alert('Please enter bed and wake times.');return;}
+    const bed=document.getElementById('bed-time').value;
+    const wake=document.getElementById('wake-time').value;
+    if(!bed||!wake){showToast('Please enter bed and wake times','err');btn.disabled=false;btn.textContent='Save Entry';return;}
     const bM=parseInt(bed.split(':')[0])*60+parseInt(bed.split(':')[1]);
     let wM=parseInt(wake.split(':')[0])*60+parseInt(wake.split(':')[1]);
     if(wM<bM)wM+=1440;
     const hours=parseFloat(((wM-bM)/60).toFixed(1));
-    state.todayLog.push({type:'sleep',bedtime:bed,waketime:wake,hours,quality:state.selectedQuality});
-    const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    const today=days[new Date().getDay()];
-    const ex=state.sleepHistory.findIndex(d=>d.date===today);
-    if(ex>=0)state.sleepHistory[ex]={date:today,hours,quality:state.selectedQuality};
-    else{state.sleepHistory.push({date:today,hours,quality:state.selectedQuality});if(state.sleepHistory.length>7)state.sleepHistory.shift();}
+    const entry={type:'sleep',bedtime:bed,waketime:wake,hours,quality:state.selectedQuality};
+    const saved = await saveSleepToSupabase(entry);
+    if(saved){
+      entry.id=saved.id;
+      todayLog.push(entry);
+      const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const today=days[new Date().getDay()];
+      const ex=sleepHistory.findIndex(d=>d.date===today);
+      if(ex>=0)sleepHistory[ex]={date:today,hours,quality:state.selectedQuality};
+      else sleepHistory.push({date:today,hours,quality:state.selectedQuality});
+      if(sleepHistory.length>7)sleepHistory.shift();
+    }
   }
-  closeModal();renderLogScreen();updateDash();
+
+  btn.disabled=false;
+  btn.textContent='Save Entry';
+  closeModal();
+  renderLogScreen();
+  updateDash();
 }
- 
+
+// ============================================
+// AI ADVISOR
+// ============================================
 function buildCtx(){
   const{avg,last,debt,napMins,goal}=calcEnergy();
-  const caf=state.todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
-  const cl=state.todayLog.filter(e=>e.type==='consume').map(e=>`${e.item} x${e.amount} at ${e.time}`).join(', ')||'none';
-  const sl=state.todayLog.filter(e=>e.type==='sleep').map(e=>`${fmtH(e.hours)} (${e.quality})`).join(', ')||'none today';
-  const hist=state.sleepHistory.map(d=>`${d.date}:${d.hours}h(${d.quality})`).join(', ');
-  return `You are an expert sleep science advisor in a sleep tracking app. You have deep knowledge of sleep physiology, circadian rhythms, adenosine, REM cycles, caffeine pharmacology, sleep debt, and productivity science. Give warm, personalised, science-backed advice. Be concise. Never diagnose medically.\n\nUSER PROFILE:\n- Name: ${profile.display_name}\n- Age group: ${profile.age_group}\n- Sleep goal: ${goal}h/night\n- Work schedule: ${profile.work_schedule}\n- Main goal: ${profile.main_goal}\n- Caffeine sensitivity: ${profile.caffeine_sensitivity}\n\nTODAY'S DATA:\n- Last night: ${fmtH(last)}\n- 7d avg: ${fmtH(avg)}\n- Sleep debt: ${debt}min\n- Rec nap: ${napMins>0?napMins+'min':'none'}\n- Caffeine: ${caf}mg\n- Consumed: ${cl}\n- Sleep logged: ${sl}\n- 7d history: ${hist}`;
+  const caf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  const cl=todayLog.filter(e=>e.type==='consume').map(e=>`${e.item} x${e.amount} at ${e.time}`).join(', ')||'none';
+  const sl=todayLog.filter(e=>e.type==='sleep').map(e=>`${fmtH(e.hours)} (${e.quality})`).join(', ')||'none today';
+  const hist=sleepHistory.map(d=>`${d.date}:${d.hours}h(${d.quality})`).join(', ')||'no history yet';
+  return `You are an expert sleep science advisor in a sleep tracking app. Deep knowledge of sleep physiology, circadian rhythms, adenosine, REM cycles, caffeine pharmacology, sleep debt, and productivity. Give warm, personalised, science-backed advice. Be concise. Never diagnose medically.\n\nUSER PROFILE:\n- Name: ${profile.display_name}\n- Age group: ${profile.age_group}\n- Sleep goal: ${goal}h/night\n- Work schedule: ${profile.work_schedule}\n- Main goal: ${profile.main_goal}\n- Caffeine sensitivity: ${profile.caffeine_sensitivity}\n\nTODAY'S DATA:\n- Last night: ${fmtH(last)}\n- 7d avg: ${fmtH(avg)}\n- Sleep debt: ${debt}min\n- Rec nap: ${napMins>0?napMins+'min':'none'}\n- Caffeine: ${caf}mg\n- Consumed: ${cl}\n- Sleep logged: ${sl}\n- 7d history: ${hist}`;
 }
- 
 function appendMsg(role,text){
   const d=document.createElement('div');d.className=`msg ${role}`;d.textContent=text;
   document.getElementById('chat-area').appendChild(d);d.scrollIntoView({behavior:'smooth',block:'end'});return d;
@@ -678,7 +922,6 @@ function showTyping(){
   document.getElementById('chat-area').appendChild(d);d.scrollIntoView({behavior:'smooth',block:'end'});
 }
 function rmTyping(){const t=document.getElementById('typing');if(t)t.remove();}
- 
 async function sendMsg(){
   const inp=document.getElementById('chat-inp');
   const text=inp.value.trim();
@@ -704,9 +947,11 @@ async function callAI(){
 }
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
- 
-loadProfile();
+
+// ============================================
+// START THE APP
+// ============================================
+init();
 </script>
 </body>
 </html>
- 
