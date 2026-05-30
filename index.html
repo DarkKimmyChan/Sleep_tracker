@@ -441,8 +441,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <div class="planet-canvas-wrap">
         <svg class="planet-svg" id="planet-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
-      <div class="planet-name" id="planet-name-display" onclick="openPlanetNameModal()" style="cursor:pointer">Tap to name ✏️</div>
-      <div class="planet-edit-hint">Tap name to rename</div>
+      <div class="planet-name" id="planet-name-display"></div>
+      <button onclick="openPlanetNameModal()" style="background:var(--purple-dim);border:1px solid rgba(124,92,252,0.2);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;color:var(--purple);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:12px">✏️ Rename planet</button>
+
       <div class="planet-lv-row" style="width:100%">
         <div class="planet-lv-badge" id="planet-lv-badge">Lv. 0</div>
         <div class="planet-xp-bar-wrap"><div class="planet-xp-bar" id="planet-xp-bar" style="width:0%"></div></div>
@@ -924,7 +925,8 @@ function renderPlanetScreen(){
   const svg=document.getElementById('planet-svg');
   renderPlanet(svg,planetData.color1,planetData.color2,160,planetData.level);
   const nameEl=document.getElementById('planet-name-display');
-  nameEl.textContent=planetData.name?`${planetData.name} ✏️`:'Tap to name ✏️';
+  const defaultName=(profile.display_name||'Your')+"'s Planet";
+  nameEl.textContent=planetData.name||defaultName;
   const xpInLevel=planetData.totalXP%100;
   document.getElementById('planet-lv-badge').textContent=`Lv. ${planetData.level}`;
   document.getElementById('planet-xp-bar').style.width=`${xpInLevel}%`;
@@ -1025,7 +1027,10 @@ function generateMiniPlanetSVG(c1,c2){
 // =============================================
 function openPlanetNameModal(){
   document.getElementById('pname-inp').value=planetData.name||'';
-  document.getElementById('pname-modal').classList.remove('hidden');
+  document.getElementById('pname-inp').value='';
+  document.getElementById('pname-modal').classList.add('hidden');
+  renderPlanetScreen();
+  showToast('✅ Planet renamed!');
 }
 function savePlanetName(){
   const name=document.getElementById('pname-inp').value.trim();
