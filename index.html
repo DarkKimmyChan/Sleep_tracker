@@ -1,45 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <title>Slumber — Sleep Tracker</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
+
+/* ===================== DARK THEME ===================== */
+[data-theme="dark"]{
   --bg:#0B0F1A;--bg2:#131929;--bg3:#1A2235;
   --card:#1E2A40;--border:rgba(255,255,255,0.07);
   --text:#F0F4FF;--muted:#7B8DB0;--muted2:#4A5878;
-  --green:#00E5A0;--green2:#00B87A;--green-dim:rgba(0,229,160,0.12);
-  --purple:#A78BFA;--purple2:#7C5CFC;--purple-dim:rgba(167,139,250,0.12);
-  --amber:#FFBE3D;--amber-dim:rgba(255,190,61,0.12);
-  --coral:#FF6B6B;--coral-dim:rgba(255,107,107,0.12);
+  --card-grad:linear-gradient(135deg,rgba(30,42,64,0.9),rgba(20,30,50,0.9));
+  --hero-bg:linear-gradient(135deg,#1B2A4A,#0F1E35);
+  --nap-bg:linear-gradient(135deg,#1C1640,#0F0B2A);
+  --ai-bg:linear-gradient(135deg,#0F1E35,#1A1040);
+  --nav-bg:rgba(19,25,41,0.85);
+  --modal-bg:#131929;
+  --input-bg:#1A2235;
+  --toggle-bg:#1E2A40;
+  --orb-opacity:0.18;
+  --shadow:rgba(0,0,0,0.3);
+}
+
+/* ===================== LIGHT THEME ===================== */
+[data-theme="light"]{
+  --bg:#F0F4FF;--bg2:#FFFFFF;--bg3:#E8EDF8;
+  --card:#FFFFFF;--border:rgba(0,0,0,0.08);
+  --text:#0B1229;--muted:#6B7A99;--muted2:#9BA8C0;
+  --card-grad:linear-gradient(135deg,rgba(255,255,255,0.95),rgba(240,244,255,0.95));
+  --hero-bg:linear-gradient(135deg,#E1F5EE,#D4EDE4);
+  --nap-bg:linear-gradient(135deg,#EDE9FE,#DDD6FE);
+  --ai-bg:linear-gradient(135deg,#EDE9FE,#E0D9FF);
+  --nav-bg:rgba(255,255,255,0.9);
+  --modal-bg:#FFFFFF;
+  --input-bg:#F0F4FF;
+  --toggle-bg:#E8EDF8;
+  --orb-opacity:0.08;
+  --shadow:rgba(0,0,0,0.08);
+}
+
+/* ===================== SHARED COLORS ===================== */
+:root{
+  --green:#00C87A;--green2:#00A663;--green-dim:rgba(0,200,122,0.12);
+  --purple:#7C5CFC;--purple2:#6344E8;--purple-dim:rgba(124,92,252,0.12);
+  --amber:#E8A020;--amber-dim:rgba(232,160,32,0.12);
+  --coral:#E8504A;--coral-dim:rgba(232,80,74,0.12);
   --grad-green:linear-gradient(135deg,#00E5A0,#00B87A);
   --grad-purple:linear-gradient(135deg,#A78BFA,#7C5CFC);
-  --grad-card:linear-gradient(135deg,rgba(30,42,64,0.9),rgba(20,30,50,0.9));
+  --grad-card:var(--card-grad);
 }
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.3s,color 0.3s}
 .app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
 .screen{flex:1;display:none;flex-direction:column;padding-bottom:90px;overflow-y:auto}
 .screen.active{display:flex}
-.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;opacity:0.18}
+
+/* ORBS */
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;opacity:var(--orb-opacity);transition:opacity 0.3s}
 .orb1{width:300px;height:300px;background:#7C5CFC;top:-80px;right:-60px}
 .orb2{width:250px;height:250px;background:#00B87A;bottom:100px;left:-80px}
-.orb3{width:200px;height:200px;background:#3B82F6;top:40%;right:-80px;opacity:0.12}
+.orb3{width:200px;height:200px;background:#3B82F6;top:40%;right:-80px}
+
+/* NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:100;padding:0 16px 20px}
-.nav-inner{background:rgba(19,25,41,0.85);backdrop-filter:blur(20px);border:0.5px solid var(--border);border-radius:24px;display:flex;justify-content:space-around;padding:10px 8px}
+.nav-inner{background:var(--nav-bg);backdrop-filter:blur(20px);border:0.5px solid var(--border);border-radius:24px;display:flex;justify-content:space-around;padding:10px 8px;box-shadow:0 4px 24px var(--shadow)}
 .nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:16px;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.03em;transition:all 0.2s;text-transform:uppercase}
 .nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .nav-btn.active{color:var(--green);background:var(--green-dim)}
-.screen-header{padding:20px 20px 8px;position:relative;z-index:1}
+
+/* HEADER */
+.screen-header{padding:20px 20px 8px;position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-start}
+.header-left{}
 .greet-lbl{font-size:13px;color:var(--muted);font-weight:500}
-.greet-name{font-size:26px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#F0F4FF,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.date-chip{font-size:11px;background:var(--green-dim);color:var(--green);padding:5px 12px;border-radius:20px;font-weight:600;border:1px solid rgba(0,229,160,0.2);display:inline-block;margin-top:6px}
-.card{background:var(--grad-card);border:0.5px solid var(--border);border-radius:20px;padding:18px;margin:0 16px 12px;position:relative;z-index:1;overflow:hidden}
-.card::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,0.04),transparent);pointer-events:none}
+.greet-name{font-size:26px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--text),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.date-chip{font-size:11px;background:var(--green-dim);color:var(--green);padding:5px 12px;border-radius:20px;font-weight:600;border:1px solid rgba(0,200,122,0.2);display:inline-block;margin-top:6px}
+
+/* THEME TOGGLE */
+.theme-toggle{width:44px;height:44px;border-radius:14px;background:var(--toggle-bg);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:all 0.2s;margin-top:4px}
+.theme-toggle:active{transform:scale(0.92)}
+
+/* CARDS */
+.card{background:var(--grad-card);border:0.5px solid var(--border);border-radius:20px;padding:18px;margin:0 16px 12px;position:relative;z-index:1;overflow:hidden;box-shadow:0 2px 12px var(--shadow)}
 .card-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
-.energy-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:linear-gradient(135deg,#1B2A4A,#0F1E35)}
-.energy-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,160,0.2),transparent 70%)}
+
+/* ENERGY HERO */
+.energy-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:var(--hero-bg);box-shadow:0 4px 20px var(--shadow)}
+.energy-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,160,0.15),transparent 70%)}
 .energy-top{display:flex;align-items:center;gap:20px}
 .ring-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
 .ring-wrap svg{transform:rotate(-90deg)}
@@ -51,8 +99,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .e-row:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
 .e-key{font-size:12px;color:var(--muted);font-weight:500}
 .e-val{font-size:13px;font-weight:700}
+
+/* STATS */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px;position:relative;z-index:1}
-.stat-card{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;overflow:hidden}
+.stat-card{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;overflow:hidden;box-shadow:0 2px 12px var(--shadow)}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:18px 18px 0 0}
 .stat-card.green::before{background:var(--grad-green)}
 .stat-card.purple::before{background:var(--grad-purple)}
@@ -61,95 +111,144 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .stat-card.purple .stat-num{background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stat-unit{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
 .stat-name{font-size:11px;color:var(--muted2);font-weight:500;margin-top:2px}
+
+/* SECTION TITLE */
 .sec-title{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;padding:4px 20px 8px;position:relative;z-index:1}
-.log-group{margin:0 16px 12px;border-radius:20px;overflow:hidden;border:0.5px solid var(--border);position:relative;z-index:1}
+
+/* LOG */
+.log-group{margin:0 16px 12px;border-radius:20px;overflow:hidden;border:0.5px solid var(--border);position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
 .log-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid var(--border);background:var(--grad-card)}
 .log-item:last-child{border-bottom:none}
 .log-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .log-info{flex:1}
 .log-name{font-size:14px;font-weight:600}
 .log-time{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
-.log-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;letter-spacing:0.03em}
-.badge-bad{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(255,107,107,0.2)}
-.badge-good{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,0.2)}
-.badge-neu{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,190,61,0.2)}
-.badge-sleep{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,0.2)}
-.fab{position:fixed;bottom:96px;right:calc(50% - 215px + 16px);width:52px;height:52px;border-radius:50%;background:var(--grad-green);border:none;color:#0B1A12;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(0,229,160,0.4);z-index:99;font-weight:700}
+.log-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700}
+.badge-bad{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(232,80,74,0.2)}
+.badge-good{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,200,122,0.2)}
+.badge-neu{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(232,160,32,0.2)}
+.badge-sleep{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(124,92,252,0.2)}
+
+/* FAB */
+.fab{position:fixed;bottom:96px;right:calc(50% - 215px + 16px);width:52px;height:52px;border-radius:50%;background:var(--grad-green);border:none;color:#0B1A12;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(0,200,122,0.4);z-index:99;font-weight:700;transition:transform 0.15s}
 .fab:active{transform:scale(0.94)}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:flex-end;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%)}
-.modal{background:var(--bg2);border:0.5px solid var(--border);border-radius:28px 28px 0 0;padding:28px 20px 36px;width:100%;max-height:82vh;overflow-y:auto;position:relative}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:flex-end;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%)}
+.modal{background:var(--modal-bg);border:0.5px solid var(--border);border-radius:28px 28px 0 0;padding:28px 20px 36px;width:100%;max-height:82vh;overflow-y:auto;position:relative}
 .modal-handle{width:36px;height:4px;background:var(--muted2);border-radius:4px;margin:0 auto 20px}
 .modal-title{font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:20px}
 .modal-sec{margin-bottom:20px}
 .modal-lbl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
 .chip-group{display:flex;flex-wrap:wrap;gap:8px}
-.chip{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--bg3);font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Plus Jakarta Sans',sans-serif;color:var(--muted);font-weight:600}
-.chip.sel{background:var(--green-dim);color:var(--green);border-color:rgba(0,229,160,0.3)}
-.time-inp{width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:14px;font-size:15px;font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg3);color:var(--text);outline:none}
+.chip{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--input-bg);font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Plus Jakarta Sans',sans-serif;color:var(--muted);font-weight:600}
+.chip.sel{background:var(--green-dim);color:var(--green);border-color:rgba(0,200,122,0.3)}
+.time-inp{width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:14px;font-size:15px;font-family:'Plus Jakarta Sans',sans-serif;background:var(--input-bg);color:var(--text);outline:none;transition:border-color 0.2s}
 .time-inp:focus{border-color:var(--green)}
 .amt-row{display:flex;align-items:center;gap:14px;margin-top:10px}
-.amt-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif}
+.amt-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--input-bg);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif}
 .amt-val{font-size:20px;font-weight:700;min-width:40px;text-align:center}
 .save-btn{width:100%;padding:15px;background:var(--grad-green);color:#0B1A12;border:none;border-radius:16px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px}
 .save-btn:disabled{opacity:0.5;cursor:not-allowed}
-.close-btn{position:absolute;top:20px;right:20px;background:var(--bg3);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center}
+.close-btn{position:absolute;top:20px;right:20px;background:var(--input-bg);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center}
 .sleep-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .sleep-field label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:6px;letter-spacing:0.04em;text-transform:uppercase}
 .hidden{display:none}
-.chart-wrap{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:20px;padding:18px;position:relative;z-index:1}
-.chart-container{position:relative;height:180px}
-.hist-item{display:flex;align-items:center;gap:14px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:16px;padding:14px 16px;margin:0 16px 8px;position:relative;z-index:1}
-.hbar-wrap{width:5px;height:52px;background:var(--bg3);border-radius:4px;overflow:hidden;flex-shrink:0}
-.hbar{width:100%;border-radius:4px}
-.hbar.good{background:var(--grad-green)}
-.hbar.mid{background:linear-gradient(135deg,var(--amber),#FF8C00)}
-.hbar.low{background:linear-gradient(135deg,var(--coral),#E63946)}
-.hday-info{flex:1}
-.hday-lbl{font-size:13px;font-weight:700}
-.hday-sub{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
-.nap-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:linear-gradient(135deg,#1C1640,#0F0B2A)}
-.nap-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,0.25),transparent 70%)}
-.nap-lbl{font-size:10px;color:rgba(167,139,250,0.7);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+
+/* ===================== CALENDAR ===================== */
+.cal-header{margin:0 16px 12px;position:relative;z-index:1}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-month{font-size:18px;font-weight:800;letter-spacing:-0.3px}
+.cal-nav-btn{width:36px;height:36px;border-radius:12px;background:var(--grad-card);border:1px solid var(--border);cursor:pointer;color:var(--text);font-size:16px;display:flex;align-items:center;justify-content:center;transition:background 0.15s}
+.cal-wrap{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:20px;padding:16px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
+.cal-days-header{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px}
+.cal-day-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:0.05em;text-transform:uppercase;padding:4px 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-cell{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform 0.15s;border:1px solid transparent}
+.cal-cell:active{transform:scale(0.94)}
+.cal-cell.empty{cursor:default}
+.cal-date{font-size:12px;font-weight:700;line-height:1}
+.cal-pct{font-size:9px;font-weight:600;margin-top:2px;line-height:1}
+.cal-cell.no-data{background:var(--input-bg)}
+.cal-cell.no-data .cal-date{color:var(--muted)}
+.cal-cell.no-data .cal-pct{color:var(--muted2)}
+.cal-cell.great{background:rgba(0,200,122,0.2);border-color:rgba(0,200,122,0.3)}
+.cal-cell.great .cal-date{color:var(--green)}
+.cal-cell.great .cal-pct{color:var(--green)}
+.cal-cell.good{background:rgba(0,200,122,0.1);border-color:rgba(0,200,122,0.2)}
+.cal-cell.good .cal-date{color:var(--green)}
+.cal-cell.good .cal-pct{color:var(--green)}
+.cal-cell.mid{background:rgba(232,160,32,0.15);border-color:rgba(232,160,32,0.25)}
+.cal-cell.mid .cal-date{color:var(--amber)}
+.cal-cell.mid .cal-pct{color:var(--amber)}
+.cal-cell.low{background:rgba(232,80,74,0.15);border-color:rgba(232,80,74,0.25)}
+.cal-cell.low .cal-date{color:var(--coral)}
+.cal-cell.low .cal-pct{color:var(--coral)}
+.cal-cell.today{box-shadow:0 0 0 2px var(--green)}
+.cal-cell.future{opacity:0.3;cursor:default}
+
+/* CALENDAR LEGEND */
+.cal-legend{display:flex;align-items:center;gap:12px;margin:0 16px 12px;position:relative;z-index:1;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:500}
+.leg-dot{width:10px;height:10px;border-radius:3px}
+
+/* CALENDAR DETAIL CARD */
+.cal-detail{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1;display:none;box-shadow:0 2px 12px var(--shadow)}
+.cal-detail.show{display:block}
+.cal-detail-date{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px}
+.cal-detail-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border)}
+.cal-detail-row:last-child{border-bottom:none}
+.cal-detail-key{font-size:13px;color:var(--muted);font-weight:500}
+.cal-detail-val{font-size:13px;font-weight:700}
+
+/* NAP */
+.nap-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:var(--nap-bg);box-shadow:0 4px 20px var(--shadow)}
+.nap-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,252,0.2),transparent 70%)}
+.nap-lbl{font-size:10px;color:rgba(124,92,252,0.7);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
 .nap-time{font-size:52px;font-weight:800;letter-spacing:-2px;background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
-.nap-sub{font-size:13px;color:rgba(167,139,250,0.8);font-weight:500;margin-top:8px}
+.nap-sub{font-size:13px;color:rgba(124,92,252,0.8);font-weight:500;margin-top:8px}
 .nap-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px;position:relative;z-index:1}
-.nap-opt{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;cursor:pointer}
+.nap-opt{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 12px var(--shadow)}
 .nap-opt.sel{border:1.5px solid var(--purple);background:var(--purple-dim)}
 .nap-opt-time{font-size:22px;font-weight:800;color:var(--purple);letter-spacing:-0.5px}
 .nap-opt-label{font-size:13px;font-weight:600;margin-top:2px}
 .nap-opt-desc{font-size:11px;color:var(--muted);font-weight:500;margin-top:4px}
-.sci-card{margin:0 16px 12px;background:var(--purple-dim);border:1px solid rgba(167,139,250,0.15);border-radius:18px;padding:16px;position:relative;z-index:1}
+.sci-card{margin:0 16px 12px;background:var(--purple-dim);border:1px solid rgba(124,92,252,0.15);border-radius:18px;padding:16px;position:relative;z-index:1}
 .sci-head{font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px}
-.sci-body{font-size:12px;color:rgba(167,139,250,0.85);line-height:1.7;font-weight:500}
+.sci-body{font-size:12px;color:var(--purple);opacity:0.85;line-height:1.7;font-weight:500}
+
+/* INSIGHTS */
 .insight-card{margin:0 16px 12px;border-radius:18px;padding:16px;position:relative;z-index:1}
-.insight-card.info{background:linear-gradient(135deg,rgba(0,229,160,0.1),rgba(0,184,122,0.05));border:1px solid rgba(0,229,160,0.15)}
-.insight-card.warn{background:linear-gradient(135deg,rgba(255,190,61,0.1),rgba(255,140,0,0.05));border:1px solid rgba(255,190,61,0.15)}
-.insight-card.alert{background:linear-gradient(135deg,rgba(255,107,107,0.1),rgba(230,57,70,0.05));border:1px solid rgba(255,107,107,0.15)}
+.insight-card.info{background:linear-gradient(135deg,rgba(0,200,122,0.1),rgba(0,166,99,0.05));border:1px solid rgba(0,200,122,0.15)}
+.insight-card.warn{background:linear-gradient(135deg,rgba(232,160,32,0.1),rgba(232,160,32,0.05));border:1px solid rgba(232,160,32,0.15)}
+.insight-card.alert{background:linear-gradient(135deg,rgba(232,80,74,0.1),rgba(232,80,74,0.05));border:1px solid rgba(232,80,74,0.15)}
 .insight-title{font-size:14px;font-weight:700;margin-bottom:6px}
 .insight-title.info{color:var(--green)}
 .insight-title.warn{color:var(--amber)}
 .insight-title.alert{color:var(--coral)}
 .insight-body{font-size:12px;line-height:1.7;font-weight:500}
-.insight-body.info{color:rgba(0,229,160,0.85)}
-.insight-body.warn{color:rgba(255,190,61,0.85)}
-.insight-body.alert{color:rgba(255,107,107,0.85)}
-.caf-wrap{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1}
+.insight-body.info{color:var(--green);opacity:0.85}
+.insight-body.warn{color:var(--amber);opacity:0.85}
+.insight-body.alert{color:var(--coral);opacity:0.85}
+.caf-wrap{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
 .caf-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .caf-row:last-child{margin-bottom:0}
 .caf-name{font-size:12px;color:var(--muted);font-weight:600;width:72px;flex-shrink:0}
-.caf-bg{flex:1;height:7px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.caf-bg{flex:1;height:7px;background:var(--input-bg);border-radius:4px;overflow:hidden}
 .caf-bar{height:100%;border-radius:4px;background:linear-gradient(135deg,var(--amber),#FF8C00)}
 .caf-val{font-size:11px;font-weight:700;color:var(--amber);width:38px;text-align:right}
-.ai-intro{margin:0 16px 12px;border-radius:20px;padding:20px;position:relative;overflow:hidden;z-index:1;background:linear-gradient(135deg,#0F1E35,#1A1040)}
-.ai-intro::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,252,0.2),transparent 70%)}
+
+/* AI */
+.ai-intro{margin:0 16px 12px;border-radius:20px;padding:20px;position:relative;overflow:hidden;z-index:1;background:var(--ai-bg);box-shadow:0 4px 20px var(--shadow)}
+.ai-intro::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,252,0.15),transparent 70%)}
 .ai-intro-title{font-size:14px;font-weight:700;color:var(--purple);margin-bottom:8px}
-.ai-intro-body{font-size:12px;color:rgba(167,139,250,0.8);line-height:1.7;font-weight:500}
+.ai-intro-body{font-size:12px;color:var(--purple);opacity:0.8;line-height:1.7;font-weight:500}
 .qbtns{margin:0 16px 12px;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
-.qbtn{background:var(--grad-card);border:0.5px solid var(--border);border-radius:14px;padding:13px 16px;text-align:left;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--text);font-weight:500;display:flex;align-items:center;gap:10px}
+.qbtn{background:var(--grad-card);border:0.5px solid var(--border);border-radius:14px;padding:13px 16px;text-align:left;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--text);font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px var(--shadow)}
 .qbtn-ico{width:32px;height:32px;border-radius:10px;background:var(--purple-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
 .chat-area{margin:0 16px;display:flex;flex-direction:column;gap:10px;margin-bottom:12px;position:relative;z-index:1}
 .msg{max-width:86%;padding:13px 16px;border-radius:18px;font-size:13px;line-height:1.65;font-weight:500}
-.msg.user{background:linear-gradient(135deg,var(--green2),var(--green));color:#0B1A12;align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
+.msg.user{background:linear-gradient(135deg,var(--green2),var(--green));color:#fff;align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
 .msg.ai{background:var(--card);color:var(--text);align-self:flex-start;border:0.5px solid var(--border);border-bottom-left-radius:4px}
 .msg.typing{background:var(--card);border:0.5px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;padding:14px 16px}
 .dots{display:flex;gap:4px;align-items:center}
@@ -158,33 +257,27 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .dots span:nth-child(3){animation-delay:0.4s}
 @keyframes dot{0%,80%,100%{opacity:0.3;transform:scale(0.8)}40%{opacity:1;transform:scale(1)}}
 .chat-input-wrap{position:sticky;bottom:90px;padding:0 16px 8px;z-index:10}
-.chat-row{display:flex;gap:10px;align-items:flex-end;background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:10px 10px 10px 16px}
+.chat-row{display:flex;gap:10px;align-items:flex-end;background:var(--modal-bg);border:1px solid var(--border);border-radius:18px;padding:10px 10px 10px 16px}
 .chat-ta{flex:1;border:none;background:transparent;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;color:var(--text);resize:none;outline:none;max-height:100px;line-height:1.5;font-weight:500}
 .chat-ta::placeholder{color:var(--muted2)}
 .chat-send{width:38px;height:38px;border-radius:12px;background:var(--grad-green);border:none;color:#0B1A12;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
 .chat-send:disabled{opacity:0.35;cursor:not-allowed}
 .ai-disc{margin:0 16px 8px;font-size:10px;color:var(--muted2);text-align:center;font-weight:500;position:relative;z-index:1}
-.profile-banner{margin:0 16px 12px;background:linear-gradient(135deg,rgba(124,92,252,0.15),rgba(0,229,160,0.1));border:1px solid rgba(167,139,250,0.2);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.profile-banner{margin:0 16px 12px;background:linear-gradient(135deg,rgba(124,92,252,0.12),rgba(0,200,122,0.08));border:1px solid rgba(124,92,252,0.15);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
 .profile-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--purple2),var(--green2));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0}
 .profile-info{flex:1}
 .profile-name{font-size:16px;font-weight:800}
 .profile-goal{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px}
-.profile-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,0.2)}
-
-/* TOAST */
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1E2A40;border:1px solid var(--border);border-radius:14px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--text);z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
+.profile-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green-dim);color:var(--green);border:1px solid rgba(0,200,122,0.2)}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--text);z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px var(--shadow)}
 .toast.show{opacity:1}
-.toast.ok{border-color:rgba(0,229,160,0.3);color:var(--green)}
-.toast.err{border-color:rgba(255,107,107,0.3);color:var(--coral)}
-
-/* LOADING */
-.loading-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.toast.ok{border-color:rgba(0,200,122,0.3);color:var(--green)}
+.toast.err{border-color:rgba(232,80,74,0.3);color:var(--coral)}
+.loading-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:background 0.3s}
 .loading-icon{font-size:48px;animation:pulse 1.5s ease infinite}
 @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:0.7}}
 .loading-text{font-size:14px;color:var(--muted);font-weight:500}
-
-/* SIGN OUT BTN */
-.signout-btn{margin:0 16px 12px;background:var(--coral-dim);border:1px solid rgba(255,107,107,0.2);border-radius:14px;padding:13px 16px;color:var(--coral);font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:calc(100% - 32px);position:relative;z-index:1}
+.signout-btn{margin:0 16px 12px;background:var(--coral-dim);border:1px solid rgba(232,80,74,0.2);border-radius:14px;padding:13px 16px;color:var(--coral);font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:calc(100% - 32px);position:relative;z-index:1}
 </style>
 </head>
 <body>
@@ -192,22 +285,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   <div class="orb orb1"></div>
   <div class="orb orb2"></div>
   <div class="orb orb3"></div>
-
-  <!-- LOADING -->
   <div class="loading-screen" id="loading-screen">
     <div class="loading-icon">🌙</div>
     <div class="loading-text">Loading your sleep data...</div>
   </div>
-
-  <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
   <!-- HOME -->
   <div class="screen active" id="screen-home">
     <div class="screen-header">
-      <div class="greet-lbl" id="greet-lbl">Good morning</div>
-      <div class="greet-name" id="greet-name">Sleep Tracker 🌙</div>
-      <div class="date-chip" id="today-date"></div>
+      <div class="header-left">
+        <div class="greet-lbl" id="greet-lbl">Good morning</div>
+        <div class="greet-name" id="greet-name">Sleep Tracker 🌙</div>
+        <div class="date-chip" id="today-date"></div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">🌙</button>
     </div>
     <div class="profile-banner">
       <div class="profile-avatar" id="profile-avatar">S</div>
@@ -221,7 +313,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <div class="energy-top">
         <div class="ring-wrap">
           <svg width="110" height="110" viewBox="0 0 110 110">
-            <circle cx="55" cy="55" r="44" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="11"/>
+            <circle cx="55" cy="55" r="44" fill="none" stroke="rgba(128,128,128,0.15)" stroke-width="11"/>
             <circle id="energy-ring" cx="55" cy="55" r="44" fill="none" stroke="url(#rg)" stroke-width="11" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
             <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00E5A0"/><stop offset="100%" stop-color="#00B87A"/></linearGradient></defs>
           </svg>
@@ -252,32 +344,73 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   <!-- LOG -->
   <div class="screen" id="screen-log">
     <div class="screen-header">
-      <div class="greet-name" style="margin-bottom:4px">Daily Log</div>
-      <div style="font-size:13px;color:var(--muted);font-weight:500">Track what affects your sleep</div>
+      <div class="header-left">
+        <div class="greet-name" style="margin-bottom:4px">Daily Log</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:500">Track what affects your sleep</div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
     <div class="sec-title">Today's entries</div>
     <div id="log-entries"></div>
   </div>
 
-  <!-- HISTORY -->
-  <div class="screen" id="screen-history">
+  <!-- CALENDAR -->
+  <div class="screen" id="screen-calendar">
     <div class="screen-header">
-      <div class="greet-name" style="margin-bottom:4px">Sleep History</div>
-      <div style="font-size:13px;color:var(--muted);font-weight:500">Past 7 days</div>
+      <div class="header-left">
+        <div class="greet-name" style="margin-bottom:4px">Calendar</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:500">Your sleep productivity score</div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
-    <div class="chart-wrap">
-      <div class="card-label">Hours slept per night</div>
-      <div class="chart-container"><canvas id="sleepChart"></canvas></div>
+    <div class="cal-header">
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+        <div class="cal-month" id="cal-month-label">May 2026</div>
+        <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+      </div>
     </div>
-    <div class="sec-title">Daily breakdown</div>
-    <div id="history-list"></div>
+    <div class="cal-wrap">
+      <div class="cal-days-header">
+        <div class="cal-day-label">Sun</div>
+        <div class="cal-day-label">Mon</div>
+        <div class="cal-day-label">Tue</div>
+        <div class="cal-day-label">Wed</div>
+        <div class="cal-day-label">Thu</div>
+        <div class="cal-day-label">Fri</div>
+        <div class="cal-day-label">Sat</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+    <div class="cal-legend">
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(0,200,122,0.5)"></div>90–100%</div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(0,200,122,0.25)"></div>70–89%</div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(232,160,32,0.4)"></div>50–69%</div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(232,80,74,0.4)"></div>Below 50%</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--input-bg);border:1px solid var(--border)"></div>No data</div>
+    </div>
+    <div class="cal-detail" id="cal-detail">
+      <div class="cal-detail-date" id="cal-detail-date">Monday, May 1</div>
+      <div class="cal-detail-row"><span class="cal-detail-key">Hours slept</span><span class="cal-detail-val" id="cal-detail-hours">—</span></div>
+      <div class="cal-detail-row"><span class="cal-detail-key">Sleep goal</span><span class="cal-detail-val" id="cal-detail-goal">8h</span></div>
+      <div class="cal-detail-row"><span class="cal-detail-key">Quality</span><span class="cal-detail-val" id="cal-detail-quality">—</span></div>
+      <div class="cal-detail-row"><span class="cal-detail-key">Productivity score</span><span class="cal-detail-val" id="cal-detail-score" style="color:var(--green)">—</span></div>
+    </div>
+    <div class="sec-title" style="margin-top:4px">Monthly summary</div>
+    <div class="stats-grid" style="margin-bottom:20px">
+      <div class="stat-card green"><div class="stat-num" id="cal-avg-score">—</div><div class="stat-unit">avg score</div><div class="stat-name">this month</div></div>
+      <div class="stat-card purple"><div class="stat-num" id="cal-best-streak">—</div><div class="stat-unit">day streak</div><div class="stat-name">best this month</div></div>
+    </div>
   </div>
 
   <!-- NAP -->
   <div class="screen" id="screen-nap">
     <div class="screen-header">
-      <div class="greet-name" style="margin-bottom:4px">Nap Advisor</div>
-      <div style="font-size:13px;color:var(--muted);font-weight:500">Find your ideal nap length</div>
+      <div class="header-left">
+        <div class="greet-name" style="margin-bottom:4px">Nap Advisor</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:500">Find your ideal nap length</div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
     <div class="nap-hero">
       <div class="nap-lbl">Recommended nap</div>
@@ -300,8 +433,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   <!-- INSIGHTS -->
   <div class="screen" id="screen-insights">
     <div class="screen-header">
-      <div class="greet-name" style="margin-bottom:4px">Insights</div>
-      <div style="font-size:13px;color:var(--muted);font-weight:500">Personalised patterns</div>
+      <div class="header-left">
+        <div class="greet-name" style="margin-bottom:4px">Insights</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:500">Personalised patterns</div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
     <div id="insights-container"></div>
     <div class="sec-title">Caffeine breakdown</div>
@@ -311,8 +447,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   <!-- AI -->
   <div class="screen" id="screen-ai">
     <div class="screen-header">
-      <div class="greet-name" style="margin-bottom:4px">AI Advisor ✨</div>
-      <div style="font-size:13px;color:var(--muted);font-weight:500">Science-backed, personalised advice</div>
+      <div class="header-left">
+        <div class="greet-name" style="margin-bottom:4px">AI Advisor ✨</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:500">Science-backed, personalised advice</div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
     <div class="ai-intro">
       <div class="ai-intro-title">🧠 Deep sleep science</div>
@@ -345,8 +484,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <button class="nav-btn" onclick="goTo('log',this)">
         <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Log
       </button>
-      <button class="nav-btn" onclick="goTo('history',this)">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>History
+      <button class="nav-btn" onclick="goTo('calendar',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Calendar
       </button>
       <button class="nav-btn" onclick="goTo('nap',this)">
         <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>Nap
@@ -426,19 +565,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ============================================
-// SUPABASE CONFIG — replace with your values
-// ============================================
-const SUPABASE_URL = 'https://edewdvjaefbwisvnuoyq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkZXdkdmphZWZid2lzdm51b3lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2ODA3OTgsImV4cCI6MjA5NTI1Njc5OH0.ICW3fXz0Rxc7mPqcl_wvPTcDntqSdmQwZ0D5Mg87FF8';
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ============================================
-// ITEM DEFINITIONS
-// ============================================
 const ITEMS={
   'Coffee':{caf:95,effect:'neg',label:'Delays sleep ~1h'},
   'Tea':{caf:40,effect:'neg',label:'Mild stimulant'},
@@ -450,264 +582,198 @@ const ITEMS={
   'Melatonin':{caf:0,effect:'pos',label:'Promotes sleep onset'},
 };
 
-// ============================================
-// APP STATE
-// ============================================
-let currentUser = null;
-let profile = {display_name:'',sleep_goal_hours:8,age_group:'',work_schedule:'',main_goal:'',caffeine_sensitivity:'medium'};
-let sleepHistory = [];
-let todayLog = [];
-let state = {selectedItem:null,selectedType:'consume',selectedQuality:'Good',amount:1,chatHistory:[],aiLoading:false};
-let chartInst = null;
+let currentUser=null;
+let profile={display_name:'',sleep_goal_hours:8,age_group:'',work_schedule:'',main_goal:'',caffeine_sensitivity:'medium'};
+let sleepHistory=[];
+let allSleepData={};
+let todayLog=[];
+let state={selectedItem:null,selectedType:'consume',selectedQuality:'Good',amount:1,chatHistory:[],aiLoading:false};
+let calViewDate=new Date();
 
-// ============================================
-// TOAST NOTIFICATION
-// ============================================
-function showToast(msg, type='ok'){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast ${type} show`;
-  setTimeout(()=>t.classList.remove('show'), 3000);
+// ===================== THEME =====================
+function initTheme(){
+  const saved=localStorage.getItem('slumber_theme')||'dark';
+  document.documentElement.setAttribute('data-theme',saved);
+  updateThemeIcons(saved);
+}
+function toggleTheme(){
+  const current=document.documentElement.getAttribute('data-theme');
+  const next=current==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('slumber_theme',next);
+  updateThemeIcons(next);
+}
+function updateThemeIcons(theme){
+  document.querySelectorAll('.theme-toggle').forEach(btn=>{
+    btn.textContent=theme==='dark'?'☀️':'🌙';
+  });
 }
 
-// ============================================
-// AUTH CHECK — runs first on page load
-// ============================================
+// ===================== TOAST =====================
+function showToast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ===================== AUTH & INIT =====================
 async function init(){
-  const { data:{ session } } = await sb.auth.getSession();
-  if(!session){
-    window.location.href = 'auth.html';
-    return;
-  }
-  currentUser = session.user;
+  initTheme();
+  const{data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='auth.html';return;}
+  currentUser=session.user;
   await loadProfile();
   await loadTodayData();
-  document.getElementById('loading-screen').style.display = 'none';
+  await loadAllSleepData();
+  document.getElementById('loading-screen').style.display='none';
   setupHeader();
   updateDash();
 }
 
-// ============================================
-// LOAD PROFILE FROM SUPABASE
-// ============================================
+// ===================== LOAD PROFILE =====================
 async function loadProfile(){
-  const { data, error } = await sb
-    .from('profiles')
-    .select('*')
-    .eq('id', currentUser.id)
-    .single();
-
-  if(error || !data){
-    // No profile yet — check localStorage from onboarding
-    const local = localStorage.getItem('slumber_profile');
+  const{data,error}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+  if(error||!data){
+    const local=localStorage.getItem('slumber_profile');
     if(local){
       try{
-        const p = JSON.parse(local);
-        // Save onboarding answers to Supabase
+        const p=JSON.parse(local);
         await sb.from('profiles').upsert({
-          id: currentUser.id,
-          display_name: p.display_name,
-          sleep_goal_hours: p.sleep_goal_hours,
-          age_group: p.age_group,
-          work_schedule: p.work_schedule,
-          main_goal: p.main_goal,
-          caffeine_sensitivity: p.caffeine_sensitivity,
-          onboarding_complete: true
+          id:currentUser.id,
+          display_name:p.display_name,
+          sleep_goal_hours:p.sleep_goal_hours,
+          age_group:p.age_group,
+          work_schedule:p.work_schedule,
+          main_goal:p.main_goal,
+          caffeine_sensitivity:p.caffeine_sensitivity,
+          onboarding_complete:true
         });
-        profile = p;
+        profile=p;
       }catch(e){}
-    } else {
-      window.location.href = 'onboarding.html';
-    }
+    } else {window.location.href='onboarding.html';}
   } else {
-    profile = data;
-    if(!data.onboarding_complete){
-      window.location.href = 'onboarding.html';
-    }
+    profile=data;
+    if(!data.onboarding_complete)window.location.href='onboarding.html';
   }
 }
 
-// ============================================
-// LOAD TODAY'S DATA FROM SUPABASE
-// ============================================
+// ===================== LOAD TODAY DATA =====================
 async function loadTodayData(){
-  const today = new Date().toISOString().split('T')[0];
-
-  // Load today's sleep entries
-  const { data: sleepData } = await sb
-    .from('sleep_entries')
-    .select('*')
-    .eq('user_id', currentUser.id)
-    .eq('entry_date', today)
-    .order('created_at', { ascending: false });
-
-  // Load today's consumption entries
-  const { data: consumeData } = await sb
-    .from('consumption_entries')
-    .select('*')
-    .eq('user_id', currentUser.id)
-    .eq('entry_date', today)
-    .order('consumed_at', { ascending: true });
-
-  // Load last 7 days of sleep for history
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
-  const fromDate = sevenDaysAgo.toISOString().split('T')[0];
-
-  const { data: historyData } = await sb
-    .from('sleep_entries')
-    .select('*')
-    .eq('user_id', currentUser.id)
-    .gte('entry_date', fromDate)
-    .order('entry_date', { ascending: true });
-
-  // Format data for the app
-  const sleepEntries = (sleepData||[]).map(s=>({
-    type:'sleep',
-    bedtime: s.bedtime?.slice(0,5)||'',
-    waketime: s.wake_time?.slice(0,5)||'',
-    hours: s.hours_slept,
-    quality: s.quality,
-    id: s.id
-  }));
-
-  const consumeEntries = (consumeData||[]).map(c=>({
-    type:'consume',
-    item: c.item_name,
-    amount: c.quantity,
-    time: c.consumed_at?.slice(0,5)||'',
-    id: c.id
-  }));
-
-  todayLog = [...sleepEntries, ...consumeEntries];
-
-  // Build 7-day history
-  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  sleepHistory = (historyData||[]).map(s=>({
-    date: days[new Date(s.entry_date+'T12:00:00').getDay()],
-    hours: s.hours_slept,
-    quality: s.quality,
-    entry_date: s.entry_date
-  }));
-
-  // If no history yet add placeholder
-  if(sleepHistory.length === 0){
-    sleepHistory = [{date: days[new Date().getDay()], hours: 0, quality: 'Good', entry_date: today}];
-  }
+  const today=new Date().toISOString().split('T')[0];
+  const{data:sleepData}=await sb.from('sleep_entries').select('*').eq('user_id',currentUser.id).eq('entry_date',today).order('created_at',{ascending:false});
+  const{data:consumeData}=await sb.from('consumption_entries').select('*').eq('user_id',currentUser.id).eq('entry_date',today).order('consumed_at',{ascending:true});
+  const sevenDaysAgo=new Date();sevenDaysAgo.setDate(sevenDaysAgo.getDate()-6);
+  const fromDate=sevenDaysAgo.toISOString().split('T')[0];
+  const{data:historyData}=await sb.from('sleep_entries').select('*').eq('user_id',currentUser.id).gte('entry_date',fromDate).order('entry_date',{ascending:true});
+  const sleepEntries=(sleepData||[]).map(s=>({type:'sleep',bedtime:s.bedtime?.slice(0,5)||'',waketime:s.wake_time?.slice(0,5)||'',hours:s.hours_slept,quality:s.quality,id:s.id}));
+  const consumeEntries=(consumeData||[]).map(c=>({type:'consume',item:c.item_name,amount:c.quantity,time:c.consumed_at?.slice(0,5)||'',id:c.id}));
+  todayLog=[...sleepEntries,...consumeEntries];
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  sleepHistory=(historyData||[]).map(s=>({date:days[new Date(s.entry_date+'T12:00:00').getDay()],hours:s.hours_slept,quality:s.quality,entry_date:s.entry_date}));
+  if(sleepHistory.length===0)sleepHistory=[{date:days[new Date().getDay()],hours:0,quality:'Good',entry_date:today}];
 }
 
-// ============================================
-// SAVE SLEEP ENTRY TO SUPABASE
-// ============================================
+// ===================== LOAD ALL SLEEP DATA FOR CALENDAR =====================
+async function loadAllSleepData(){
+  const{data}=await sb.from('sleep_entries').select('entry_date,hours_slept,quality').eq('user_id',currentUser.id).order('entry_date',{ascending:true});
+  allSleepData={};
+  (data||[]).forEach(s=>{allSleepData[s.entry_date]={hours:s.hours_slept,quality:s.quality};});
+}
+
+// ===================== SAVE TO SUPABASE =====================
 async function saveSleepToSupabase(entry){
-  const today = new Date().toISOString().split('T')[0];
-  const { data, error } = await sb.from('sleep_entries').insert({
-    user_id: currentUser.id,
-    entry_date: today,
-    bedtime: entry.bedtime,
-    wake_time: entry.waketime,
-    hours_slept: entry.hours,
-    quality: entry.quality,
-    sleep_debt_minutes: Math.round((entry.hours - (profile.sleep_goal_hours||8)) * 60)
+  const today=new Date().toISOString().split('T')[0];
+  const{data,error}=await sb.from('sleep_entries').insert({
+    user_id:currentUser.id,entry_date:today,
+    bedtime:entry.bedtime,wake_time:entry.waketime,
+    hours_slept:entry.hours,quality:entry.quality,
+    sleep_debt_minutes:Math.round((entry.hours-(profile.sleep_goal_hours||8))*60)
   }).select().single();
-
-  if(error){ showToast('Failed to save sleep entry', 'err'); return null; }
-  showToast('✅ Sleep entry saved!');
-  return data;
+  if(error){showToast('Failed to save sleep entry','err');return null;}
+  allSleepData[today]={hours:entry.hours,quality:entry.quality};
+  showToast('✅ Sleep entry saved!');return data;
 }
 
-// ============================================
-// SAVE CONSUMPTION ENTRY TO SUPABASE
-// ============================================
 async function saveConsumeToSupabase(entry){
-  const today = new Date().toISOString().split('T')[0];
-  const info = ITEMS[entry.item]||{};
-  const { data, error } = await sb.from('consumption_entries').insert({
-    user_id: currentUser.id,
-    entry_date: today,
-    item_name: entry.item,
-    quantity: entry.amount,
-    caffeine_mg: (info.caf||0) * entry.amount,
-    effect_type: info.effect||'neu',
-    consumed_at: entry.time
+  const today=new Date().toISOString().split('T')[0];
+  const info=ITEMS[entry.item]||{};
+  const{data,error}=await sb.from('consumption_entries').insert({
+    user_id:currentUser.id,entry_date:today,
+    item_name:entry.item,quantity:entry.amount,
+    caffeine_mg:(info.caf||0)*entry.amount,
+    effect_type:info.effect||'neu',consumed_at:entry.time
   }).select().single();
-
-  if(error){ showToast('Failed to save entry', 'err'); return null; }
-  showToast('✅ Entry saved!');
-  return data;
+  if(error){showToast('Failed to save entry','err');return null;}
+  showToast('✅ Entry saved!');return data;
 }
 
-// ============================================
-// SIGN OUT
-// ============================================
 async function signOut(){
   await sb.auth.signOut();
   localStorage.removeItem('slumber_profile');
-  window.location.href = 'auth.html';
+  window.location.href='auth.html';
 }
 
-// ============================================
-// HEADER SETUP
-// ============================================
+// ===================== HEADER =====================
 function setupHeader(){
-  const h = new Date().getHours();
-  const g = h<12?'Good morning ☀️':h<17?'Good afternoon 🌤':'Good evening 🌙';
-  document.getElementById('greet-lbl').textContent = g;
-  const n = profile.display_name||'there';
-  document.getElementById('greet-name').textContent = 'Hey, '+n+' 🌙';
-  document.getElementById('profile-avatar').textContent = n.charAt(0).toUpperCase();
-  document.getElementById('profile-name').textContent = n;
-  document.getElementById('profile-goal').textContent = 'Sleep goal: '+(profile.sleep_goal_hours||8)+'h · '+(profile.age_group||'');
-  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  const t = new Date(); t.setMinutes(0,0,0);
-  document.getElementById('consume-time').value = t.toTimeString().slice(0,5);
-  const bt = new Date(t); bt.setHours(bt.getHours()-8);
-  document.getElementById('bed-time').value = bt.toTimeString().slice(0,5);
-  document.getElementById('wake-time').value = t.toTimeString().slice(0,5);
+  const h=new Date().getHours();
+  document.getElementById('greet-lbl').textContent=h<12?'Good morning ☀️':h<17?'Good afternoon 🌤':'Good evening 🌙';
+  const n=profile.display_name||'there';
+  document.getElementById('greet-name').textContent='Hey, '+n+' 🌙';
+  document.getElementById('profile-avatar').textContent=n.charAt(0).toUpperCase();
+  document.getElementById('profile-name').textContent=n;
+  document.getElementById('profile-goal').textContent='Sleep goal: '+(profile.sleep_goal_hours||8)+'h · '+(profile.age_group||'');
+  document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  const t=new Date();t.setMinutes(0,0,0);
+  document.getElementById('consume-time').value=t.toTimeString().slice(0,5);
+  const bt=new Date(t);bt.setHours(bt.getHours()-8);
+  document.getElementById('bed-time').value=bt.toTimeString().slice(0,5);
+  document.getElementById('wake-time').value=t.toTimeString().slice(0,5);
 }
 
-// ============================================
-// NAVIGATION
-// ============================================
+// ===================== NAVIGATION =====================
 function goTo(name,btn){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('fab-btn').style.display=(name==='log'||name==='home')?'flex':'none';
-  if(name==='history')renderHistory();
+  if(name==='calendar')renderCalendar();
   if(name==='insights')renderInsights();
   if(name==='nap')updateNapRec();
   if(name==='home')updateDash();
   if(name==='log')renderLogScreen();
 }
 
-// ============================================
-// ENERGY CALCULATIONS
-// ============================================
+// ===================== ENERGY CALC =====================
 function calcEnergy(){
-  const goal = profile.sleep_goal_hours||8;
-  const avg = sleepHistory.length ? sleepHistory.reduce((a,d)=>a+d.hours,0)/sleepHistory.length : 0;
-  const last = sleepHistory.length ? sleepHistory[sleepHistory.length-1].hours : 0;
-  const pct = last ? Math.min(100,Math.round((last/goal)*100)) : 0;
-  const debt = last ? Math.round((last-goal)*60) : 0;
-  const napMins = debt<0 ? Math.min(90,Math.abs(debt)) : 0;
+  const goal=profile.sleep_goal_hours||8;
+  const avg=sleepHistory.length?sleepHistory.reduce((a,d)=>a+d.hours,0)/sleepHistory.length:0;
+  const last=sleepHistory.length?sleepHistory[sleepHistory.length-1].hours:0;
+  const pct=last?Math.min(100,Math.round((last/goal)*100)):0;
+  const debt=last?Math.round((last-goal)*60):0;
+  const napMins=debt<0?Math.min(90,Math.abs(debt)):0;
   return{avg,last,pct,debt,napMins,goal};
 }
+function fmtH(h){if(!h)return'—';const hr=Math.floor(h);const m=Math.round((h-hr)*60);return m>0?`${hr}h ${m}m`:`${hr}h`;}
 
-function fmtH(h){
-  if(!h) return '—';
-  const hr=Math.floor(h); const m=Math.round((h-hr)*60);
-  return m>0?`${hr}h ${m}m`:`${hr}h`;
+// ===================== PRODUCTIVITY SCORE =====================
+function calcScore(hours,quality,goal){
+  if(!hours)return 0;
+  const sleepScore=Math.min(100,Math.round((hours/goal)*100));
+  const qualityBonus={Restless:-10,Okay:0,Good:5,Great:10};
+  return Math.min(100,Math.max(0,sleepScore+(qualityBonus[quality]||0)));
+}
+function scoreClass(score){
+  if(score>=90)return'great';
+  if(score>=70)return'good';
+  if(score>=50)return'mid';
+  return'low';
 }
 
-// ============================================
-// DASHBOARD UPDATE
-// ============================================
+// ===================== DASHBOARD =====================
 function updateDash(){
   const{avg,last,pct,debt,napMins}=calcEnergy();
-  const circ=276.5;
-  document.getElementById('energy-ring').setAttribute('stroke-dashoffset',(circ*(1-pct/100)).toFixed(1));
+  document.getElementById('energy-ring').setAttribute('stroke-dashoffset',(276.5*(1-pct/100)).toFixed(1));
   document.getElementById('energy-pct').textContent=pct+'%';
   document.getElementById('dash-sleep').textContent=fmtH(last);
   document.getElementById('dash-avg').textContent=fmtH(avg);
@@ -730,9 +796,7 @@ function updateDash(){
   }).join('');
 }
 
-// ============================================
-// LOG SCREEN
-// ============================================
+// ===================== LOG SCREEN =====================
 function renderLogScreen(){
   const c=document.getElementById('log-entries');
   if(!todayLog.length){c.innerHTML='<div style="margin:0 16px;color:var(--muted);font-size:13px;font-weight:500">Nothing logged yet. Tap + to add.</div>';return;}
@@ -756,34 +820,84 @@ function renderLogScreen(){
   c.innerHTML=html;
 }
 
-// ============================================
-// HISTORY
-// ============================================
-function renderHistory(){
-  if(!sleepHistory.length){
-    document.getElementById('history-list').innerHTML='<div style="margin:0 16px;color:var(--muted);font-size:13px;font-weight:500">No sleep data yet. Log your first night!</div>';
-    return;
-  }
-  const d=sleepHistory;
-  if(chartInst)chartInst.destroy();
-  chartInst=new Chart(document.getElementById('sleepChart').getContext('2d'),{
-    type:'bar',
-    data:{labels:d.map(x=>x.date),datasets:[{data:d.map(x=>x.hours),backgroundColor:d.map(x=>x.hours>=(profile.sleep_goal_hours||8)?'rgba(0,229,160,0.8)':x.hours>=6?'rgba(255,190,61,0.8)':'rgba(255,107,107,0.8)'),borderRadius:8,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(19,25,41,0.95)',titleColor:'#F0F4FF',bodyColor:'#7B8DB0',borderColor:'rgba(255,255,255,0.07)',borderWidth:1,cornerRadius:10,callbacks:{label:v=>` ${v.raw}h`}}},scales:{y:{min:0,max:10,grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#7B8DB0',font:{size:11,family:'Plus Jakarta Sans'},callback:v=>v+'h'}},x:{grid:{display:false},ticks:{color:'#7B8DB0',font:{size:11,family:'Plus Jakarta Sans'}}}}}
-  });
-  const goal=profile.sleep_goal_hours||8;
-  document.getElementById('history-list').innerHTML=d.map(x=>{
-    const pct=Math.min(100,(x.hours/10)*100);
-    const cls=x.hours>=goal?'good':x.hours>=6?'mid':'low';
-    const badgeCls=x.hours>=goal?'badge-good':x.hours>=6?'badge-neu':'badge-bad';
-    const lbl=x.hours>=goal?'Good':x.hours>=6?'Short':'Low';
-    return `<div class="hist-item"><div class="hbar-wrap"><div class="hbar ${cls}" style="height:${pct}%"></div></div><div class="hday-info"><div class="hday-lbl">${x.date} — ${fmtH(x.hours)}</div><div class="hday-sub">Quality: ${x.quality}</div></div><span class="log-badge ${badgeCls}">${lbl}</span></div>`;
-  }).join('');
+// ===================== CALENDAR =====================
+function changeMonth(dir){
+  calViewDate.setMonth(calViewDate.getMonth()+dir);
+  renderCalendar();
 }
 
-// ============================================
-// NAP ADVISOR
-// ============================================
+function renderCalendar(){
+  const year=calViewDate.getFullYear();
+  const month=calViewDate.getMonth();
+  const today=new Date();
+  const todayStr=today.toISOString().split('T')[0];
+  const goal=profile.sleep_goal_hours||8;
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent=monthNames[month]+' '+year;
+  const firstDay=new Date(year,month,1).getDay();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const grid=document.getElementById('cal-grid');
+  let html='';
+  let scores=[];
+  let streak=0;let bestStreak=0;let curStreak=0;
+
+  // Empty cells before first day
+  for(let i=0;i<firstDay;i++){
+    html+=`<div class="cal-cell empty"></div>`;
+  }
+
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=dateStr===todayStr;
+    const isFuture=new Date(dateStr)>today;
+    const data=allSleepData[dateStr];
+
+    if(isFuture){
+      html+=`<div class="cal-cell future${isToday?' today':''}"><div class="cal-date">${d}</div></div>`;
+    } else if(data){
+      const score=calcScore(data.hours,data.quality,goal);
+      scores.push(score);
+      curStreak++;
+      bestStreak=Math.max(bestStreak,curStreak);
+      const cls=scoreClass(score);
+      html+=`<div class="cal-cell ${cls}${isToday?' today':''}" onclick="showCalDetail('${dateStr}',${data.hours},'${data.quality}',${score})">
+        <div class="cal-date">${d}</div>
+        <div class="cal-pct">${score}%</div>
+      </div>`;
+    } else {
+      curStreak=0;
+      html+=`<div class="cal-cell no-data${isToday?' today':''}" onclick="hideCalDetail()">
+        <div class="cal-date">${d}</div>
+        <div class="cal-pct">—</div>
+      </div>`;
+    }
+  }
+
+  grid.innerHTML=html;
+
+  // Monthly summary
+  const avgScore=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
+  document.getElementById('cal-avg-score').textContent=scores.length?avgScore+'%':'—';
+  document.getElementById('cal-best-streak').textContent=bestStreak||'—';
+}
+
+function showCalDetail(dateStr,hours,quality,score){
+  const detail=document.getElementById('cal-detail');
+  const goal=profile.sleep_goal_hours||8;
+  const date=new Date(dateStr+'T12:00:00');
+  document.getElementById('cal-detail-date').textContent=date.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('cal-detail-hours').textContent=fmtH(hours);
+  document.getElementById('cal-detail-goal').textContent=goal+'h';
+  document.getElementById('cal-detail-quality').textContent=quality;
+  document.getElementById('cal-detail-score').textContent=score+'%';
+  document.getElementById('cal-detail-score').style.color=score>=70?'var(--green)':score>=50?'var(--amber)':'var(--coral)';
+  detail.classList.add('show');
+}
+function hideCalDetail(){
+  document.getElementById('cal-detail').classList.remove('show');
+}
+
+// ===================== NAP ADVISOR =====================
 const SCI={
   '10–20 min':'A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake.',
   '20–30 min':'At 20–30 min you may enter stage 2 sleep more deeply. You might feel mild sleep inertia for a few minutes, but memory consolidation and motor learning improve significantly.',
@@ -808,9 +922,7 @@ function selNap(el,time,desc){
   document.getElementById('sci-text').textContent=SCI[time]||SCI['No nap'];
 }
 
-// ============================================
-// INSIGHTS
-// ============================================
+// ===================== INSIGHTS =====================
 function renderInsights(){
   const{avg,last,debt}=calcEnergy();
   const cafSens=profile.caffeine_sensitivity||'medium';
@@ -818,13 +930,10 @@ function renderInsights(){
   const caf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
   const lateC=todayLog.find(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0&&parseInt(e.time.split(':')[0])>=cafCutoff);
   const ins=[];
-  if(!last){
-    ins.push({t:'info',title:'Log your first sleep entry',body:'Once you log tonight\'s sleep, you\'ll see personalised insights here based on your patterns.'});
-  } else {
-    if(debt<-60)ins.push({t:'alert',title:'Sleep deficit detected',body:`You're running ${Math.abs(debt)} min behind your ${profile.sleep_goal_hours||8}h goal. A ${Math.min(90,Math.abs(debt))}-min nap or earlier bedtime tonight can help.`});
-    else if(debt<0)ins.push({t:'warn',title:'Slightly under-slept',body:`You got ${fmtH(last)} — about ${Math.abs(debt)} min short. A 20-min power nap this afternoon can compensate.`});
-    else ins.push({t:'info',title:'Well-rested today',body:`Great night! You hit ${fmtH(last)} — above your 7-day average of ${fmtH(avg)}. No nap needed today.`});
-  }
+  if(!last){ins.push({t:'info',title:'Log your first sleep entry',body:'Once you log tonight\'s sleep, you\'ll see personalised insights here.'});}
+  else if(debt<-60)ins.push({t:'alert',title:'Sleep deficit detected',body:`You're running ${Math.abs(debt)} min behind your ${profile.sleep_goal_hours||8}h goal. A ${Math.min(90,Math.abs(debt))}-min nap or earlier bedtime tonight can help.`});
+  else if(debt<0)ins.push({t:'warn',title:'Slightly under-slept',body:`You got ${fmtH(last)} — about ${Math.abs(debt)} min short. A 20-min power nap this afternoon can compensate.`});
+  else ins.push({t:'info',title:'Well-rested today',body:`Great night! You hit ${fmtH(last)} — above your 7-day average of ${fmtH(avg)}. No nap needed today.`});
   if(caf>200)ins.push({t:'warn',title:'High caffeine intake',body:`~${caf}mg today. With ${cafSens} sensitivity, consider stopping by ${cafCutoff}:00.`});
   else if(caf>0)ins.push({t:'info',title:'Caffeine on track',body:`${caf}mg today — manageable for your sensitivity level.`});
   if(lateC)ins.push({t:'alert',title:'Late caffeine detected',body:`You had ${lateC.item} after ${cafCutoff}:00. This may delay sleep onset tonight.`});
@@ -837,9 +946,7 @@ function renderInsights(){
   document.getElementById('caf-bars').innerHTML=cafS.map(e=>{const mg=(ITEMS[e.item].caf||0)*e.amount;return `<div class="caf-row"><span class="caf-name">${e.item}</span><div class="caf-bg"><div class="caf-bar" style="width:${Math.round((mg/maxC)*100)}%"></div></div><span class="caf-val">${mg}mg</span></div>`;}).join('');
 }
 
-// ============================================
-// MODAL
-// ============================================
+// ===================== MODAL =====================
 function openModal(){
   document.getElementById('modal-overlay').classList.remove('hidden');
   state.selectedItem=null;state.amount=1;state.selectedType='consume';state.selectedQuality='Good';
@@ -858,20 +965,16 @@ function selItem(el,name){document.querySelectorAll('#item-chips .chip').forEach
 function selQuality(el,q){document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');state.selectedQuality=q;}
 function chgAmt(d){state.amount=Math.max(1,Math.min(10,state.amount+d));document.getElementById('amt-display').textContent=state.amount;}
 
-// ============================================
-// SAVE ENTRY — saves to Supabase + updates UI
-// ============================================
+// ===================== SAVE ENTRY =====================
 async function saveEntry(){
-  const btn = document.getElementById('save-btn');
-  btn.disabled = true;
-  btn.textContent = 'Saving...';
-
+  const btn=document.getElementById('save-btn');
+  btn.disabled=true;btn.textContent='Saving...';
   if(state.selectedType==='consume'){
     if(!state.selectedItem){showToast('Please select an item','err');btn.disabled=false;btn.textContent='Save Entry';return;}
-    const time = document.getElementById('consume-time').value||'12:00';
-    const entry = {type:'consume',item:state.selectedItem,amount:state.amount,time};
-    const saved = await saveConsumeToSupabase(entry);
-    if(saved){ entry.id=saved.id; todayLog.push(entry); }
+    const time=document.getElementById('consume-time').value||'12:00';
+    const entry={type:'consume',item:state.selectedItem,amount:state.amount,time};
+    const saved=await saveConsumeToSupabase(entry);
+    if(saved){entry.id=saved.id;todayLog.push(entry);}
   } else {
     const bed=document.getElementById('bed-time').value;
     const wake=document.getElementById('wake-time').value;
@@ -881,10 +984,9 @@ async function saveEntry(){
     if(wM<bM)wM+=1440;
     const hours=parseFloat(((wM-bM)/60).toFixed(1));
     const entry={type:'sleep',bedtime:bed,waketime:wake,hours,quality:state.selectedQuality};
-    const saved = await saveSleepToSupabase(entry);
+    const saved=await saveSleepToSupabase(entry);
     if(saved){
-      entry.id=saved.id;
-      todayLog.push(entry);
+      entry.id=saved.id;todayLog.push(entry);
       const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       const today=days[new Date().getDay()];
       const ex=sleepHistory.findIndex(d=>d.date===today);
@@ -893,24 +995,18 @@ async function saveEntry(){
       if(sleepHistory.length>7)sleepHistory.shift();
     }
   }
-
-  btn.disabled=false;
-  btn.textContent='Save Entry';
-  closeModal();
-  renderLogScreen();
-  updateDash();
+  btn.disabled=false;btn.textContent='Save Entry';
+  closeModal();renderLogScreen();updateDash();
 }
 
-// ============================================
-// AI ADVISOR
-// ============================================
+// ===================== AI ADVISOR =====================
 function buildCtx(){
   const{avg,last,debt,napMins,goal}=calcEnergy();
   const caf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
   const cl=todayLog.filter(e=>e.type==='consume').map(e=>`${e.item} x${e.amount} at ${e.time}`).join(', ')||'none';
   const sl=todayLog.filter(e=>e.type==='sleep').map(e=>`${fmtH(e.hours)} (${e.quality})`).join(', ')||'none today';
   const hist=sleepHistory.map(d=>`${d.date}:${d.hours}h(${d.quality})`).join(', ')||'no history yet';
-  return `You are an expert sleep science advisor in a sleep tracking app. Deep knowledge of sleep physiology, circadian rhythms, adenosine, REM cycles, caffeine pharmacology, sleep debt, and productivity. Give warm, personalised, science-backed advice. Be concise. Never diagnose medically.\n\nUSER PROFILE:\n- Name: ${profile.display_name}\n- Age group: ${profile.age_group}\n- Sleep goal: ${goal}h/night\n- Work schedule: ${profile.work_schedule}\n- Main goal: ${profile.main_goal}\n- Caffeine sensitivity: ${profile.caffeine_sensitivity}\n\nTODAY'S DATA:\n- Last night: ${fmtH(last)}\n- 7d avg: ${fmtH(avg)}\n- Sleep debt: ${debt}min\n- Rec nap: ${napMins>0?napMins+'min':'none'}\n- Caffeine: ${caf}mg\n- Consumed: ${cl}\n- Sleep logged: ${sl}\n- 7d history: ${hist}`;
+  return `You are an expert sleep science advisor. Deep knowledge of sleep physiology, circadian rhythms, adenosine, REM cycles, caffeine pharmacology, sleep debt, and productivity. Warm, personalised, science-backed advice. Be concise. Never diagnose medically.\n\nUSER PROFILE:\n- Name: ${profile.display_name}\n- Age group: ${profile.age_group}\n- Sleep goal: ${goal}h/night\n- Work schedule: ${profile.work_schedule}\n- Main goal: ${profile.main_goal}\n- Caffeine sensitivity: ${profile.caffeine_sensitivity}\n\nTODAY'S DATA:\n- Last night: ${fmtH(last)}\n- 7d avg: ${fmtH(avg)}\n- Sleep debt: ${debt}min\n- Rec nap: ${napMins>0?napMins+'min':'none'}\n- Caffeine: ${caf}mg\n- Consumed: ${cl}\n- Sleep logged: ${sl}\n- 7d history: ${hist}`;
 }
 function appendMsg(role,text){
   const d=document.createElement('div');d.className=`msg ${role}`;d.textContent=text;
@@ -948,9 +1044,6 @@ async function callAI(){
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
 
-// ============================================
-// START THE APP
-// ============================================
 init();
 </script>
 </body>
