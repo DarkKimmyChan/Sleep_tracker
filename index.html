@@ -7,41 +7,37 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 
-/* ===================== DARK THEME ===================== */
+/* ===== DARK THEME ===== */
 [data-theme="dark"]{
   --bg:#0B0F1A;--bg2:#131929;--bg3:#1A2235;
   --card:#1E2A40;--border:rgba(255,255,255,0.07);
-  --text:#F0F4FF;--muted:#7B8DB0;--muted2:#4A5878;
+  --text:#F0F4FF;--text2:#C8D4F0;--muted:#7B8DB0;--muted2:#4A5878;
   --card-grad:linear-gradient(135deg,rgba(30,42,64,0.9),rgba(20,30,50,0.9));
   --hero-bg:linear-gradient(135deg,#1B2A4A,#0F1E35);
   --nap-bg:linear-gradient(135deg,#1C1640,#0F0B2A);
   --ai-bg:linear-gradient(135deg,#0F1E35,#1A1040);
-  --nav-bg:rgba(19,25,41,0.85);
-  --modal-bg:#131929;
-  --input-bg:#1A2235;
-  --toggle-bg:#1E2A40;
-  --orb-opacity:0.18;
-  --shadow:rgba(0,0,0,0.3);
+  --planet-bg:linear-gradient(135deg,#0A1628,#12082A);
+  --nav-bg:rgba(19,25,41,0.88);
+  --modal-bg:#131929;--input-bg:#1A2235;
+  --shadow:rgba(0,0,0,0.35);
 }
 
-/* ===================== LIGHT THEME ===================== */
+/* ===== LIGHT THEME ===== */
 [data-theme="light"]{
-  --bg:#F0F4FF;--bg2:#FFFFFF;--bg3:#E8EDF8;
-  --card:#FFFFFF;--border:rgba(0,0,0,0.08);
-  --text:#0B1229;--muted:#6B7A99;--muted2:#9BA8C0;
-  --card-grad:linear-gradient(135deg,rgba(255,255,255,0.95),rgba(240,244,255,0.95));
-  --hero-bg:linear-gradient(135deg,#E1F5EE,#D4EDE4);
-  --nap-bg:linear-gradient(135deg,#EDE9FE,#DDD6FE);
-  --ai-bg:linear-gradient(135deg,#EDE9FE,#E0D9FF);
-  --nav-bg:rgba(255,255,255,0.9);
-  --modal-bg:#FFFFFF;
-  --input-bg:#F0F4FF;
-  --toggle-bg:#E8EDF8;
-  --orb-opacity:0.08;
-  --shadow:rgba(0,0,0,0.08);
+  --bg:#F4F7FF;--bg2:#FFFFFF;--bg3:#E8EEF8;
+  --card:#FFFFFF;--border:rgba(0,0,0,0.09);
+  --text:#0D1B3E;--text2:#2A3D6B;--muted:#556080;--muted2:#8A97B8;
+  --card-grad:linear-gradient(135deg,#FFFFFF,#F4F7FF);
+  --hero-bg:linear-gradient(135deg,#D4F0E5,#C0E8D8);
+  --nap-bg:linear-gradient(135deg,#EAE4FF,#DAD0FF);
+  --ai-bg:linear-gradient(135deg,#EAE4FF,#DDD8FF);
+  --planet-bg:linear-gradient(135deg,#E8EEF8,#DDE4F8);
+  --nav-bg:rgba(255,255,255,0.92);
+  --modal-bg:#FFFFFF;--input-bg:#F0F4FF;
+  --shadow:rgba(0,0,0,0.07);
 }
 
-/* ===================== SHARED COLORS ===================== */
+/* ===== SHARED ===== */
 :root{
   --green:#00C87A;--green2:#00A663;--green-dim:rgba(0,200,122,0.12);
   --purple:#7C5CFC;--purple2:#6344E8;--purple-dim:rgba(124,92,252,0.12);
@@ -49,45 +45,38 @@
   --coral:#E8504A;--coral-dim:rgba(232,80,74,0.12);
   --grad-green:linear-gradient(135deg,#00E5A0,#00B87A);
   --grad-purple:linear-gradient(135deg,#A78BFA,#7C5CFC);
-  --grad-card:var(--card-grad);
 }
 
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.3s,color 0.3s}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.4s,color 0.4s}
 .app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
 .screen{flex:1;display:none;flex-direction:column;padding-bottom:90px;overflow-y:auto}
 .screen.active{display:flex}
-
-/* ORBS */
-.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;opacity:var(--orb-opacity);transition:opacity 0.3s}
-.orb1{width:300px;height:300px;background:#7C5CFC;top:-80px;right:-60px}
-.orb2{width:250px;height:250px;background:#00B87A;bottom:100px;left:-80px}
-.orb3{width:200px;height:200px;background:#3B82F6;top:40%;right:-80px}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;transition:opacity 0.4s}
+.orb1{width:300px;height:300px;background:#7C5CFC;top:-80px;right:-60px;opacity:0.18}
+.orb2{width:250px;height:250px;background:#00B87A;bottom:100px;left:-80px;opacity:0.18}
+.orb3{width:200px;height:200px;background:#3B82F6;top:40%;right:-80px;opacity:0.12}
+[data-theme="light"] .orb{opacity:0.06!important}
 
 /* NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:100;padding:0 16px 20px}
-.nav-inner{background:var(--nav-bg);backdrop-filter:blur(20px);border:0.5px solid var(--border);border-radius:24px;display:flex;justify-content:space-around;padding:10px 8px;box-shadow:0 4px 24px var(--shadow)}
-.nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:16px;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.03em;transition:all 0.2s;text-transform:uppercase}
-.nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-inner{background:var(--nav-bg);backdrop-filter:blur(20px);border:0.5px solid var(--border);border-radius:24px;display:flex;justify-content:space-around;padding:10px 6px;box-shadow:0 4px 24px var(--shadow)}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:6px 8px;border-radius:16px;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.03em;transition:all 0.2s;text-transform:uppercase}
+.nav-btn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .nav-btn.active{color:var(--green);background:var(--green-dim)}
 
 /* HEADER */
-.screen-header{padding:20px 20px 8px;position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-start}
-.header-left{}
+.screen-header{padding:20px 20px 8px;position:relative;z-index:1}
 .greet-lbl{font-size:13px;color:var(--muted);font-weight:500}
 .greet-name{font-size:26px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--text),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .date-chip{font-size:11px;background:var(--green-dim);color:var(--green);padding:5px 12px;border-radius:20px;font-weight:600;border:1px solid rgba(0,200,122,0.2);display:inline-block;margin-top:6px}
 
-/* THEME TOGGLE */
-.theme-toggle{width:44px;height:44px;border-radius:14px;background:var(--toggle-bg);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:all 0.2s;margin-top:4px}
-.theme-toggle:active{transform:scale(0.92)}
-
 /* CARDS */
-.card{background:var(--grad-card);border:0.5px solid var(--border);border-radius:20px;padding:18px;margin:0 16px 12px;position:relative;z-index:1;overflow:hidden;box-shadow:0 2px 12px var(--shadow)}
+.card{background:var(--card-grad);border:0.5px solid var(--border);border-radius:20px;padding:18px;margin:0 16px 12px;position:relative;z-index:1;overflow:hidden;box-shadow:0 2px 12px var(--shadow)}
 .card-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
 
 /* ENERGY HERO */
 .energy-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:var(--hero-bg);box-shadow:0 4px 20px var(--shadow)}
-.energy-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,160,0.15),transparent 70%)}
+.energy-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,122,0.15),transparent 70%)}
 .energy-top{display:flex;align-items:center;gap:20px}
 .ring-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
 .ring-wrap svg{transform:rotate(-90deg)}
@@ -102,26 +91,25 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 /* STATS */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px;position:relative;z-index:1}
-.stat-card{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;overflow:hidden;box-shadow:0 2px 12px var(--shadow)}
+.stat-card{background:var(--card-grad);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;overflow:hidden;box-shadow:0 2px 12px var(--shadow)}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:18px 18px 0 0}
 .stat-card.green::before{background:var(--grad-green)}
 .stat-card.purple::before{background:var(--grad-purple)}
-.stat-num{font-size:30px;font-weight:800;line-height:1;letter-spacing:-1px}
+.stat-num{font-size:28px;font-weight:800;line-height:1;letter-spacing:-1px}
 .stat-card.green .stat-num{background:var(--grad-green);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stat-card.purple .stat-num{background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stat-unit{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
 .stat-name{font-size:11px;color:var(--muted2);font-weight:500;margin-top:2px}
 
-/* SECTION TITLE */
 .sec-title{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;padding:4px 20px 8px;position:relative;z-index:1}
 
 /* LOG */
 .log-group{margin:0 16px 12px;border-radius:20px;overflow:hidden;border:0.5px solid var(--border);position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
-.log-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid var(--border);background:var(--grad-card)}
+.log-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid var(--border);background:var(--card-grad)}
 .log-item:last-child{border-bottom:none}
 .log-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .log-info{flex:1}
-.log-name{font-size:14px;font-weight:600}
+.log-name{font-size:14px;font-weight:600;color:var(--text)}
 .log-time{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
 .log-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700}
 .badge-bad{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(232,80,74,0.2)}
@@ -137,17 +125,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:flex-end;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%)}
 .modal{background:var(--modal-bg);border:0.5px solid var(--border);border-radius:28px 28px 0 0;padding:28px 20px 36px;width:100%;max-height:82vh;overflow-y:auto;position:relative}
 .modal-handle{width:36px;height:4px;background:var(--muted2);border-radius:4px;margin:0 auto 20px}
-.modal-title{font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:20px}
+.modal-title{font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:20px;color:var(--text)}
 .modal-sec{margin-bottom:20px}
 .modal-lbl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
 .chip-group{display:flex;flex-wrap:wrap;gap:8px}
 .chip{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--input-bg);font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Plus Jakarta Sans',sans-serif;color:var(--muted);font-weight:600}
 .chip.sel{background:var(--green-dim);color:var(--green);border-color:rgba(0,200,122,0.3)}
-.time-inp{width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:14px;font-size:15px;font-family:'Plus Jakarta Sans',sans-serif;background:var(--input-bg);color:var(--text);outline:none;transition:border-color 0.2s}
+.time-inp{width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:14px;font-size:15px;font-family:'Plus Jakarta Sans',sans-serif;background:var(--input-bg);color:var(--text);outline:none}
 .time-inp:focus{border-color:var(--green)}
 .amt-row{display:flex;align-items:center;gap:14px;margin-top:10px}
 .amt-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--input-bg);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif}
-.amt-val{font-size:20px;font-weight:700;min-width:40px;text-align:center}
+.amt-val{font-size:20px;font-weight:700;min-width:40px;text-align:center;color:var(--text)}
 .save-btn{width:100%;padding:15px;background:var(--grad-green);color:#0B1A12;border:none;border-radius:16px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px}
 .save-btn:disabled{opacity:0.5;cursor:not-allowed}
 .close-btn{position:absolute;top:20px;right:20px;background:var(--input-bg);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center}
@@ -155,96 +143,145 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .sleep-field label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:6px;letter-spacing:0.04em;text-transform:uppercase}
 .hidden{display:none}
 
-/* ===================== CALENDAR ===================== */
-.cal-header{margin:0 16px 12px;position:relative;z-index:1}
-.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.cal-month{font-size:18px;font-weight:800;letter-spacing:-0.3px}
-.cal-nav-btn{width:36px;height:36px;border-radius:12px;background:var(--grad-card);border:1px solid var(--border);cursor:pointer;color:var(--text);font-size:16px;display:flex;align-items:center;justify-content:center;transition:background 0.15s}
-.cal-wrap{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:20px;padding:16px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
+/* ===== CALENDAR ===== */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin:0 16px 12px;position:relative;z-index:1}
+.cal-month{font-size:18px;font-weight:800;letter-spacing:-0.3px;color:var(--text)}
+.cal-nav-btn{width:36px;height:36px;border-radius:12px;background:var(--card-grad);border:1px solid var(--border);cursor:pointer;color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center}
+.cal-wrap{margin:0 16px 12px;background:var(--card-grad);border:0.5px solid var(--border);border-radius:20px;padding:16px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
 .cal-days-header{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px}
 .cal-day-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:0.05em;text-transform:uppercase;padding:4px 0}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .cal-cell{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform 0.15s;border:1px solid transparent}
-.cal-cell:active{transform:scale(0.94)}
+.cal-cell:active{transform:scale(0.92)}
 .cal-cell.empty{cursor:default}
 .cal-date{font-size:12px;font-weight:700;line-height:1}
 .cal-pct{font-size:9px;font-weight:600;margin-top:2px;line-height:1}
 .cal-cell.no-data{background:var(--input-bg)}
 .cal-cell.no-data .cal-date{color:var(--muted)}
 .cal-cell.no-data .cal-pct{color:var(--muted2)}
-.cal-cell.great{background:rgba(0,200,122,0.2);border-color:rgba(0,200,122,0.3)}
-.cal-cell.great .cal-date{color:var(--green)}
-.cal-cell.great .cal-pct{color:var(--green)}
-.cal-cell.good{background:rgba(0,200,122,0.1);border-color:rgba(0,200,122,0.2)}
-.cal-cell.good .cal-date{color:var(--green)}
-.cal-cell.good .cal-pct{color:var(--green)}
-.cal-cell.mid{background:rgba(232,160,32,0.15);border-color:rgba(232,160,32,0.25)}
-.cal-cell.mid .cal-date{color:var(--amber)}
-.cal-cell.mid .cal-pct{color:var(--amber)}
-.cal-cell.low{background:rgba(232,80,74,0.15);border-color:rgba(232,80,74,0.25)}
-.cal-cell.low .cal-date{color:var(--coral)}
-.cal-cell.low .cal-pct{color:var(--coral)}
+.cal-cell.great{background:rgba(0,200,122,0.22);border-color:rgba(0,200,122,0.35)}
+.cal-cell.great .cal-date,.cal-cell.great .cal-pct{color:var(--green)}
+.cal-cell.good{background:rgba(0,200,122,0.12);border-color:rgba(0,200,122,0.22)}
+.cal-cell.good .cal-date,.cal-cell.good .cal-pct{color:var(--green)}
+.cal-cell.mid{background:rgba(232,160,32,0.18);border-color:rgba(232,160,32,0.28)}
+.cal-cell.mid .cal-date,.cal-cell.mid .cal-pct{color:var(--amber)}
+.cal-cell.low{background:rgba(232,80,74,0.18);border-color:rgba(232,80,74,0.28)}
+.cal-cell.low .cal-date,.cal-cell.low .cal-pct{color:var(--coral)}
 .cal-cell.today{box-shadow:0 0 0 2px var(--green)}
-.cal-cell.future{opacity:0.3;cursor:default}
-
-/* CALENDAR LEGEND */
-.cal-legend{display:flex;align-items:center;gap:12px;margin:0 16px 12px;position:relative;z-index:1;flex-wrap:wrap}
+.cal-cell.future{opacity:0.25;cursor:default;pointer-events:none}
+.cal-legend{display:flex;align-items:center;gap:10px;margin:0 16px 12px;position:relative;z-index:1;flex-wrap:wrap}
 .leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:500}
 .leg-dot{width:10px;height:10px;border-radius:3px}
-
-/* CALENDAR DETAIL CARD */
-.cal-detail{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1;display:none;box-shadow:0 2px 12px var(--shadow)}
+.cal-detail{margin:0 16px 12px;background:var(--card-grad);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1;display:none;box-shadow:0 2px 12px var(--shadow)}
 .cal-detail.show{display:block}
 .cal-detail-date{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px}
 .cal-detail-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border)}
 .cal-detail-row:last-child{border-bottom:none}
 .cal-detail-key{font-size:13px;color:var(--muted);font-weight:500}
-.cal-detail-val{font-size:13px;font-weight:700}
+.cal-detail-val{font-size:13px;font-weight:700;color:var(--text)}
+
+/* ===== PLANET SCREEN ===== */
+.planet-screen-wrap{position:relative;z-index:1}
+.planet-hero{margin:8px 16px 12px;border-radius:24px;padding:28px 24px;background:var(--planet-bg);border:0.5px solid var(--border);position:relative;overflow:hidden;box-shadow:0 4px 24px var(--shadow);display:flex;flex-direction:column;align-items:center;text-align:center}
+.planet-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(124,92,252,0.15),transparent 70%)}
+.planet-canvas-wrap{position:relative;width:160px;height:160px;margin:0 auto 16px}
+.planet-svg{width:160px;height:160px;filter:drop-shadow(0 0 24px var(--planet-glow,rgba(124,92,252,0.5)))}
+.planet-name{font-size:20px;font-weight:800;letter-spacing:-0.3px;color:var(--text);margin-bottom:4px}
+.planet-name-input{background:transparent;border:none;border-bottom:1.5px solid var(--border);font-size:20px;font-weight:800;letter-spacing:-0.3px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;text-align:center;width:200px;outline:none;padding:4px 0;margin-bottom:4px}
+.planet-name-input:focus{border-bottom-color:var(--green)}
+.planet-edit-hint{font-size:11px;color:var(--muted);font-weight:500;margin-bottom:16px}
+.planet-lv-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.planet-lv-badge{background:var(--grad-purple);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:800;color:#fff}
+.planet-xp-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+.planet-xp-bar{height:100%;border-radius:4px;background:var(--grad-purple);transition:width 0.6s ease}
+.planet-xp-label{font-size:11px;color:var(--muted);font-weight:500}
+.planet-stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%}
+.planet-stat{background:rgba(255,255,255,0.05);border-radius:12px;padding:10px;border:0.5px solid var(--border)}
+.planet-stat-num{font-size:18px;font-weight:800;color:var(--text)}
+.planet-stat-lbl{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;margin-top:2px}
+.lv-history{margin:0 16px 12px;background:var(--card-grad);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
+.lv-history-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px}
+.lv-log-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border)}
+.lv-log-item:last-child{border-bottom:none}
+.lv-log-icon{font-size:16px;width:28px;text-align:center}
+.lv-log-text{flex:1;font-size:12px;color:var(--muted);font-weight:500}
+.lv-log-xp{font-size:12px;font-weight:700}
+.lv-log-xp.pos{color:var(--green)}
+.lv-log-xp.neg{color:var(--coral)}
+
+/* ===== LEADERBOARD ===== */
+.lb-wrap{margin:0 16px 12px;position:relative;z-index:1}
+.lb-item{display:flex;align-items:center;gap:12px;background:var(--card-grad);border:0.5px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:8px;box-shadow:0 2px 8px var(--shadow)}
+.lb-item.you{border:1.5px solid var(--green);background:linear-gradient(135deg,rgba(0,200,122,0.08),rgba(0,166,99,0.04))}
+.lb-rank{font-size:16px;font-weight:800;width:28px;text-align:center;color:var(--muted)}
+.lb-rank.gold{color:#F5A623}
+.lb-rank.silver{color:#A8B4C8}
+.lb-rank.bronze{color:#C8845A}
+.lb-planet-mini{width:44px;height:44px;flex-shrink:0}
+.lb-info{flex:1}
+.lb-name{font-size:14px;font-weight:700;color:var(--text)}
+.lb-planet-name{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+.lb-lv{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--purple-dim);color:var(--purple);border:1px solid rgba(124,92,252,0.2)}
+
+/* ===== ANALYSIS / WARNINGS ===== */
+.analysis-score-card{margin:0 16px 12px;border-radius:20px;padding:20px;position:relative;overflow:hidden;z-index:1;box-shadow:0 4px 20px var(--shadow)}
+.analysis-score-card.great{background:linear-gradient(135deg,rgba(0,200,122,0.15),rgba(0,166,99,0.08));border:1px solid rgba(0,200,122,0.2)}
+.analysis-score-card.good{background:linear-gradient(135deg,rgba(0,200,122,0.1),rgba(0,166,99,0.05));border:1px solid rgba(0,200,122,0.15)}
+.analysis-score-card.warn{background:linear-gradient(135deg,rgba(232,160,32,0.12),rgba(232,160,32,0.06));border:1px solid rgba(232,160,32,0.2)}
+.analysis-score-card.alert{background:linear-gradient(135deg,rgba(232,80,74,0.12),rgba(232,80,74,0.06));border:1px solid rgba(232,80,74,0.2)}
+.analysis-score-row{display:flex;align-items:center;gap:16px}
+.analysis-big-score{font-size:52px;font-weight:800;letter-spacing:-2px;line-height:1}
+.analysis-big-score.great{color:var(--green)}
+.analysis-big-score.good{color:var(--green)}
+.analysis-big-score.warn{color:var(--amber)}
+.analysis-big-score.alert{color:var(--coral)}
+.analysis-right{flex:1}
+.analysis-title{font-size:14px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.analysis-sub{font-size:12px;color:var(--muted);font-weight:500;line-height:1.6}
+.warning-card{margin:0 16px 10px;border-radius:16px;padding:14px 16px;position:relative;z-index:1;display:flex;align-items:flex-start;gap:12px}
+.warning-card.warn{background:rgba(232,160,32,0.1);border:1px solid rgba(232,160,32,0.2)}
+.warning-card.alert{background:rgba(232,80,74,0.1);border:1px solid rgba(232,80,74,0.2)}
+.warning-card.info{background:rgba(0,200,122,0.08);border:1px solid rgba(0,200,122,0.15)}
+.warning-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.warning-content{}
+.warning-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.warning-card.warn .warning-title{color:var(--amber)}
+.warning-card.alert .warning-title{color:var(--coral)}
+.warning-card.info .warning-title{color:var(--green)}
+.warning-body{font-size:12px;color:var(--muted);font-weight:500;line-height:1.6}
+.factor-breakdown{margin:0 16px 12px;background:var(--card-grad);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
+.factor-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.factor-row:last-child{margin-bottom:0}
+.factor-label{font-size:12px;color:var(--muted);font-weight:600;width:90px;flex-shrink:0}
+.factor-bar-bg{flex:1;height:8px;background:var(--input-bg);border-radius:4px;overflow:hidden}
+.factor-bar{height:100%;border-radius:4px;transition:width 0.5s ease}
+.factor-val{font-size:11px;font-weight:700;width:36px;text-align:right}
+.science-note{margin:0 16px 12px;padding:12px 16px;background:var(--input-bg);border-radius:14px;border:0.5px solid var(--border);font-size:11px;color:var(--muted);line-height:1.6;font-weight:500;position:relative;z-index:1}
+.science-note strong{color:var(--text)}
 
 /* NAP */
 .nap-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:var(--nap-bg);box-shadow:0 4px 20px var(--shadow)}
 .nap-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,252,0.2),transparent 70%)}
 .nap-lbl{font-size:10px;color:rgba(124,92,252,0.7);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
 .nap-time{font-size:52px;font-weight:800;letter-spacing:-2px;background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
-.nap-sub{font-size:13px;color:rgba(124,92,252,0.8);font-weight:500;margin-top:8px}
+.nap-sub{font-size:13px;color:var(--purple);opacity:0.85;font-weight:500;margin-top:8px}
 .nap-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px;position:relative;z-index:1}
-.nap-opt{background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 12px var(--shadow)}
+.nap-opt{background:var(--card-grad);border:0.5px solid var(--border);border-radius:18px;padding:16px;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 12px var(--shadow)}
 .nap-opt.sel{border:1.5px solid var(--purple);background:var(--purple-dim)}
 .nap-opt-time{font-size:22px;font-weight:800;color:var(--purple);letter-spacing:-0.5px}
-.nap-opt-label{font-size:13px;font-weight:600;margin-top:2px}
+.nap-opt-label{font-size:13px;font-weight:600;margin-top:2px;color:var(--text)}
 .nap-opt-desc{font-size:11px;color:var(--muted);font-weight:500;margin-top:4px}
 .sci-card{margin:0 16px 12px;background:var(--purple-dim);border:1px solid rgba(124,92,252,0.15);border-radius:18px;padding:16px;position:relative;z-index:1}
 .sci-head{font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px}
-.sci-body{font-size:12px;color:var(--purple);opacity:0.85;line-height:1.7;font-weight:500}
-
-/* INSIGHTS */
-.insight-card{margin:0 16px 12px;border-radius:18px;padding:16px;position:relative;z-index:1}
-.insight-card.info{background:linear-gradient(135deg,rgba(0,200,122,0.1),rgba(0,166,99,0.05));border:1px solid rgba(0,200,122,0.15)}
-.insight-card.warn{background:linear-gradient(135deg,rgba(232,160,32,0.1),rgba(232,160,32,0.05));border:1px solid rgba(232,160,32,0.15)}
-.insight-card.alert{background:linear-gradient(135deg,rgba(232,80,74,0.1),rgba(232,80,74,0.05));border:1px solid rgba(232,80,74,0.15)}
-.insight-title{font-size:14px;font-weight:700;margin-bottom:6px}
-.insight-title.info{color:var(--green)}
-.insight-title.warn{color:var(--amber)}
-.insight-title.alert{color:var(--coral)}
-.insight-body{font-size:12px;line-height:1.7;font-weight:500}
-.insight-body.info{color:var(--green);opacity:0.85}
-.insight-body.warn{color:var(--amber);opacity:0.85}
-.insight-body.alert{color:var(--coral);opacity:0.85}
-.caf-wrap{margin:0 16px 12px;background:var(--grad-card);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
-.caf-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.caf-row:last-child{margin-bottom:0}
-.caf-name{font-size:12px;color:var(--muted);font-weight:600;width:72px;flex-shrink:0}
-.caf-bg{flex:1;height:7px;background:var(--input-bg);border-radius:4px;overflow:hidden}
-.caf-bar{height:100%;border-radius:4px;background:linear-gradient(135deg,var(--amber),#FF8C00)}
-.caf-val{font-size:11px;font-weight:700;color:var(--amber);width:38px;text-align:right}
+.sci-body{font-size:12px;color:var(--purple);opacity:0.9;line-height:1.7;font-weight:500}
 
 /* AI */
 .ai-intro{margin:0 16px 12px;border-radius:20px;padding:20px;position:relative;overflow:hidden;z-index:1;background:var(--ai-bg);box-shadow:0 4px 20px var(--shadow)}
 .ai-intro::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,252,0.15),transparent 70%)}
 .ai-intro-title{font-size:14px;font-weight:700;color:var(--purple);margin-bottom:8px}
-.ai-intro-body{font-size:12px;color:var(--purple);opacity:0.8;line-height:1.7;font-weight:500}
+.ai-intro-body{font-size:12px;color:var(--purple);opacity:0.85;line-height:1.7;font-weight:500}
 .qbtns{margin:0 16px 12px;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
-.qbtn{background:var(--grad-card);border:0.5px solid var(--border);border-radius:14px;padding:13px 16px;text-align:left;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--text);font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px var(--shadow)}
+.qbtn{background:var(--card-grad);border:0.5px solid var(--border);border-radius:14px;padding:13px 16px;text-align:left;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--text);font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px var(--shadow)}
 .qbtn-ico{width:32px;height:32px;border-radius:10px;background:var(--purple-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
 .chat-area{margin:0 16px;display:flex;flex-direction:column;gap:10px;margin-bottom:12px;position:relative;z-index:1}
 .msg{max-width:86%;padding:13px 16px;border-radius:18px;font-size:13px;line-height:1.65;font-weight:500}
@@ -263,21 +300,33 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .chat-send{width:38px;height:38px;border-radius:12px;background:var(--grad-green);border:none;color:#0B1A12;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
 .chat-send:disabled{opacity:0.35;cursor:not-allowed}
 .ai-disc{margin:0 16px 8px;font-size:10px;color:var(--muted2);text-align:center;font-weight:500;position:relative;z-index:1}
+
+/* PROFILE BANNER */
 .profile-banner{margin:0 16px 12px;background:linear-gradient(135deg,rgba(124,92,252,0.12),rgba(0,200,122,0.08));border:1px solid rgba(124,92,252,0.15);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
 .profile-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--purple2),var(--green2));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0}
 .profile-info{flex:1}
-.profile-name{font-size:16px;font-weight:800}
+.profile-name{font-size:16px;font-weight:800;color:var(--text)}
 .profile-goal{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px}
 .profile-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green-dim);color:var(--green);border:1px solid rgba(0,200,122,0.2)}
+
+/* TOAST & LOADING */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--text);z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px var(--shadow)}
 .toast.show{opacity:1}
 .toast.ok{border-color:rgba(0,200,122,0.3);color:var(--green)}
 .toast.err{border-color:rgba(232,80,74,0.3);color:var(--coral)}
-.loading-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:background 0.3s}
+.loading-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:background 0.4s}
 .loading-icon{font-size:48px;animation:pulse 1.5s ease infinite}
 @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:0.7}}
 .loading-text{font-size:14px;color:var(--muted);font-weight:500}
 .signout-btn{margin:0 16px 12px;background:var(--coral-dim);border:1px solid rgba(232,80,74,0.2);border-radius:14px;padding:13px 16px;color:var(--coral);font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:calc(100% - 32px);position:relative;z-index:1}
+
+/* PLANET NAME MODAL */
+.pname-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:300;display:flex;align-items:center;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%)}
+.pname-box{background:var(--modal-bg);border:0.5px solid var(--border);border-radius:24px;padding:28px 24px;width:calc(100% - 40px);max-width:360px}
+.pname-title{font-size:18px;font-weight:800;margin-bottom:16px;color:var(--text)}
+.pname-inp{width:100%;padding:14px 16px;background:var(--input-bg);border:1px solid var(--border);border-radius:14px;font-size:16px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);outline:none;margin-bottom:16px}
+.pname-inp:focus{border-color:var(--green)}
+.pname-save{width:100%;padding:14px;background:var(--grad-green);color:#0B1A12;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
 </style>
 </head>
 <body>
@@ -285,21 +334,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   <div class="orb orb1"></div>
   <div class="orb orb2"></div>
   <div class="orb orb3"></div>
-  <div class="loading-screen" id="loading-screen">
-    <div class="loading-icon">🌙</div>
-    <div class="loading-text">Loading your sleep data...</div>
-  </div>
+  <div class="loading-screen" id="loading-screen"><div class="loading-icon">🌙</div><div class="loading-text">Loading your sleep data...</div></div>
   <div class="toast" id="toast"></div>
 
   <!-- HOME -->
   <div class="screen active" id="screen-home">
     <div class="screen-header">
-      <div class="header-left">
-        <div class="greet-lbl" id="greet-lbl">Good morning</div>
-        <div class="greet-name" id="greet-name">Sleep Tracker 🌙</div>
-        <div class="date-chip" id="today-date"></div>
-      </div>
-      <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">🌙</button>
+      <div class="greet-lbl" id="greet-lbl">Good morning</div>
+      <div class="greet-name" id="greet-name">Sleep Tracker 🌙</div>
+      <div class="date-chip" id="today-date"></div>
     </div>
     <div class="profile-banner">
       <div class="profile-avatar" id="profile-avatar">S</div>
@@ -344,11 +387,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   <!-- LOG -->
   <div class="screen" id="screen-log">
     <div class="screen-header">
-      <div class="header-left">
-        <div class="greet-name" style="margin-bottom:4px">Daily Log</div>
-        <div style="font-size:13px;color:var(--muted);font-weight:500">Track what affects your sleep</div>
-      </div>
-      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+      <div class="greet-name" style="margin-bottom:4px">Daily Log</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Track what affects your sleep</div>
     </div>
     <div class="sec-title">Today's entries</div>
     <div id="log-entries"></div>
@@ -357,28 +397,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   <!-- CALENDAR -->
   <div class="screen" id="screen-calendar">
     <div class="screen-header">
-      <div class="header-left">
-        <div class="greet-name" style="margin-bottom:4px">Calendar</div>
-        <div style="font-size:13px;color:var(--muted);font-weight:500">Your sleep productivity score</div>
-      </div>
-      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+      <div class="greet-name" style="margin-bottom:4px">Calendar</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Your sleep productivity score</div>
     </div>
-    <div class="cal-header">
-      <div class="cal-nav">
-        <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
-        <div class="cal-month" id="cal-month-label">May 2026</div>
-        <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
-      </div>
+    <div class="cal-nav">
+      <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+      <div class="cal-month" id="cal-month-label">May 2026</div>
+      <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
     </div>
     <div class="cal-wrap">
       <div class="cal-days-header">
-        <div class="cal-day-label">Sun</div>
-        <div class="cal-day-label">Mon</div>
-        <div class="cal-day-label">Tue</div>
-        <div class="cal-day-label">Wed</div>
-        <div class="cal-day-label">Thu</div>
-        <div class="cal-day-label">Fri</div>
-        <div class="cal-day-label">Sat</div>
+        <div class="cal-day-label">Sun</div><div class="cal-day-label">Mon</div><div class="cal-day-label">Tue</div>
+        <div class="cal-day-label">Wed</div><div class="cal-day-label">Thu</div><div class="cal-day-label">Fri</div><div class="cal-day-label">Sat</div>
       </div>
       <div class="cal-grid" id="cal-grid"></div>
     </div>
@@ -386,31 +416,101 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <div class="leg-item"><div class="leg-dot" style="background:rgba(0,200,122,0.5)"></div>90–100%</div>
       <div class="leg-item"><div class="leg-dot" style="background:rgba(0,200,122,0.25)"></div>70–89%</div>
       <div class="leg-item"><div class="leg-dot" style="background:rgba(232,160,32,0.4)"></div>50–69%</div>
-      <div class="leg-item"><div class="leg-dot" style="background:rgba(232,80,74,0.4)"></div>Below 50%</div>
-      <div class="leg-item"><div class="leg-dot" style="background:var(--input-bg);border:1px solid var(--border)"></div>No data</div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(232,80,74,0.4)"></div>&lt;50%</div>
     </div>
     <div class="cal-detail" id="cal-detail">
       <div class="cal-detail-date" id="cal-detail-date">Monday, May 1</div>
       <div class="cal-detail-row"><span class="cal-detail-key">Hours slept</span><span class="cal-detail-val" id="cal-detail-hours">—</span></div>
-      <div class="cal-detail-row"><span class="cal-detail-key">Sleep goal</span><span class="cal-detail-val" id="cal-detail-goal">8h</span></div>
       <div class="cal-detail-row"><span class="cal-detail-key">Quality</span><span class="cal-detail-val" id="cal-detail-quality">—</span></div>
       <div class="cal-detail-row"><span class="cal-detail-key">Productivity score</span><span class="cal-detail-val" id="cal-detail-score" style="color:var(--green)">—</span></div>
     </div>
-    <div class="sec-title" style="margin-top:4px">Monthly summary</div>
+    <div class="sec-title">Monthly summary</div>
     <div class="stats-grid" style="margin-bottom:20px">
       <div class="stat-card green"><div class="stat-num" id="cal-avg-score">—</div><div class="stat-unit">avg score</div><div class="stat-name">this month</div></div>
       <div class="stat-card purple"><div class="stat-num" id="cal-best-streak">—</div><div class="stat-unit">day streak</div><div class="stat-name">best this month</div></div>
     </div>
   </div>
 
+  <!-- PLANET -->
+  <div class="screen" id="screen-planet">
+    <div class="screen-header">
+      <div class="greet-name" style="margin-bottom:4px">My Planet 🪐</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Grow your planet by sleeping well</div>
+    </div>
+    <div class="planet-hero">
+      <div class="planet-canvas-wrap">
+        <svg class="planet-svg" id="planet-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="planet-name" id="planet-name-display" onclick="openPlanetNameModal()" style="cursor:pointer">Tap to name ✏️</div>
+      <div class="planet-edit-hint">Tap name to rename</div>
+      <div class="planet-lv-row" style="width:100%">
+        <div class="planet-lv-badge" id="planet-lv-badge">Lv. 0</div>
+        <div class="planet-xp-bar-wrap"><div class="planet-xp-bar" id="planet-xp-bar" style="width:0%"></div></div>
+        <div class="planet-xp-label" id="planet-xp-label">0 / 100 XP</div>
+      </div>
+      <div class="planet-stats-row">
+        <div class="planet-stat"><div class="planet-stat-num" id="planet-total-xp">0</div><div class="planet-stat-lbl">Total XP</div></div>
+        <div class="planet-stat"><div class="planet-stat-num" id="planet-good-nights">0</div><div class="planet-stat-lbl">Good nights</div></div>
+        <div class="planet-stat"><div class="planet-stat-num" id="planet-streak">0</div><div class="planet-stat-lbl">Streak</div></div>
+      </div>
+    </div>
+    <div class="lv-history" id="xp-log">
+      <div class="lv-history-title">Recent XP activity</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Log sleep to earn XP for your planet!</div>
+    </div>
+    <div class="sec-title">🏆 Leaderboard</div>
+    <div class="lb-wrap" id="lb-wrap">
+      <div style="margin:0 0 12px;font-size:13px;color:var(--muted);font-weight:500">Loading rankings...</div>
+    </div>
+  </div>
+
+  <!-- ANALYSIS -->
+  <div class="screen" id="screen-analysis">
+    <div class="screen-header">
+      <div class="greet-name" style="margin-bottom:4px">Sleep Analysis</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Science-backed assessment</div>
+    </div>
+    <div id="analysis-score-wrap"></div>
+    <div class="sec-title">⚠️ Active warnings</div>
+    <div id="warnings-wrap"></div>
+    <div class="sec-title">Factor breakdown</div>
+    <div class="factor-breakdown">
+      <div class="factor-row">
+        <span class="factor-label">Sleep hours</span>
+        <div class="factor-bar-bg"><div class="factor-bar" id="fb-sleep" style="width:0%;background:var(--grad-green)"></div></div>
+        <span class="factor-val" id="fv-sleep" style="color:var(--green)">0%</span>
+      </div>
+      <div class="factor-row">
+        <span class="factor-label">Caffeine</span>
+        <div class="factor-bar-bg"><div class="factor-bar" id="fb-caf" style="width:100%;background:var(--grad-green)"></div></div>
+        <span class="factor-val" id="fv-caf" style="color:var(--green)">100%</span>
+      </div>
+      <div class="factor-row">
+        <span class="factor-label">Meal timing</span>
+        <div class="factor-bar-bg"><div class="factor-bar" id="fb-meal" style="width:100%;background:var(--grad-green)"></div></div>
+        <span class="factor-val" id="fv-meal" style="color:var(--green)">100%</span>
+      </div>
+      <div class="factor-row">
+        <span class="factor-label">Alcohol</span>
+        <div class="factor-bar-bg"><div class="factor-bar" id="fb-alc" style="width:100%;background:var(--grad-green)"></div></div>
+        <span class="factor-val" id="fv-alc" style="color:var(--green)">100%</span>
+      </div>
+      <div class="factor-row">
+        <span class="factor-label">Sleep quality</span>
+        <div class="factor-bar-bg"><div class="factor-bar" id="fb-qual" style="width:0%;background:var(--grad-green)"></div></div>
+        <span class="factor-val" id="fv-qual" style="color:var(--green)">0%</span>
+      </div>
+    </div>
+    <div class="science-note">
+      <strong>Based on peer-reviewed research:</strong> Caffeine half-life ~5–6h (NIH); 400mg+ within 12h of bedtime clinically disrupts sleep (Oxford Sleep, 2024); Heavy meals within 3h of bedtime increase poor sleep odds by 2.73x (Frontiers Nutrition, 2024); Even 2 alcoholic drinks reduce REM sleep by 10–15 min (Sleep Medicine Reviews, 2024).
+    </div>
+  </div>
+
   <!-- NAP -->
   <div class="screen" id="screen-nap">
     <div class="screen-header">
-      <div class="header-left">
-        <div class="greet-name" style="margin-bottom:4px">Nap Advisor</div>
-        <div style="font-size:13px;color:var(--muted);font-weight:500">Find your ideal nap length</div>
-      </div>
-      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+      <div class="greet-name" style="margin-bottom:4px">Nap Advisor</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Find your ideal nap length</div>
     </div>
     <div class="nap-hero">
       <div class="nap-lbl">Recommended nap</div>
@@ -430,28 +530,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     </div>
   </div>
 
-  <!-- INSIGHTS -->
-  <div class="screen" id="screen-insights">
-    <div class="screen-header">
-      <div class="header-left">
-        <div class="greet-name" style="margin-bottom:4px">Insights</div>
-        <div style="font-size:13px;color:var(--muted);font-weight:500">Personalised patterns</div>
-      </div>
-      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-    </div>
-    <div id="insights-container"></div>
-    <div class="sec-title">Caffeine breakdown</div>
-    <div class="caf-wrap"><div id="caf-bars"><div style="font-size:13px;color:var(--muted);font-weight:500">No caffeine logged today.</div></div><div style="font-size:10px;color:var(--muted2);margin-top:10px;font-weight:500">Caffeine half-life ~5–6 hours. Amounts are approximate.</div></div>
-  </div>
-
   <!-- AI -->
   <div class="screen" id="screen-ai">
     <div class="screen-header">
-      <div class="header-left">
-        <div class="greet-name" style="margin-bottom:4px">AI Advisor ✨</div>
-        <div style="font-size:13px;color:var(--muted);font-weight:500">Science-backed, personalised advice</div>
-      </div>
-      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+      <div class="greet-name" style="margin-bottom:4px">AI Advisor ✨</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Science-backed, personalised advice</div>
     </div>
     <div class="ai-intro">
       <div class="ai-intro-title">🧠 Deep sleep science</div>
@@ -482,16 +565,16 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
         <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
       </button>
       <button class="nav-btn" onclick="goTo('log',this)">
-        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Log
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>Log
       </button>
       <button class="nav-btn" onclick="goTo('calendar',this)">
         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Calendar
       </button>
-      <button class="nav-btn" onclick="goTo('nap',this)">
-        <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>Nap
+      <button class="nav-btn" onclick="goTo('planet',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><ellipse cx="12" cy="12" rx="12" ry="4" fill="none"/></svg>Planet
       </button>
-      <button class="nav-btn" onclick="goTo('insights',this)">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Insights
+      <button class="nav-btn" onclick="goTo('analysis',this)">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Analysis
       </button>
       <button class="nav-btn" onclick="goTo('ai',this)">
         <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Advisor
@@ -563,74 +646,94 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <button class="save-btn" id="save-btn" onclick="saveEntry()">Save Entry</button>
     </div>
   </div>
+
+  <!-- PLANET NAME MODAL -->
+  <div class="pname-modal hidden" id="pname-modal">
+    <div class="pname-box">
+      <div class="pname-title">Name your planet 🪐</div>
+      <input class="pname-inp" id="pname-inp" type="text" placeholder="e.g. Nova, Zephyr, Lumis..." maxlength="20">
+      <button class="pname-save" onclick="savePlanetName()">Save name</button>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = 'https://edewdvjaefbwisvnuoyq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkZXdkdmphZWZid2lzdm51b3lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2ODA3OTgsImV4cCI6MjA5NTI1Njc5OH0.ICW3fXz0Rxc7mPqcl_wvPTcDntqSdmQwZ0D5Mg87FF8';
+// =============================================
+// SUPABASE CONFIG
+// =============================================
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// =============================================
+// ITEM DEFINITIONS
+// =============================================
 const ITEMS={
-  'Coffee':{caf:95,effect:'neg',label:'Delays sleep ~1h'},
-  'Tea':{caf:40,effect:'neg',label:'Mild stimulant'},
-  'Energy drink':{caf:160,effect:'neg',label:'Disrupts deep sleep'},
-  'Alcohol':{caf:0,effect:'neg',label:'Fragments REM'},
-  'Heavy meal':{caf:0,effect:'neg',label:'May cause discomfort'},
-  'Light meal':{caf:0,effect:'pos',label:'Stable energy'},
-  'Water':{caf:0,effect:'pos',label:'Aids recovery'},
-  'Melatonin':{caf:0,effect:'pos',label:'Promotes sleep onset'},
+  'Coffee':{caf:95,effect:'neg',label:'Delays sleep ~1h',alcUnits:0},
+  'Tea':{caf:40,effect:'neg',label:'Mild stimulant',alcUnits:0},
+  'Energy drink':{caf:160,effect:'neg',label:'Disrupts deep sleep',alcUnits:0},
+  'Alcohol':{caf:0,effect:'neg',label:'Fragments REM sleep',alcUnits:2},
+  'Heavy meal':{caf:0,effect:'neg',label:'May disrupt sleep',alcUnits:0},
+  'Light meal':{caf:0,effect:'pos',label:'Stable energy',alcUnits:0},
+  'Water':{caf:0,effect:'pos',label:'Aids recovery',alcUnits:0},
+  'Melatonin':{caf:0,effect:'pos',label:'Promotes sleep onset',alcUnits:0},
 };
 
+// =============================================
+// STATE
+// =============================================
 let currentUser=null;
 let profile={display_name:'',sleep_goal_hours:8,age_group:'',work_schedule:'',main_goal:'',caffeine_sensitivity:'medium'};
 let sleepHistory=[];
 let allSleepData={};
 let todayLog=[];
+let planetData={name:'',color1:'#7C5CFC',color2:'#A78BFA',totalXP:0,level:0,xpLog:[]};
 let state={selectedItem:null,selectedType:'consume',selectedQuality:'Good',amount:1,chatHistory:[],aiLoading:false};
 let calViewDate=new Date();
 
-// ===================== THEME =====================
-function initTheme(){
-  const saved=localStorage.getItem('slumber_theme')||'dark';
-  document.documentElement.setAttribute('data-theme',saved);
-  updateThemeIcons(saved);
+// =============================================
+// AUTO THEME — switches based on time
+// =============================================
+function applyAutoTheme(){
+  const h=new Date().getHours();
+  // Night mode: 8pm (20) to 7am (7)
+  const isNight=(h>=20||h<7);
+  const theme=isNight?'dark':'light';
+  document.documentElement.setAttribute('data-theme',theme);
 }
-function toggleTheme(){
-  const current=document.documentElement.getAttribute('data-theme');
-  const next=current==='dark'?'light':'dark';
-  document.documentElement.setAttribute('data-theme',next);
-  localStorage.setItem('slumber_theme',next);
-  updateThemeIcons(next);
-}
-function updateThemeIcons(theme){
-  document.querySelectorAll('.theme-toggle').forEach(btn=>{
-    btn.textContent=theme==='dark'?'☀️':'🌙';
-  });
-}
+// Check every minute
+applyAutoTheme();
+setInterval(applyAutoTheme,60000);
 
-// ===================== TOAST =====================
+// =============================================
+// TOAST
+// =============================================
 function showToast(msg,type='ok'){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className=`toast ${type} show`;
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// ===================== AUTH & INIT =====================
+// =============================================
+// INIT
+// =============================================
 async function init(){
-  initTheme();
   const{data:{session}}=await sb.auth.getSession();
   if(!session){window.location.href='auth.html';return;}
   currentUser=session.user;
   await loadProfile();
   await loadTodayData();
   await loadAllSleepData();
+  loadPlanetData();
   document.getElementById('loading-screen').style.display='none';
   setupHeader();
   updateDash();
 }
 
-// ===================== LOAD PROFILE =====================
+// =============================================
+// LOAD PROFILE
+// =============================================
 async function loadProfile(){
   const{data,error}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
   if(error||!data){
@@ -639,14 +742,10 @@ async function loadProfile(){
       try{
         const p=JSON.parse(local);
         await sb.from('profiles').upsert({
-          id:currentUser.id,
-          display_name:p.display_name,
-          sleep_goal_hours:p.sleep_goal_hours,
-          age_group:p.age_group,
-          work_schedule:p.work_schedule,
-          main_goal:p.main_goal,
-          caffeine_sensitivity:p.caffeine_sensitivity,
-          onboarding_complete:true
+          id:currentUser.id,display_name:p.display_name,
+          sleep_goal_hours:p.sleep_goal_hours,age_group:p.age_group,
+          work_schedule:p.work_schedule,main_goal:p.main_goal,
+          caffeine_sensitivity:p.caffeine_sensitivity,onboarding_complete:true
         });
         profile=p;
       }catch(e){}
@@ -657,7 +756,9 @@ async function loadProfile(){
   }
 }
 
-// ===================== LOAD TODAY DATA =====================
+// =============================================
+// LOAD TODAY DATA
+// =============================================
 async function loadTodayData(){
   const today=new Date().toISOString().split('T')[0];
   const{data:sleepData}=await sb.from('sleep_entries').select('*').eq('user_id',currentUser.id).eq('entry_date',today).order('created_at',{ascending:false});
@@ -670,17 +771,418 @@ async function loadTodayData(){
   todayLog=[...sleepEntries,...consumeEntries];
   const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   sleepHistory=(historyData||[]).map(s=>({date:days[new Date(s.entry_date+'T12:00:00').getDay()],hours:s.hours_slept,quality:s.quality,entry_date:s.entry_date}));
-  if(sleepHistory.length===0)sleepHistory=[{date:days[new Date().getDay()],hours:0,quality:'Good',entry_date:today}];
+  if(sleepHistory.length===0){sleepHistory=[{date:days[new Date().getDay()],hours:0,quality:'Good',entry_date:today}];}
 }
 
-// ===================== LOAD ALL SLEEP DATA FOR CALENDAR =====================
+// =============================================
+// LOAD ALL SLEEP DATA FOR CALENDAR
+// =============================================
 async function loadAllSleepData(){
   const{data}=await sb.from('sleep_entries').select('entry_date,hours_slept,quality').eq('user_id',currentUser.id).order('entry_date',{ascending:true});
   allSleepData={};
   (data||[]).forEach(s=>{allSleepData[s.entry_date]={hours:s.hours_slept,quality:s.quality};});
 }
 
-// ===================== SAVE TO SUPABASE =====================
+// =============================================
+// PLANET DATA (stored in localStorage)
+// =============================================
+function loadPlanetData(){
+  const key=`slumber_planet_${currentUser.id}`;
+  const saved=localStorage.getItem(key);
+  if(saved){
+    try{planetData=JSON.parse(saved);}catch(e){}
+  } else {
+    // Assign random planet colors
+    const palettes=[
+      ['#7C5CFC','#A78BFA'],['#00C87A','#5DECB8'],['#E8504A','#FF8B87'],
+      ['#E8A020','#FFD07A'],['#3B82F6','#7CB9FF'],['#EC4899','#F9A8D4'],
+      ['#14B8A6','#5EEAD4'],['#F97316','#FDBA74']
+    ];
+    const p=palettes[Math.floor(Math.random()*palettes.length)];
+    planetData={name:'',color1:p[0],color2:p[1],totalXP:0,level:0,xpLog:[]};
+    savePlanetDataLocal();
+  }
+}
+function savePlanetDataLocal(){
+  const key=`slumber_planet_${currentUser.id}`;
+  localStorage.setItem(key,JSON.stringify(planetData));
+}
+
+// =============================================
+// XP SYSTEM (based on sleep science)
+// =============================================
+function calcXPForNight(hours,quality,cafMg,hasHeavyMeal,alcUnits,goal){
+  let xp=0;
+  // Base XP from sleep duration
+  if(hours>=goal){xp+=50;}
+  else if(hours>=goal-1){xp+=30;}
+  else if(hours>=goal-2){xp+=15;}
+  else{xp-=20;}
+  // Quality bonus/penalty
+  const qMap={Great:20,Good:10,Okay:0,Restless:-15};
+  xp+=(qMap[quality]||0);
+  // Caffeine penalty (research: 400mg+ within 12h significantly disrupts sleep)
+  if(cafMg>400){xp-=25;}
+  else if(cafMg>200){xp-=10;}
+  else if(cafMg>0){xp-=3;}
+  // Heavy meal penalty (research: 2.73x odds of poor sleep within 3h of bed)
+  if(hasHeavyMeal){xp-=10;}
+  // Alcohol penalty (research: even 2 drinks reduces REM by 10-15min)
+  if(alcUnits>=5){xp-=30;}
+  else if(alcUnits>=2){xp-=15;}
+  else if(alcUnits>0){xp-=8;}
+  return xp;
+}
+
+function applyXPFromLastNight(){
+  const lastSleep=todayLog.find(e=>e.type==='sleep');
+  if(!lastSleep)return;
+  const cafMg=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  const hasHeavyMeal=todayLog.some(e=>e.item==='Heavy meal');
+  const alcUnits=todayLog.filter(e=>e.item==='Alcohol').reduce((a,e)=>a+(ITEMS['Alcohol'].alcUnits||2)*e.amount,0);
+  const xp=calcXPForNight(lastSleep.hours,lastSleep.quality,cafMg,hasHeavyMeal,alcUnits,profile.sleep_goal_hours||8);
+  const today=new Date().toISOString().split('T')[0];
+  const alreadyApplied=planetData.xpLog.some(l=>l.date===today);
+  if(alreadyApplied)return;
+  planetData.totalXP=Math.max(0,planetData.totalXP+xp);
+  planetData.xpLog.unshift({date:today,xp,hours:lastSleep.hours,quality:lastSleep.quality});
+  if(planetData.xpLog.length>20)planetData.xpLog=planetData.xpLog.slice(0,20);
+  planetData.level=Math.floor(planetData.totalXP/100);
+  savePlanetDataLocal();
+}
+
+// =============================================
+// PLANET SVG RENDERING
+// =============================================
+function renderPlanet(svgEl,c1,c2,size=160,level=0){
+  const cx=size/2,cy=size/2,r=size*0.35;
+  const ringRx=r*1.55,ringRy=r*0.35;
+  const spots=generatePlanetSpots(c1,c2,level);
+  // Darker shade for ring
+  const ringColor=shadeColor(c1,-20);
+  svgEl.innerHTML=`
+    <defs>
+      <radialGradient id="pg" cx="38%" cy="35%" r="65%">
+        <stop offset="0%" stop-color="${lightenColor(c2,40)}"/>
+        <stop offset="45%" stop-color="${c1}"/>
+        <stop offset="100%" stop-color="${darkenColor(c1,35)}"/>
+      </radialGradient>
+      <radialGradient id="sg" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.3)"/>
+        <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+      </radialGradient>
+      <clipPath id="pc"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
+      <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <!-- Planet body -->
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#pg)"/>
+    <!-- Surface spots -->
+    ${spots}
+    <!-- Shine -->
+    <ellipse cx="${cx-r*0.2}" cy="${cy-r*0.25}" rx="${r*0.35}" ry="${r*0.22}" fill="url(#sg)" opacity="0.7"/>
+    <!-- Ring back half -->
+    <ellipse cx="${cx}" cy="${cy+r*0.05}" rx="${ringRx}" ry="${ringRy}" fill="none" stroke="${ringColor}" stroke-width="${size*0.05}" opacity="0.55" clip-path="url(#pc)"/>
+    <!-- Ring front half -->
+    <ellipse cx="${cx}" cy="${cy+r*0.05}" rx="${ringRx}" ry="${ringRy}" fill="none" stroke="${ringColor}" stroke-width="${size*0.05}" opacity="0.8" clip-path="inset(${cy+r*0.05}px 0 0 0)"/>
+    <!-- Small moon -->
+    <circle cx="${cx+r*1.45}" cy="${cy-r*0.6}" r="${r*0.13}" fill="${lightenColor(c2,20)}" opacity="0.9"/>
+  `;
+  // Set glow CSS var
+  svgEl.style.setProperty('--planet-glow',`${c1}80`);
+}
+
+function generatePlanetSpots(c1,c2,level){
+  const spots=[];
+  const count=Math.min(3+Math.floor(level/2),8);
+  const positions=[
+    [0.2,0.3,0.12],[0.5,0.55,0.08],[-0.15,0.1,0.09],
+    [0.3,-0.2,0.07],[-0.2,0.4,0.06],[0.1,0.15,0.05],
+    [-0.3,-0.1,0.08],[0.4,0.1,0.06]
+  ];
+  for(let i=0;i<count;i++){
+    const[dx,dy,dr]=positions[i];
+    const x=80+dx*56,y=80+dy*56,r=dr*56;
+    spots.push(`<circle cx="${x}" cy="${y}" r="${r}" fill="${shadeColor(c2,-15)}" opacity="0.4" clip-path="url(#pc)"/>`);
+  }
+  return spots.join('');
+}
+
+function shadeColor(col,pct){
+  const n=parseInt(col.slice(1),16);
+  const t=pct<0?0:255,p=Math.abs(pct)/100;
+  const R=(n>>16),G=(n>>8&0x00FF),B=(n&0x0000FF);
+  return `#${(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1)}`;
+}
+function lightenColor(col,pct){return shadeColor(col,pct);}
+function darkenColor(col,pct){return shadeColor(col,-pct);}
+
+// =============================================
+// RENDER PLANET SCREEN
+// =============================================
+function renderPlanetScreen(){
+  applyXPFromLastNight();
+  const svg=document.getElementById('planet-svg');
+  renderPlanet(svg,planetData.color1,planetData.color2,160,planetData.level);
+  const nameEl=document.getElementById('planet-name-display');
+  nameEl.textContent=planetData.name?`${planetData.name} ✏️`:'Tap to name ✏️';
+  const xpInLevel=planetData.totalXP%100;
+  document.getElementById('planet-lv-badge').textContent=`Lv. ${planetData.level}`;
+  document.getElementById('planet-xp-bar').style.width=`${xpInLevel}%`;
+  document.getElementById('planet-xp-label').textContent=`${xpInLevel} / 100 XP`;
+  document.getElementById('planet-total-xp').textContent=planetData.totalXP;
+  const goodNights=planetData.xpLog.filter(l=>l.xp>0).length;
+  document.getElementById('planet-good-nights').textContent=goodNights;
+  // Streak
+  let streak=0;
+  for(let i=0;i<planetData.xpLog.length;i++){
+    if(planetData.xpLog[i].xp>0)streak++;else break;
+  }
+  document.getElementById('planet-streak').textContent=streak;
+  // XP Log
+  const logEl=document.getElementById('xp-log');
+  if(!planetData.xpLog.length){
+    logEl.innerHTML='<div class="lv-history-title">Recent XP activity</div><div style="font-size:13px;color:var(--muted);font-weight:500">Log sleep to earn XP for your planet!</div>';
+  } else {
+    logEl.innerHTML='<div class="lv-history-title">Recent XP activity</div>'+
+    planetData.xpLog.slice(0,7).map(l=>{
+      const icon=l.xp>0?'⭐':'💔';
+      const cls=l.xp>0?'pos':'neg';
+      return `<div class="lv-log-item"><div class="lv-log-icon">${icon}</div><div class="lv-log-text">${l.date} · ${l.hours}h sleep · ${l.quality}</div><div class="lv-log-xp ${cls}">${l.xp>0?'+':''}${l.xp} XP</div></div>`;
+    }).join('');
+  }
+  renderLeaderboard();
+}
+
+// =============================================
+// LEADERBOARD (shared via Supabase storage)
+// =============================================
+async function renderLeaderboard(){
+  const lb=document.getElementById('lb-wrap');
+  // Build my entry
+  const myEntry={
+    user_id:currentUser.id,
+    display_name:profile.display_name||'You',
+    planet_name:planetData.name||'Unknown',
+    level:planetData.level,
+    total_xp:planetData.totalXP,
+    color1:planetData.color1,
+    color2:planetData.color2,
+  };
+  // Save my planet data to profiles table (add planet columns if they exist)
+  try{
+    await sb.from('profiles').update({
+      planet_name:planetData.name,
+      planet_level:planetData.level,
+      planet_xp:planetData.totalXP,
+      planet_color1:planetData.color1,
+      planet_color2:planetData.color2,
+    }).eq('id',currentUser.id);
+  }catch(e){}
+  // Fetch all users' planet data
+  let users=[];
+  try{
+    const{data}=await sb.from('profiles').select('id,display_name,planet_name,planet_level,planet_xp,planet_color1,planet_color2').not('planet_xp','is',null).order('planet_xp',{ascending:false}).limit(20);
+    users=data||[];
+  }catch(e){
+    // If planet columns don't exist yet, just show current user
+    users=[{id:currentUser.id,display_name:profile.display_name,planet_name:planetData.name,planet_level:planetData.level,planet_xp:planetData.totalXP,planet_color1:planetData.color1,planet_color2:planetData.color2}];
+  }
+  if(!users.length){
+    lb.innerHTML='<div style="font-size:13px;color:var(--muted);font-weight:500;padding:0">No players yet. Be the first!</div>';
+    return;
+  }
+  const rankIcons=['🥇','🥈','🥉'];
+  const rankClasses=['gold','silver','bronze'];
+  lb.innerHTML=users.map((u,i)=>{
+    const isYou=u.id===currentUser.id;
+    const rankDisplay=i<3?rankIcons[i]:`${i+1}`;
+    const rankCls=i<3?rankClasses[i]:'';
+    const c1=u.planet_color1||'#7C5CFC';
+    const c2=u.planet_color2||'#A78BFA';
+    const miniSvg=generateMiniPlanetSVG(c1,c2);
+    return `<div class="lb-item${isYou?' you':''}">
+      <div class="lb-rank ${rankCls}">${rankDisplay}</div>
+      <svg class="lb-planet-mini" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">${miniSvg}</svg>
+      <div class="lb-info">
+        <div class="lb-name">${u.display_name||'Unknown'}${isYou?' (You)':''}</div>
+        <div class="lb-planet-name">${u.planet_name||'Unnamed planet'}</div>
+      </div>
+      <div class="lb-lv">Lv. ${u.planet_level||0}</div>
+    </div>`;
+  }).join('');
+}
+
+function generateMiniPlanetSVG(c1,c2){
+  const r=16,cx=22,cy=22;
+  const ringColor=shadeColor(c1,-20);
+  return `<defs><radialGradient id="mpg${c1.replace('#','')}" cx="38%" cy="35%" r="65%"><stop offset="0%" stop-color="${lightenColor(c2,40)}"/><stop offset="100%" stop-color="${darkenColor(c1,35)}"/></radialGradient></defs>
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#mpg${c1.replace('#','')})"/>
+  <ellipse cx="${cx}" cy="${cy+2}" rx="${r*1.5}" ry="${r*0.32}" fill="none" stroke="${ringColor}" stroke-width="2.5" opacity="0.7"/>`;
+}
+
+// =============================================
+// PLANET NAME MODAL
+// =============================================
+function openPlanetNameModal(){
+  document.getElementById('pname-inp').value=planetData.name||'';
+  document.getElementById('pname-modal').classList.remove('hidden');
+}
+function savePlanetName(){
+  const name=document.getElementById('pname-inp').value.trim();
+  if(!name){showToast('Please enter a name','err');return;}
+  planetData.name=name;
+  savePlanetDataLocal();
+  document.getElementById('pname-modal').classList.add('hidden');
+  renderPlanetScreen();
+  showToast('✅ Planet named!');
+}
+
+// =============================================
+// ANALYSIS ENGINE (science-based)
+// =============================================
+function runAnalysis(){
+  const goal=profile.sleep_goal_hours||8;
+  const cafSens=profile.caffeine_sensitivity||'medium';
+  const lastSleep=todayLog.find(e=>e.type==='sleep');
+  const hours=lastSleep?.hours||0;
+  const quality=lastSleep?.quality||'Good';
+  // Caffeine total
+  const totalCaf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  // Late caffeine (after 2pm = 14:00)
+  const lateCaf=todayLog.filter(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0).filter(e=>{
+    const h=parseInt((e.time||'00:00').split(':')[0]);
+    return h>=14;
+  }).reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  // Alcohol
+  const alcUnits=todayLog.filter(e=>e.item==='Alcohol').reduce((a,e)=>a+(ITEMS['Alcohol'].alcUnits||2)*e.amount,0);
+  // Heavy meal
+  const heavyMealCount=todayLog.filter(e=>e.item==='Heavy meal').reduce((a,e)=>a+e.amount,0);
+  // Late heavy meal (after 7pm = 19:00)
+  const lateHeavyMeal=todayLog.some(e=>e.item==='Heavy meal'&&parseInt((e.time||'00:00').split(':')[0])>=19);
+
+  // ---- SCORE CALCULATION ----
+  // Factor 1: Sleep duration (max 40 points)
+  let sleepScore=0;
+  if(hours>=goal)sleepScore=40;
+  else if(hours>=goal-0.5)sleepScore=35;
+  else if(hours>=goal-1)sleepScore=28;
+  else if(hours>=goal-2)sleepScore=18;
+  else if(hours>0)sleepScore=8;
+  else sleepScore=0;
+
+  // Factor 2: Caffeine impact (max 25 points)
+  // Based on: 400mg+ within 12h disrupts sleep (Oxford Sleep 2024)
+  // Sensitivity adjustments
+  const cafLimit=cafSens==='high'?200:cafSens==='low'?600:400;
+  const lateCafLimit=cafSens==='high'?50:cafSens==='low'?200:100;
+  let cafScore=25;
+  if(totalCaf>cafLimit)cafScore-=15;
+  else if(totalCaf>cafLimit*0.75)cafScore-=8;
+  else if(totalCaf>cafLimit*0.5)cafScore-=3;
+  if(lateCaf>lateCafLimit)cafScore-=10;
+  else if(lateCaf>0)cafScore-=4;
+  cafScore=Math.max(0,cafScore);
+
+  // Factor 3: Meal timing (max 20 points)
+  // Based on: eating within 3h of bed = 2.73x poor sleep odds (Frontiers 2024)
+  let mealScore=20;
+  if(lateHeavyMeal)mealScore-=14;
+  else if(heavyMealCount>2)mealScore-=7;
+  mealScore=Math.max(0,mealScore);
+
+  // Factor 4: Alcohol (max 15 points)
+  // Based on: 2 drinks reduces REM 10-15min (Sleep Medicine Reviews 2024)
+  let alcScore=15;
+  if(alcUnits>=5)alcScore=0;
+  else if(alcUnits>=3)alcScore=4;
+  else if(alcUnits>=2)alcScore=8;
+  else if(alcUnits>0)alcScore=11;
+  alcScore=Math.max(0,alcScore);
+
+  // Quality bonus (incorporated into final score)
+  const qualBonus={Great:5,Good:3,Okay:1,Restless:0};
+  const qBonus=qualBonus[quality]||0;
+
+  // Total score
+  const rawScore=sleepScore+cafScore+mealScore+alcScore+qBonus;
+  const maxScore=40+25+20+15+5;
+  const finalScore=Math.min(100,Math.round((rawScore/maxScore)*100));
+
+  // Factor percentages for bars
+  const sleepPct=Math.round((sleepScore/40)*100);
+  const cafPct=Math.round((cafScore/25)*100);
+  const mealPct=Math.round((mealScore/20)*100);
+  const alcPct=Math.round((alcScore/15)*100);
+  const qualPct=Math.round((qBonus/5)*100);
+
+  // ---- WARNINGS ----
+  const warnings=[];
+  // Caffeine warnings
+  if(totalCaf>400){warnings.push({type:'alert',icon:'⚡',title:'Caffeine overload',body:`You've consumed ${totalCaf}mg of caffeine today — above the 400mg daily limit recommended by health authorities. Research shows this level within 12 hours of bedtime clinically disrupts sleep onset and reduces total sleep time.`});}
+  else if(totalCaf>200&&cafSens==='high'){warnings.push({type:'warn',icon:'☕',title:'High caffeine for your sensitivity',body:`At ${totalCaf}mg and high caffeine sensitivity, your sleep quality may be affected. Your body metabolises caffeine more slowly, meaning it stays active in your system longer.`});}
+  if(lateCaf>100){warnings.push({type:'alert',icon:'🕒',title:'Late caffeine detected',body:`${lateCaf}mg consumed after 2pm. Caffeine has a half-life of 5–6 hours, so it will still be circulating at bedtime. Research shows coffee consumed 8+ hours before bed can reduce total sleep time by up to 45 minutes.`});}
+  else if(lateCaf>0){warnings.push({type:'warn',icon:'🕒',title:'Afternoon caffeine',body:`You had ${lateCaf}mg of caffeine after 2pm. Depending on your metabolism, trace amounts may still be active at bedtime. Consider switching to decaf after noon.`});}
+  // Meal warnings
+  if(lateHeavyMeal){warnings.push({type:'alert',icon:'🍲',title:'Late heavy meal',body:'Eating a heavy meal within 3 hours of bedtime increases odds of poor sleep by 2.73x according to a 2024 Frontiers in Nutrition study. Your body\'s core temperature stays elevated during digestion, suppressing melatonin production.'});}
+  else if(heavyMealCount>2){warnings.push({type:'warn',icon:'🍽',title:'Multiple heavy meals',body:'Multiple heavy meals today may keep your digestive system active longer, potentially affecting sleep quality. Try to keep your last meal light and at least 3 hours before bed.'});}
+  // Alcohol warnings
+  if(alcUnits>=5){warnings.push({type:'alert',icon:'🍺',title:'High alcohol intake',body:`${alcUnits} standard drinks today. Research from Sleep Medicine Reviews (2024) shows high doses of alcohol severely fragment REM sleep, causing a rebound effect in the second half of the night — leaving you feeling unrestored despite sleeping.`});}
+  else if(alcUnits>=2){warnings.push({type:'warn',icon:'🍺',title:'Alcohol may disrupt REM sleep',body:`Even ${alcUnits} standard drinks can reduce REM sleep by 10–15 minutes. While alcohol helps you fall asleep faster, it suppresses the restorative REM cycles that consolidate memory and regulate mood.`});}
+  // Positive feedback
+  if(warnings.length===0&&hours>=goal){warnings.push({type:'info',icon:'🌟',title:'Excellent sleep hygiene today',body:'No major sleep disruptors detected. Your caffeine intake, meal timing, and sleep duration are all within optimal ranges. Keep it up!'});}
+
+  return{finalScore,sleepPct,cafPct,mealPct,alcPct,qualPct,warnings,hours,quality};
+}
+
+function renderAnalysis(){
+  const{finalScore,sleepPct,cafPct,mealPct,alcPct,qualPct,warnings,hours,quality}=runAnalysis();
+  // Score card
+  let scoreCls,scoreLabel,scoreSub;
+  if(finalScore>=90){scoreCls='great';scoreLabel='Excellent';scoreSub='Your sleep conditions are optimal tonight.';}
+  else if(finalScore>=70){scoreCls='good';scoreLabel='Good';scoreSub='Minor factors affecting sleep quality.';}
+  else if(finalScore>=50){scoreCls='warn';scoreLabel='Fair';scoreSub='Several factors are disrupting your sleep.';}
+  else{scoreCls='alert';scoreLabel='Poor';scoreSub='Multiple sleep disruptors detected today.';}
+
+  document.getElementById('analysis-score-wrap').innerHTML=`
+    <div class="analysis-score-card ${scoreCls}">
+      <div class="analysis-score-row">
+        <div class="analysis-big-score ${scoreCls}">${finalScore}%</div>
+        <div class="analysis-right">
+          <div class="analysis-title">${scoreLabel} sleep conditions</div>
+          <div class="analysis-sub">${scoreSub}${hours?` Last night: ${fmtH(hours)} (${quality}).`:' Log your sleep to see your full score.'}</div>
+        </div>
+      </div>
+    </div>`;
+
+  // Warnings
+  document.getElementById('warnings-wrap').innerHTML=warnings.map(w=>`
+    <div class="warning-card ${w.type}">
+      <div class="warning-icon">${w.icon}</div>
+      <div class="warning-content">
+        <div class="warning-title">${w.title}</div>
+        <div class="warning-body">${w.body}</div>
+      </div>
+    </div>`).join('');
+
+  // Factor bars
+  const setBar=(id,vid,pct,color)=>{
+    const el=document.getElementById(id);
+    el.style.width=pct+'%';
+    el.style.background=color;
+    document.getElementById(vid).textContent=pct+'%';
+    document.getElementById(vid).style.color=pct>=70?'var(--green)':pct>=40?'var(--amber)':'var(--coral)';
+  };
+  const barColor=(pct)=>pct>=70?'linear-gradient(135deg,#00E5A0,#00B87A)':pct>=40?'linear-gradient(135deg,#E8A020,#FF8C00)':'linear-gradient(135deg,#E8504A,#E63946)';
+  setBar('fb-sleep','fv-sleep',sleepPct,barColor(sleepPct));
+  setBar('fb-caf','fv-caf',cafPct,barColor(cafPct));
+  setBar('fb-meal','fv-meal',mealPct,barColor(mealPct));
+  setBar('fb-alc','fv-alc',alcPct,barColor(alcPct));
+  setBar('fb-qual','fv-qual',qualPct,barColor(qualPct));
+}
+
+// =============================================
+// SAVE TO SUPABASE
+// =============================================
 async function saveSleepToSupabase(entry){
   const today=new Date().toISOString().split('T')[0];
   const{data,error}=await sb.from('sleep_entries').insert({
@@ -693,7 +1195,6 @@ async function saveSleepToSupabase(entry){
   allSleepData[today]={hours:entry.hours,quality:entry.quality};
   showToast('✅ Sleep entry saved!');return data;
 }
-
 async function saveConsumeToSupabase(entry){
   const today=new Date().toISOString().split('T')[0];
   const info=ITEMS[entry.item]||{};
@@ -706,14 +1207,15 @@ async function saveConsumeToSupabase(entry){
   if(error){showToast('Failed to save entry','err');return null;}
   showToast('✅ Entry saved!');return data;
 }
-
 async function signOut(){
   await sb.auth.signOut();
   localStorage.removeItem('slumber_profile');
   window.location.href='auth.html';
 }
 
-// ===================== HEADER =====================
+// =============================================
+// HEADER
+// =============================================
 function setupHeader(){
   const h=new Date().getHours();
   document.getElementById('greet-lbl').textContent=h<12?'Good morning ☀️':h<17?'Good afternoon 🌤':'Good evening 🌙';
@@ -730,7 +1232,9 @@ function setupHeader(){
   document.getElementById('wake-time').value=t.toTimeString().slice(0,5);
 }
 
-// ===================== NAVIGATION =====================
+// =============================================
+// NAVIGATION
+// =============================================
 function goTo(name,btn){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
@@ -738,13 +1242,16 @@ function goTo(name,btn){
   btn.classList.add('active');
   document.getElementById('fab-btn').style.display=(name==='log'||name==='home')?'flex':'none';
   if(name==='calendar')renderCalendar();
-  if(name==='insights')renderInsights();
+  if(name==='planet')renderPlanetScreen();
+  if(name==='analysis')renderAnalysis();
   if(name==='nap')updateNapRec();
   if(name==='home')updateDash();
   if(name==='log')renderLogScreen();
 }
 
-// ===================== ENERGY CALC =====================
+// =============================================
+// ENERGY
+// =============================================
 function calcEnergy(){
   const goal=profile.sleep_goal_hours||8;
   const avg=sleepHistory.length?sleepHistory.reduce((a,d)=>a+d.hours,0)/sleepHistory.length:0;
@@ -756,21 +1263,9 @@ function calcEnergy(){
 }
 function fmtH(h){if(!h)return'—';const hr=Math.floor(h);const m=Math.round((h-hr)*60);return m>0?`${hr}h ${m}m`:`${hr}h`;}
 
-// ===================== PRODUCTIVITY SCORE =====================
-function calcScore(hours,quality,goal){
-  if(!hours)return 0;
-  const sleepScore=Math.min(100,Math.round((hours/goal)*100));
-  const qualityBonus={Restless:-10,Okay:0,Good:5,Great:10};
-  return Math.min(100,Math.max(0,sleepScore+(qualityBonus[quality]||0)));
-}
-function scoreClass(score){
-  if(score>=90)return'great';
-  if(score>=70)return'good';
-  if(score>=50)return'mid';
-  return'low';
-}
-
-// ===================== DASHBOARD =====================
+// =============================================
+// DASHBOARD
+// =============================================
 function updateDash(){
   const{avg,last,pct,debt,napMins}=calcEnergy();
   document.getElementById('energy-ring').setAttribute('stroke-dashoffset',(276.5*(1-pct/100)).toFixed(1));
@@ -792,11 +1287,13 @@ function updateDash(){
   list.innerHTML=todayLog.slice(-3).map(e=>{
     const icon=e.type==='sleep'?'😴':(ITEMS[e.item]?.effect==='pos'?'✅':'⚠️');
     const label=e.type==='sleep'?`Slept ${fmtH(e.hours)} (${e.quality})`:`${e.item} ×${e.amount} at ${e.time}`;
-    return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:13px;font-weight:500"><span>${icon}</span><span>${label}</span></div>`;
+    return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:13px;font-weight:500"><span>${icon}</span><span style="color:var(--text)">${label}</span></div>`;
   }).join('');
 }
 
-// ===================== LOG SCREEN =====================
+// =============================================
+// LOG SCREEN
+// =============================================
 function renderLogScreen(){
   const c=document.getElementById('log-entries');
   if(!todayLog.length){c.innerHTML='<div style="margin:0 16px;color:var(--muted);font-size:13px;font-weight:500">Nothing logged yet. Tap + to add.</div>';return;}
@@ -820,90 +1317,62 @@ function renderLogScreen(){
   c.innerHTML=html;
 }
 
-// ===================== CALENDAR =====================
-function changeMonth(dir){
-  calViewDate.setMonth(calViewDate.getMonth()+dir);
-  renderCalendar();
+// =============================================
+// CALENDAR
+// =============================================
+function calcScore(hours,quality,goal){
+  if(!hours)return 0;
+  const s=Math.min(100,Math.round((hours/goal)*100));
+  const qMap={Great:10,Good:5,Okay:0,Restless:-10};
+  return Math.min(100,Math.max(0,s+(qMap[quality]||0)));
 }
+function scoreClass(score){return score>=90?'great':score>=70?'good':score>=50?'mid':'low';}
+function changeMonth(dir){calViewDate.setMonth(calViewDate.getMonth()+dir);renderCalendar();}
 
 function renderCalendar(){
-  const year=calViewDate.getFullYear();
-  const month=calViewDate.getMonth();
-  const today=new Date();
-  const todayStr=today.toISOString().split('T')[0];
+  const year=calViewDate.getFullYear(),month=calViewDate.getMonth();
+  const today=new Date(),todayStr=today.toISOString().split('T')[0];
   const goal=profile.sleep_goal_hours||8;
-  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('cal-month-label').textContent=monthNames[month]+' '+year;
-  const firstDay=new Date(year,month,1).getDay();
-  const daysInMonth=new Date(year,month+1,0).getDate();
-  const grid=document.getElementById('cal-grid');
-  let html='';
-  let scores=[];
-  let streak=0;let bestStreak=0;let curStreak=0;
-
-  // Empty cells before first day
-  for(let i=0;i<firstDay;i++){
-    html+=`<div class="cal-cell empty"></div>`;
-  }
-
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent=months[month]+' '+year;
+  const firstDay=new Date(year,month,1).getDay(),daysInMonth=new Date(year,month+1,0).getDate();
+  let html='',scores=[],curStreak=0,bestStreak=0;
+  for(let i=0;i<firstDay;i++)html+=`<div class="cal-cell empty"></div>`;
   for(let d=1;d<=daysInMonth;d++){
     const dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday=dateStr===todayStr;
-    const isFuture=new Date(dateStr)>today;
+    const isToday=dateStr===todayStr,isFuture=new Date(dateStr+'T12:00:00')>today;
     const data=allSleepData[dateStr];
-
-    if(isFuture){
-      html+=`<div class="cal-cell future${isToday?' today':''}"><div class="cal-date">${d}</div></div>`;
-    } else if(data){
+    if(isFuture){html+=`<div class="cal-cell future${isToday?' today':''}"><div class="cal-date">${d}</div></div>`;continue;}
+    if(data){
       const score=calcScore(data.hours,data.quality,goal);
-      scores.push(score);
-      curStreak++;
-      bestStreak=Math.max(bestStreak,curStreak);
-      const cls=scoreClass(score);
-      html+=`<div class="cal-cell ${cls}${isToday?' today':''}" onclick="showCalDetail('${dateStr}',${data.hours},'${data.quality}',${score})">
-        <div class="cal-date">${d}</div>
-        <div class="cal-pct">${score}%</div>
-      </div>`;
+      scores.push(score);curStreak++;bestStreak=Math.max(bestStreak,curStreak);
+      html+=`<div class="cal-cell ${scoreClass(score)}${isToday?' today':''}" onclick="showCalDetail('${dateStr}',${data.hours},'${data.quality}',${score})"><div class="cal-date">${d}</div><div class="cal-pct">${score}%</div></div>`;
     } else {
       curStreak=0;
-      html+=`<div class="cal-cell no-data${isToday?' today':''}" onclick="hideCalDetail()">
-        <div class="cal-date">${d}</div>
-        <div class="cal-pct">—</div>
-      </div>`;
+      html+=`<div class="cal-cell no-data${isToday?' today':''}" onclick="hideCalDetail()"><div class="cal-date">${d}</div><div class="cal-pct">—</div></div>`;
     }
   }
-
-  grid.innerHTML=html;
-
-  // Monthly summary
-  const avgScore=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
-  document.getElementById('cal-avg-score').textContent=scores.length?avgScore+'%':'—';
+  document.getElementById('cal-grid').innerHTML=html;
+  const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
+  document.getElementById('cal-avg-score').textContent=scores.length?avg+'%':'—';
   document.getElementById('cal-best-streak').textContent=bestStreak||'—';
 }
-
 function showCalDetail(dateStr,hours,quality,score){
-  const detail=document.getElementById('cal-detail');
-  const goal=profile.sleep_goal_hours||8;
+  const d=document.getElementById('cal-detail');
   const date=new Date(dateStr+'T12:00:00');
   document.getElementById('cal-detail-date').textContent=date.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
   document.getElementById('cal-detail-hours').textContent=fmtH(hours);
-  document.getElementById('cal-detail-goal').textContent=goal+'h';
   document.getElementById('cal-detail-quality').textContent=quality;
   document.getElementById('cal-detail-score').textContent=score+'%';
   document.getElementById('cal-detail-score').style.color=score>=70?'var(--green)':score>=50?'var(--amber)':'var(--coral)';
-  detail.classList.add('show');
+  d.classList.add('show');
 }
-function hideCalDetail(){
-  document.getElementById('cal-detail').classList.remove('show');
-}
+function hideCalDetail(){document.getElementById('cal-detail').classList.remove('show');}
 
-// ===================== NAP ADVISOR =====================
-const SCI={
-  '10–20 min':'A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake.',
-  '20–30 min':'At 20–30 min you may enter stage 2 sleep more deeply. You might feel mild sleep inertia for a few minutes, but memory consolidation and motor learning improve significantly.',
-  '90 min':'A full 90-min cycle includes light sleep, deep sleep, and REM. Waking at the end of a full cycle means you surface naturally — refreshed without grogginess. Best for severe sleep debt.',
-  'No nap':'Even lying still with eyes closed reduces cortisol and gives your brain a reset. Mental fatigue is reduced and focus can return within 10 minutes.'
-};
+// =============================================
+// NAP ADVISOR
+// =============================================
+const SCI={'10–20 min':'A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake.','20–30 min':'At 20–30 min you may enter stage 2 sleep more deeply. You might feel mild sleep inertia for a few minutes, but memory consolidation and motor learning improve significantly.','90 min':'A full 90-min cycle includes light sleep, deep sleep, and REM. Waking at the end of a full cycle means you surface naturally — refreshed without grogginess. Best for severe sleep debt.','No nap':'Even lying still with eyes closed reduces cortisol and gives your brain a reset. Mental fatigue is reduced and focus can return within 10 minutes.'};
 function updateNapRec(){
   const{napMins}=calcEnergy();
   let rec,sub;
@@ -922,31 +1391,9 @@ function selNap(el,time,desc){
   document.getElementById('sci-text').textContent=SCI[time]||SCI['No nap'];
 }
 
-// ===================== INSIGHTS =====================
-function renderInsights(){
-  const{avg,last,debt}=calcEnergy();
-  const cafSens=profile.caffeine_sensitivity||'medium';
-  const cafCutoff=cafSens==='high'?14:cafSens==='low'?20:18;
-  const caf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
-  const lateC=todayLog.find(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0&&parseInt(e.time.split(':')[0])>=cafCutoff);
-  const ins=[];
-  if(!last){ins.push({t:'info',title:'Log your first sleep entry',body:'Once you log tonight\'s sleep, you\'ll see personalised insights here.'});}
-  else if(debt<-60)ins.push({t:'alert',title:'Sleep deficit detected',body:`You're running ${Math.abs(debt)} min behind your ${profile.sleep_goal_hours||8}h goal. A ${Math.min(90,Math.abs(debt))}-min nap or earlier bedtime tonight can help.`});
-  else if(debt<0)ins.push({t:'warn',title:'Slightly under-slept',body:`You got ${fmtH(last)} — about ${Math.abs(debt)} min short. A 20-min power nap this afternoon can compensate.`});
-  else ins.push({t:'info',title:'Well-rested today',body:`Great night! You hit ${fmtH(last)} — above your 7-day average of ${fmtH(avg)}. No nap needed today.`});
-  if(caf>200)ins.push({t:'warn',title:'High caffeine intake',body:`~${caf}mg today. With ${cafSens} sensitivity, consider stopping by ${cafCutoff}:00.`});
-  else if(caf>0)ins.push({t:'info',title:'Caffeine on track',body:`${caf}mg today — manageable for your sensitivity level.`});
-  if(lateC)ins.push({t:'alert',title:'Late caffeine detected',body:`You had ${lateC.item} after ${cafCutoff}:00. This may delay sleep onset tonight.`});
-  const lowD=sleepHistory.filter(d=>d.hours<6.5).length;
-  if(lowD>=3)ins.push({t:'warn',title:'Frequent short nights',body:`${lowD} of 7 nights under 6.5h. This affects ${profile.main_goal||'your performance'} — try banking extra sleep this weekend.`});
-  document.getElementById('insights-container').innerHTML=ins.map(i=>`<div class="insight-card ${i.t}"><div class="insight-title ${i.t}">${i.t==='info'?'✅':i.t==='warn'?'⚠️':'🚨'} ${i.title}</div><div class="insight-body ${i.t}">${i.body}</div></div>`).join('');
-  const cafS=todayLog.filter(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0);
-  if(!cafS.length){document.getElementById('caf-bars').innerHTML='<div style="font-size:13px;color:var(--muted);font-weight:500">No caffeine logged today.</div>';return;}
-  const maxC=Math.max(...cafS.map(e=>(ITEMS[e.item].caf||1)*e.amount));
-  document.getElementById('caf-bars').innerHTML=cafS.map(e=>{const mg=(ITEMS[e.item].caf||0)*e.amount;return `<div class="caf-row"><span class="caf-name">${e.item}</span><div class="caf-bg"><div class="caf-bar" style="width:${Math.round((mg/maxC)*100)}%"></div></div><span class="caf-val">${mg}mg</span></div>`;}).join('');
-}
-
-// ===================== MODAL =====================
+// =============================================
+// MODAL
+// =============================================
 function openModal(){
   document.getElementById('modal-overlay').classList.remove('hidden');
   state.selectedItem=null;state.amount=1;state.selectedType='consume';state.selectedQuality='Good';
@@ -965,7 +1412,9 @@ function selItem(el,name){document.querySelectorAll('#item-chips .chip').forEach
 function selQuality(el,q){document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');state.selectedQuality=q;}
 function chgAmt(d){state.amount=Math.max(1,Math.min(10,state.amount+d));document.getElementById('amt-display').textContent=state.amount;}
 
-// ===================== SAVE ENTRY =====================
+// =============================================
+// SAVE ENTRY
+// =============================================
 async function saveEntry(){
   const btn=document.getElementById('save-btn');
   btn.disabled=true;btn.textContent='Saving...';
@@ -976,8 +1425,7 @@ async function saveEntry(){
     const saved=await saveConsumeToSupabase(entry);
     if(saved){entry.id=saved.id;todayLog.push(entry);}
   } else {
-    const bed=document.getElementById('bed-time').value;
-    const wake=document.getElementById('wake-time').value;
+    const bed=document.getElementById('bed-time').value,wake=document.getElementById('wake-time').value;
     if(!bed||!wake){showToast('Please enter bed and wake times','err');btn.disabled=false;btn.textContent='Save Entry';return;}
     const bM=parseInt(bed.split(':')[0])*60+parseInt(bed.split(':')[1]);
     let wM=parseInt(wake.split(':')[0])*60+parseInt(wake.split(':')[1]);
@@ -999,14 +1447,17 @@ async function saveEntry(){
   closeModal();renderLogScreen();updateDash();
 }
 
-// ===================== AI ADVISOR =====================
+// =============================================
+// AI ADVISOR
+// =============================================
 function buildCtx(){
   const{avg,last,debt,napMins,goal}=calcEnergy();
+  const analysis=runAnalysis();
   const caf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
   const cl=todayLog.filter(e=>e.type==='consume').map(e=>`${e.item} x${e.amount} at ${e.time}`).join(', ')||'none';
   const sl=todayLog.filter(e=>e.type==='sleep').map(e=>`${fmtH(e.hours)} (${e.quality})`).join(', ')||'none today';
   const hist=sleepHistory.map(d=>`${d.date}:${d.hours}h(${d.quality})`).join(', ')||'no history yet';
-  return `You are an expert sleep science advisor. Deep knowledge of sleep physiology, circadian rhythms, adenosine, REM cycles, caffeine pharmacology, sleep debt, and productivity. Warm, personalised, science-backed advice. Be concise. Never diagnose medically.\n\nUSER PROFILE:\n- Name: ${profile.display_name}\n- Age group: ${profile.age_group}\n- Sleep goal: ${goal}h/night\n- Work schedule: ${profile.work_schedule}\n- Main goal: ${profile.main_goal}\n- Caffeine sensitivity: ${profile.caffeine_sensitivity}\n\nTODAY'S DATA:\n- Last night: ${fmtH(last)}\n- 7d avg: ${fmtH(avg)}\n- Sleep debt: ${debt}min\n- Rec nap: ${napMins>0?napMins+'min':'none'}\n- Caffeine: ${caf}mg\n- Consumed: ${cl}\n- Sleep logged: ${sl}\n- 7d history: ${hist}`;
+  return `You are an expert sleep science advisor. Deep knowledge of sleep physiology, circadian rhythms, adenosine, REM cycles, caffeine pharmacology, sleep debt, and productivity. Warm, personalised, science-backed advice. Be concise. Never diagnose medically.\n\nUSER PROFILE:\n- Name: ${profile.display_name}\n- Age group: ${profile.age_group}\n- Sleep goal: ${goal}h/night\n- Work schedule: ${profile.work_schedule}\n- Main goal: ${profile.main_goal}\n- Caffeine sensitivity: ${profile.caffeine_sensitivity}\n\nTODAY'S ANALYSIS:\n- Sleep score: ${analysis.finalScore}%\n- Last night: ${fmtH(last)}\n- 7d avg: ${fmtH(avg)}\n- Sleep debt: ${debt}min\n- Caffeine: ${caf}mg\n- Consumed: ${cl}\n- Sleep logged: ${sl}\n- 7d history: ${hist}\n- Planet level: ${planetData.level} (${planetData.totalXP} XP)`;
 }
 function appendMsg(role,text){
   const d=document.createElement('div');d.className=`msg ${role}`;d.textContent=text;
@@ -1044,6 +1495,9 @@ async function callAI(){
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
 
+// =============================================
+// START
+// =============================================
 init();
 </script>
 </body>
