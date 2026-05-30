@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Slumber — Sleep Tracker</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* ===== DARK THEME ===== */
+[data-theme="dark"]{
+  --bg:#0B0F1A;--bg2:#131929;--bg3:#1A2235;
+  --card:#1E2A40;--border:rgba(255,255,255,0.07);
+  --text:#F0F4FF;--text2:#C8D4F0;--muted:#7B8DB0;--muted2:#4A5878;
+  --card-grad:linear-gradient(135deg,rgba(30,42,64,0.9),rgba(20,30,50,0.9));
+  --hero-bg:linear-gradient(135deg,#1B2A4A,#0F1E35);
+  --nap-bg:linear-gradient(135deg,#1C1640,#0F0B2A);
+  --ai-bg:linear-gradient(135deg,#0F1E35,#1A1040);
+  --planet-bg:linear-gradient(135deg,#0A1628,#12082A);
+  --nav-bg:rgba(19,25,41,0.88);
+  --modal-bg:#131929;--input-bg:#1A2235;
+  --shadow:rgba(0,0,0,0.35);
+}
+
+/* ===== LIGHT THEME ===== */
+[data-theme="light"]{
+  --bg:#F4F7FF;--bg2:#FFFFFF;--bg3:#E8EEF8;
+  --card:#FFFFFF;--border:rgba(0,0,0,0.09);
+  --text:#0D1B3E;--text2:#2A3D6B;--muted:#556080;--muted2:#8A97B8;
+  --card-grad:linear-gradient(135deg,#FFFFFF,#F4F7FF);
+  --hero-bg:linear-gradient(135deg,#D4F0E5,#C0E8D8);
+  --nap-bg:linear-gradient(135deg,#EAE4FF,#DAD0FF);
+  --ai-bg:linear-gradient(135deg,#EAE4FF,#DDD8FF);
+  --planet-bg:linear-gradient(135deg,#E8EEF8,#DDE4F8);
+  --nav-bg:rgba(255,255,255,0.92);
+  --modal-bg:#FFFFFF;--input-bg:#F0F4FF;
+  --shadow:rgba(0,0,0,0.07);
+}
+
+/* ===== SHARED ===== */
+:root{
+  --green:#00C87A;--green2:#00A663;--green-dim:rgba(0,200,122,0.12);
+  --purple:#7C5CFC;--purple2:#6344E8;--purple-dim:rgba(124,92,252,0.12);
+  --amber:#E8A020;--amber-dim:rgba(232,160,32,0.12);
+  --coral:#E8504A;--coral-dim:rgba(232,80,74,0.12);
+  --grad-green:linear-gradient(135deg,#00E5A0,#00B87A);
+  --grad-purple:linear-gradient(135deg,#A78BFA,#7C5CFC);
+}
+
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.4s,color 0.4s}
+.app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
+.screen{flex:1;display:none;flex-direction:column;padding-bottom:90px;overflow-y:auto}
+.screen.active{display:flex}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;transition:opacity 0.4s}
+.orb1{width:300px;height:300px;background:#7C5CFC;top:-80px;right:-60px;opacity:0.18}
+.orb2{width:250px;height:250px;background:#00B87A;bottom:100px;left:-80px;opacity:0.18}
+.orb3{width:200px;height:200px;background:#3B82F6;top:40%;right:-80px;opacity:0.12}
+[data-theme="light"] .orb{opacity:0.06!important}
+
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:100;padding:0 16px 20px}
+.nav-inner{background:var(--nav-bg);backdrop-filter:blur(20px);border:0.5px solid var(--border);border-radius:24px;display:flex;justify-content:space-around;padding:10px 6px;box-shadow:0 4px 24px var(--shadow)}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:6px 8px;border-radius:16px;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.03em;transition:all 0.2s;text-transform:uppercase}
+.nav-btn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn.active{color:var(--green);background:var(--green-dim)}
+
+/* HEADER */
+.screen-header{padding:20px 20px 8px;position:relative;z-index:1}
+.greet-lbl{font-size:13px;color:var(--muted);font-weight:500}
+.greet-name{font-size:26px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--text),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.date-chip{font-size:11px;background:var(--green-dim);color:var(--green);padding:5px 12px;border-radius:20px;font-weight:600;border:1px solid rgba(0,200,122,0.2);display:inline-block;margin-top:6px}
+
+/* CARDS */
+.card{background:var(--card-grad);border:0.5px solid var(--border);border-radius:20px;padding:18px;margin:0 16px 12px;position:relative;z-index:1;overflow:hidden;box-shadow:0 2px 12px var(--shadow)}
+.card-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
+
+/* ENERGY HERO */
+.energy-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:var(--hero-bg);box-shadow:0 4px 20px var(--shadow)}
+.energy-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,122,0.15),transparent 70%)}
+.energy-top{display:flex;align-items:center;gap:20px}
+.ring-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-size:24px;font-weight:800;background:var(--grad-green);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ring-lbl{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:0.05em;text-transform:uppercase}
+.e-stats{flex:1}
+.e-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:0.5px solid var(--border)}
+.e-row:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.e-key{font-size:12px;color:var(--muted);font-weight:500}
+.e-val{font-size:13px;font-weight:700}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px;position:relative;z-index:1}
+.stat-card{background:var(--card-grad);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;overflow:hidden;box-shadow:0 2px 12px var(--shadow)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:18px 18px 0 0}
+.stat-card.green::before{background:var(--grad-green)}
+.stat-card.purple::before{background:var(--grad-purple)}
+.stat-num{font-size:28px;font-weight:800;line-height:1;letter-spacing:-1px}
+.stat-card.green .stat-num{background:var(--grad-green);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card.purple .stat-num{background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-unit{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
+.stat-name{font-size:11px;color:var(--muted2);font-weight:500;margin-top:2px}
+
+.sec-title{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;padding:4px 20px 8px;position:relative;z-index:1}
+
+/* LOG */
+.log-group{margin:0 16px 12px;border-radius:20px;overflow:hidden;border:0.5px solid var(--border);position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
+.log-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid var(--border);background:var(--card-grad)}
+.log-item:last-child{border-bottom:none}
+.log-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.log-info{flex:1}
+.log-name{font-size:14px;font-weight:600;color:var(--text)}
+.log-time{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+.log-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700}
+.badge-bad{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(232,80,74,0.2)}
+.badge-good{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,200,122,0.2)}
+.badge-neu{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(232,160,32,0.2)}
+.badge-sleep{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(124,92,252,0.2)}
+
+/* FAB */
+.fab{position:fixed;bottom:96px;right:calc(50% - 215px + 16px);width:52px;height:52px;border-radius:50%;background:var(--grad-green);border:none;color:#0B1A12;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(0,200,122,0.4);z-index:99;font-weight:700;transition:transform 0.15s}
+.fab:active{transform:scale(0.94)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:flex-end;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%)}
+.modal{background:var(--modal-bg);border:0.5px solid var(--border);border-radius:28px 28px 0 0;padding:28px 20px 36px;width:100%;max-height:82vh;overflow-y:auto;position:relative}
+.modal-handle{width:36px;height:4px;background:var(--muted2);border-radius:4px;margin:0 auto 20px}
+.modal-title{font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:20px;color:var(--text)}
+.modal-sec{margin-bottom:20px}
+.modal-lbl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
+.chip-group{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--input-bg);font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Plus Jakarta Sans',sans-serif;color:var(--muted);font-weight:600}
+.chip.sel{background:var(--green-dim);color:var(--green);border-color:rgba(0,200,122,0.3)}
+.time-inp{width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:14px;font-size:15px;font-family:'Plus Jakarta Sans',sans-serif;background:var(--input-bg);color:var(--text);outline:none}
+.time-inp:focus{border-color:var(--green)}
+.amt-row{display:flex;align-items:center;gap:14px;margin-top:10px}
+.amt-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--input-bg);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif}
+.amt-val{font-size:20px;font-weight:700;min-width:40px;text-align:center;color:var(--text)}
+.save-btn{width:100%;padding:15px;background:var(--grad-green);color:#0B1A12;border:none;border-radius:16px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px}
+.save-btn:disabled{opacity:0.5;cursor:not-allowed}
+.close-btn{position:absolute;top:20px;right:20px;background:var(--input-bg);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center}
+.sleep-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sleep-field label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:6px;letter-spacing:0.04em;text-transform:uppercase}
+.hidden{display:none}
+
+/* ===== CALENDAR ===== */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin:0 16px 12px;position:relative;z-index:1}
+.cal-month{font-size:18px;font-weight:800;letter-spacing:-0.3px;color:var(--text)}
+.cal-nav-btn{width:36px;height:36px;border-radius:12px;background:var(--card-grad);border:1px solid var(--border);cursor:pointer;color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center}
+.cal-wrap{margin:0 16px 12px;background:var(--card-grad);border:0.5px solid var(--border);border-radius:20px;padding:16px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
+.cal-days-header{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px}
+.cal-day-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:0.05em;text-transform:uppercase;padding:4px 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-cell{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform 0.15s;border:1px solid transparent}
+.cal-cell:active{transform:scale(0.92)}
+.cal-cell.empty{cursor:default}
+.cal-date{font-size:12px;font-weight:700;line-height:1}
+.cal-pct{font-size:9px;font-weight:600;margin-top:2px;line-height:1}
+.cal-cell.no-data{background:var(--input-bg)}
+.cal-cell.no-data .cal-date{color:var(--muted)}
+.cal-cell.no-data .cal-pct{color:var(--muted2)}
+.cal-cell.great{background:rgba(0,200,122,0.22);border-color:rgba(0,200,122,0.35)}
+.cal-cell.great .cal-date,.cal-cell.great .cal-pct{color:var(--green)}
+.cal-cell.good{background:rgba(0,200,122,0.12);border-color:rgba(0,200,122,0.22)}
+.cal-cell.good .cal-date,.cal-cell.good .cal-pct{color:var(--green)}
+.cal-cell.mid{background:rgba(232,160,32,0.18);border-color:rgba(232,160,32,0.28)}
+.cal-cell.mid .cal-date,.cal-cell.mid .cal-pct{color:var(--amber)}
+.cal-cell.low{background:rgba(232,80,74,0.18);border-color:rgba(232,80,74,0.28)}
+.cal-cell.low .cal-date,.cal-cell.low .cal-pct{color:var(--coral)}
+.cal-cell.today{box-shadow:0 0 0 2px var(--green)}
+.cal-cell.future{opacity:0.25;cursor:default;pointer-events:none}
+.cal-legend{display:flex;align-items:center;gap:10px;margin:0 16px 12px;position:relative;z-index:1;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:500}
+.leg-dot{width:10px;height:10px;border-radius:3px}
+.cal-detail{margin:0 16px 12px;background:var(--card-grad);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1;display:none;box-shadow:0 2px 12px var(--shadow)}
+.cal-detail.show{display:block}
+.cal-detail-date{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px}
+.cal-detail-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border)}
+.cal-detail-row:last-child{border-bottom:none}
+.cal-detail-key{font-size:13px;color:var(--muted);font-weight:500}
+.cal-detail-val{font-size:13px;font-weight:700;color:var(--text)}
+
+/* ===== PLANET SCREEN ===== */
+.planet-screen-wrap{position:relative;z-index:1}
+.planet-hero{margin:8px 16px 12px;border-radius:24px;padding:28px 24px;background:var(--planet-bg);border:0.5px solid var(--border);position:relative;overflow:hidden;box-shadow:0 4px 24px var(--shadow);display:flex;flex-direction:column;align-items:center;text-align:center}
+.planet-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(124,92,252,0.15),transparent 70%)}
+.planet-canvas-wrap{position:relative;width:160px;height:160px;margin:0 auto 16px}
+.planet-svg{width:160px;height:160px;filter:drop-shadow(0 0 24px var(--planet-glow,rgba(124,92,252,0.5)))}
+.planet-name{font-size:20px;font-weight:800;letter-spacing:-0.3px;color:var(--text);margin-bottom:4px}
+.planet-name-input{background:transparent;border:none;border-bottom:1.5px solid var(--border);font-size:20px;font-weight:800;letter-spacing:-0.3px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;text-align:center;width:200px;outline:none;padding:4px 0;margin-bottom:4px}
+.planet-name-input:focus{border-bottom-color:var(--green)}
+.planet-edit-hint{font-size:11px;color:var(--muted);font-weight:500;margin-bottom:16px}
+.planet-lv-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.planet-lv-badge{background:var(--grad-purple);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:800;color:#fff}
+.planet-xp-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+.planet-xp-bar{height:100%;border-radius:4px;background:var(--grad-purple);transition:width 0.6s ease}
+.planet-xp-label{font-size:11px;color:var(--muted);font-weight:500}
+.planet-stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%}
+.planet-stat{background:rgba(255,255,255,0.05);border-radius:12px;padding:10px;border:0.5px solid var(--border)}
+.planet-stat-num{font-size:18px;font-weight:800;color:var(--text)}
+.planet-stat-lbl{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;margin-top:2px}
+.lv-history{margin:0 16px 12px;background:var(--card-grad);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
+.lv-history-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px}
+.lv-log-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border)}
+.lv-log-item:last-child{border-bottom:none}
+.lv-log-icon{font-size:16px;width:28px;text-align:center}
+.lv-log-text{flex:1;font-size:12px;color:var(--muted);font-weight:500}
+.lv-log-xp{font-size:12px;font-weight:700}
+.lv-log-xp.pos{color:var(--green)}
+.lv-log-xp.neg{color:var(--coral)}
+
+/* ===== LEADERBOARD ===== */
+.lb-wrap{margin:0 16px 12px;position:relative;z-index:1}
+.lb-item{display:flex;align-items:center;gap:12px;background:var(--card-grad);border:0.5px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:8px;box-shadow:0 2px 8px var(--shadow)}
+.lb-item.you{border:1.5px solid var(--green);background:linear-gradient(135deg,rgba(0,200,122,0.08),rgba(0,166,99,0.04))}
+.lb-rank{font-size:16px;font-weight:800;width:28px;text-align:center;color:var(--muted)}
+.lb-rank.gold{color:#F5A623}
+.lb-rank.silver{color:#A8B4C8}
+.lb-rank.bronze{color:#C8845A}
+.lb-planet-mini{width:44px;height:44px;flex-shrink:0}
+.lb-info{flex:1}
+.lb-name{font-size:14px;font-weight:700;color:var(--text)}
+.lb-planet-name{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+.lb-lv{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--purple-dim);color:var(--purple);border:1px solid rgba(124,92,252,0.2)}
+
+/* ===== ANALYSIS / WARNINGS ===== */
+.analysis-score-card{margin:0 16px 12px;border-radius:20px;padding:20px;position:relative;overflow:hidden;z-index:1;box-shadow:0 4px 20px var(--shadow)}
+.analysis-score-card.great{background:linear-gradient(135deg,rgba(0,200,122,0.15),rgba(0,166,99,0.08));border:1px solid rgba(0,200,122,0.2)}
+.analysis-score-card.good{background:linear-gradient(135deg,rgba(0,200,122,0.1),rgba(0,166,99,0.05));border:1px solid rgba(0,200,122,0.15)}
+.analysis-score-card.warn{background:linear-gradient(135deg,rgba(232,160,32,0.12),rgba(232,160,32,0.06));border:1px solid rgba(232,160,32,0.2)}
+.analysis-score-card.alert{background:linear-gradient(135deg,rgba(232,80,74,0.12),rgba(232,80,74,0.06));border:1px solid rgba(232,80,74,0.2)}
+.analysis-score-row{display:flex;align-items:center;gap:16px}
+.analysis-big-score{font-size:52px;font-weight:800;letter-spacing:-2px;line-height:1}
+.analysis-big-score.great{color:var(--green)}
+.analysis-big-score.good{color:var(--green)}
+.analysis-big-score.warn{color:var(--amber)}
+.analysis-big-score.alert{color:var(--coral)}
+.analysis-right{flex:1}
+.analysis-title{font-size:14px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.analysis-sub{font-size:12px;color:var(--muted);font-weight:500;line-height:1.6}
+.warning-card{margin:0 16px 10px;border-radius:16px;padding:14px 16px;position:relative;z-index:1;display:flex;align-items:flex-start;gap:12px}
+.warning-card.warn{background:rgba(232,160,32,0.1);border:1px solid rgba(232,160,32,0.2)}
+.warning-card.alert{background:rgba(232,80,74,0.1);border:1px solid rgba(232,80,74,0.2)}
+.warning-card.info{background:rgba(0,200,122,0.08);border:1px solid rgba(0,200,122,0.15)}
+.warning-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.warning-content{}
+.warning-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.warning-card.warn .warning-title{color:var(--amber)}
+.warning-card.alert .warning-title{color:var(--coral)}
+.warning-card.info .warning-title{color:var(--green)}
+.warning-body{font-size:12px;color:var(--muted);font-weight:500;line-height:1.6}
+.factor-breakdown{margin:0 16px 12px;background:var(--card-grad);border:0.5px solid var(--border);border-radius:18px;padding:16px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
+.factor-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.factor-row:last-child{margin-bottom:0}
+.factor-label{font-size:12px;color:var(--muted);font-weight:600;width:90px;flex-shrink:0}
+.factor-bar-bg{flex:1;height:8px;background:var(--input-bg);border-radius:4px;overflow:hidden}
+.factor-bar{height:100%;border-radius:4px;transition:width 0.5s ease}
+.factor-val{font-size:11px;font-weight:700;width:36px;text-align:right}
+.science-note{margin:0 16px 12px;padding:12px 16px;background:var(--input-bg);border-radius:14px;border:0.5px solid var(--border);font-size:11px;color:var(--muted);line-height:1.6;font-weight:500;position:relative;z-index:1}
+.science-note strong{color:var(--text)}
+
+/* NAP */
+.nap-hero{margin:8px 16px 12px;border-radius:24px;padding:24px;position:relative;overflow:hidden;z-index:1;background:var(--nap-bg);box-shadow:0 4px 20px var(--shadow)}
+.nap-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,252,0.2),transparent 70%)}
+.nap-lbl{font-size:10px;color:rgba(124,92,252,0.7);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.nap-time{font-size:52px;font-weight:800;letter-spacing:-2px;background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.nap-sub{font-size:13px;color:var(--purple);opacity:0.85;font-weight:500;margin-top:8px}
+.nap-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px;position:relative;z-index:1}
+.nap-opt{background:var(--card-grad);border:0.5px solid var(--border);border-radius:18px;padding:16px;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 12px var(--shadow)}
+.nap-opt.sel{border:1.5px solid var(--purple);background:var(--purple-dim)}
+.nap-opt-time{font-size:22px;font-weight:800;color:var(--purple);letter-spacing:-0.5px}
+.nap-opt-label{font-size:13px;font-weight:600;margin-top:2px;color:var(--text)}
+.nap-opt-desc{font-size:11px;color:var(--muted);font-weight:500;margin-top:4px}
+.sci-card{margin:0 16px 12px;background:var(--purple-dim);border:1px solid rgba(124,92,252,0.15);border-radius:18px;padding:16px;position:relative;z-index:1}
+.sci-head{font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px}
+.sci-body{font-size:12px;color:var(--purple);opacity:0.9;line-height:1.7;font-weight:500}
+
+/* AI */
+.ai-intro{margin:0 16px 12px;border-radius:20px;padding:20px;position:relative;overflow:hidden;z-index:1;background:var(--ai-bg);box-shadow:0 4px 20px var(--shadow)}
+.ai-intro::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,252,0.15),transparent 70%)}
+.ai-intro-title{font-size:14px;font-weight:700;color:var(--purple);margin-bottom:8px}
+.ai-intro-body{font-size:12px;color:var(--purple);opacity:0.85;line-height:1.7;font-weight:500}
+.qbtns{margin:0 16px 12px;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
+.qbtn{background:var(--card-grad);border:0.5px solid var(--border);border-radius:14px;padding:13px 16px;text-align:left;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--text);font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px var(--shadow)}
+.qbtn-ico{width:32px;height:32px;border-radius:10px;background:var(--purple-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.chat-area{margin:0 16px;display:flex;flex-direction:column;gap:10px;margin-bottom:12px;position:relative;z-index:1}
+.msg{max-width:86%;padding:13px 16px;border-radius:18px;font-size:13px;line-height:1.65;font-weight:500}
+.msg.user{background:linear-gradient(135deg,var(--green2),var(--green));color:#fff;align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
+.msg.ai{background:var(--card);color:var(--text);align-self:flex-start;border:0.5px solid var(--border);border-bottom-left-radius:4px}
+.msg.typing{background:var(--card);border:0.5px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;padding:14px 16px}
+.dots{display:flex;gap:4px;align-items:center}
+.dots span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:dot 1.3s infinite}
+.dots span:nth-child(2){animation-delay:0.2s}
+.dots span:nth-child(3){animation-delay:0.4s}
+@keyframes dot{0%,80%,100%{opacity:0.3;transform:scale(0.8)}40%{opacity:1;transform:scale(1)}}
+.chat-input-wrap{position:sticky;bottom:90px;padding:0 16px 8px;z-index:10}
+.chat-row{display:flex;gap:10px;align-items:flex-end;background:var(--modal-bg);border:1px solid var(--border);border-radius:18px;padding:10px 10px 10px 16px}
+.chat-ta{flex:1;border:none;background:transparent;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;color:var(--text);resize:none;outline:none;max-height:100px;line-height:1.5;font-weight:500}
+.chat-ta::placeholder{color:var(--muted2)}
+.chat-send{width:38px;height:38px;border-radius:12px;background:var(--grad-green);border:none;color:#0B1A12;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.chat-send:disabled{opacity:0.35;cursor:not-allowed}
+.ai-disc{margin:0 16px 8px;font-size:10px;color:var(--muted2);text-align:center;font-weight:500;position:relative;z-index:1}
+
+/* PROFILE BANNER */
+.profile-banner{margin:0 16px 12px;background:linear-gradient(135deg,rgba(124,92,252,0.12),rgba(0,200,122,0.08));border:1px solid rgba(124,92,252,0.15);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;position:relative;z-index:1;box-shadow:0 2px 12px var(--shadow)}
+.profile-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--purple2),var(--green2));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0}
+.profile-info{flex:1}
+.profile-name{font-size:16px;font-weight:800;color:var(--text)}
+.profile-goal{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px}
+.profile-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green-dim);color:var(--green);border:1px solid rgba(0,200,122,0.2)}
+
+/* TOAST & LOADING */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--text);z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px var(--shadow)}
+.toast.show{opacity:1}
+.toast.ok{border-color:rgba(0,200,122,0.3);color:var(--green)}
+.toast.err{border-color:rgba(232,80,74,0.3);color:var(--coral)}
+.loading-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:background 0.4s}
+.loading-icon{font-size:48px;animation:pulse 1.5s ease infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:0.7}}
+.loading-text{font-size:14px;color:var(--muted);font-weight:500}
+.signout-btn{margin:0 16px 12px;background:var(--coral-dim);border:1px solid rgba(232,80,74,0.2);border-radius:14px;padding:13px 16px;color:var(--coral);font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:calc(100% - 32px);position:relative;z-index:1}
+
+/* PLANET NAME MODAL */
+.pname-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:300;display:flex;align-items:center;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%)}
+.pname-box{background:var(--modal-bg);border:0.5px solid var(--border);border-radius:24px;padding:28px 24px;width:calc(100% - 40px);max-width:360px}
+.pname-title{font-size:18px;font-weight:800;margin-bottom:16px;color:var(--text)}
+.pname-inp{width:100%;padding:14px 16px;background:var(--input-bg);border:1px solid var(--border);border-radius:14px;font-size:16px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);outline:none;margin-bottom:16px}
+.pname-inp:focus{border-color:var(--green)}
+.pname-save{width:100%;padding:14px;background:var(--grad-green);color:#0B1A12;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="loading-screen" id="loading-screen"><div class="loading-icon">🌙</div><div class="loading-text">Loading your sleep data...</div></div>
+  <div class="toast" id="toast"></div>
+
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div class="screen-header">
+      <div class="greet-lbl" id="greet-lbl">Good morning</div>
+      <div class="greet-name" id="greet-name">Sleep Tracker 🌙</div>
+      <div class="date-chip" id="today-date"></div>
+    </div>
+    <div class="profile-banner">
+      <div class="profile-avatar" id="profile-avatar">S</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profile-name">Loading...</div>
+        <div class="profile-goal" id="profile-goal">Sleep goal: 8h</div>
+      </div>
+      <div class="profile-badge" id="profile-badge">On track</div>
+    </div>
+    <div class="energy-hero">
+      <div class="energy-top">
+        <div class="ring-wrap">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="44" fill="none" stroke="rgba(128,128,128,0.15)" stroke-width="11"/>
+            <circle id="energy-ring" cx="55" cy="55" r="44" fill="none" stroke="url(#rg)" stroke-width="11" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
+            <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00E5A0"/><stop offset="100%" stop-color="#00B87A"/></linearGradient></defs>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-pct" id="energy-pct">0%</div>
+            <div class="ring-lbl">energy</div>
+          </div>
+        </div>
+        <div class="e-stats">
+          <div class="e-row"><span class="e-key">Last night</span><span class="e-val" id="dash-sleep" style="color:var(--green)">—</span></div>
+          <div class="e-row"><span class="e-key">7d average</span><span class="e-val" id="dash-avg">—</span></div>
+          <div class="e-row"><span class="e-key">Sleep debt</span><span class="e-val" id="dash-debt">—</span></div>
+          <div class="e-row"><span class="e-key">Nap needed</span><span class="e-val" id="dash-nap" style="color:var(--purple)">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card green"><div class="stat-num" id="stat-caf">0</div><div class="stat-unit">mg caffeine</div><div class="stat-name">today so far</div></div>
+      <div class="stat-card purple"><div class="stat-num" id="stat-items">0</div><div class="stat-unit">items logged</div><div class="stat-name">today</div></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Today's log</div>
+      <div id="dash-log-list" style="font-size:13px;color:var(--muted);font-weight:500">No entries yet — tap + to log something.</div>
+    </div>
+    <button class="signout-btn" onclick="signOut()">Sign out</button>
+  </div>
+
+  <!-- LOG -->
+  <div class="screen" id="screen-log">
+    <div class="screen-header">
+      <div class="greet-name" style="margin-bottom:4px">Daily Log</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Track what affects your sleep</div>
+    </div>
+    <div class="sec-title">Today's entries</div>
+    <div id="log-entries"></div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="screen" id="screen-calendar">
+    <div class="screen-header">
+      <div class="greet-name" style="margin-bottom:4px">Calendar</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Your sleep productivity score</div>
+    </div>
+    <div class="cal-nav">
+      <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+      <div class="cal-month" id="cal-month-label">May 2026</div>
+      <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+    </div>
+    <div class="cal-wrap">
+      <div class="cal-days-header">
+        <div class="cal-day-label">Sun</div><div class="cal-day-label">Mon</div><div class="cal-day-label">Tue</div>
+        <div class="cal-day-label">Wed</div><div class="cal-day-label">Thu</div><div class="cal-day-label">Fri</div><div class="cal-day-label">Sat</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+    <div class="cal-legend">
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(0,200,122,0.5)"></div>90–100%</div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(0,200,122,0.25)"></div>70–89%</div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(232,160,32,0.4)"></div>50–69%</div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(232,80,74,0.4)"></div>&lt;50%</div>
+    </div>
+    <div class="cal-detail" id="cal-detail">
+      <div class="cal-detail-date" id="cal-detail-date">Monday, May 1</div>
+      <div class="cal-detail-row"><span class="cal-detail-key">Hours slept</span><span class="cal-detail-val" id="cal-detail-hours">—</span></div>
+      <div class="cal-detail-row"><span class="cal-detail-key">Quality</span><span class="cal-detail-val" id="cal-detail-quality">—</span></div>
+      <div class="cal-detail-row"><span class="cal-detail-key">Productivity score</span><span class="cal-detail-val" id="cal-detail-score" style="color:var(--green)">—</span></div>
+    </div>
+    <div class="sec-title">Monthly summary</div>
+    <div class="stats-grid" style="margin-bottom:20px">
+      <div class="stat-card green"><div class="stat-num" id="cal-avg-score">—</div><div class="stat-unit">avg score</div><div class="stat-name">this month</div></div>
+      <div class="stat-card purple"><div class="stat-num" id="cal-best-streak">—</div><div class="stat-unit">day streak</div><div class="stat-name">best this month</div></div>
+    </div>
+  </div>
+
+  <!-- PLANET -->
+  <div class="screen" id="screen-planet">
+    <div class="screen-header">
+      <div class="greet-name" style="margin-bottom:4px">My Planet 🪐</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Grow your planet by sleeping well</div>
+    </div>
+    <div class="planet-hero">
+      <div class="planet-canvas-wrap">
+        <svg class="planet-svg" id="planet-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="planet-name" id="planet-name-display" onclick="openPlanetNameModal()" style="cursor:pointer">Tap to name ✏️</div>
+      <div class="planet-edit-hint">Tap name to rename</div>
+      <div class="planet-lv-row" style="width:100%">
+        <div class="planet-lv-badge" id="planet-lv-badge">Lv. 0</div>
+        <div class="planet-xp-bar-wrap"><div class="planet-xp-bar" id="planet-xp-bar" style="width:0%"></div></div>
+        <div class="planet-xp-label" id="planet-xp-label">0 / 100 XP</div>
+      </div>
+      <div class="planet-stats-row">
+        <div class="planet-stat"><div class="planet-stat-num" id="planet-total-xp">0</div><div class="planet-stat-lbl">Total XP</div></div>
+        <div class="planet-stat"><div class="planet-stat-num" id="planet-good-nights">0</div><div class="planet-stat-lbl">Good nights</div></div>
+        <div class="planet-stat"><div class="planet-stat-num" id="planet-streak">0</div><div class="planet-stat-lbl">Streak</div></div>
+      </div>
+    </div>
+    <div class="lv-history" id="xp-log">
+      <div class="lv-history-title">Recent XP activity</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Log sleep to earn XP for your planet!</div>
+    </div>
+    <div class="sec-title">🏆 Leaderboard</div>
+    <div class="lb-wrap" id="lb-wrap">
+      <div style="margin:0 0 12px;font-size:13px;color:var(--muted);font-weight:500">Loading rankings...</div>
+    </div>
+  </div>
+
+  <!-- ANALYSIS -->
+  <div class="screen" id="screen-analysis">
+    <div class="screen-header">
+      <div class="greet-name" style="margin-bottom:4px">Sleep Analysis</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Science-backed assessment</div>
+    </div>
+    <div id="analysis-score-wrap"></div>
+    <div class="sec-title">⚠️ Active warnings</div>
+    <div id="warnings-wrap"></div>
+    <div class="sec-title">Factor breakdown</div>
+    <div class="factor-breakdown">
+      <div class="factor-row">
+        <span class="factor-label">Sleep hours</span>
+        <div class="factor-bar-bg"><div class="factor-bar" id="fb-sleep" style="width:0%;background:var(--grad-green)"></div></div>
+        <span class="factor-val" id="fv-sleep" style="color:var(--green)">0%</span>
+      </div>
+      <div class="factor-row">
+        <span class="factor-label">Caffeine</span>
+        <div class="factor-bar-bg"><div class="factor-bar" id="fb-caf" style="width:100%;background:var(--grad-green)"></div></div>
+        <span class="factor-val" id="fv-caf" style="color:var(--green)">100%</span>
+      </div>
+      <div class="factor-row">
+        <span class="factor-label">Meal timing</span>
+        <div class="factor-bar-bg"><div class="factor-bar" id="fb-meal" style="width:100%;background:var(--grad-green)"></div></div>
+        <span class="factor-val" id="fv-meal" style="color:var(--green)">100%</span>
+      </div>
+      <div class="factor-row">
+        <span class="factor-label">Alcohol</span>
+        <div class="factor-bar-bg"><div class="factor-bar" id="fb-alc" style="width:100%;background:var(--grad-green)"></div></div>
+        <span class="factor-val" id="fv-alc" style="color:var(--green)">100%</span>
+      </div>
+      <div class="factor-row">
+        <span class="factor-label">Sleep quality</span>
+        <div class="factor-bar-bg"><div class="factor-bar" id="fb-qual" style="width:0%;background:var(--grad-green)"></div></div>
+        <span class="factor-val" id="fv-qual" style="color:var(--green)">0%</span>
+      </div>
+    </div>
+    <div class="science-note">
+      <strong>Based on peer-reviewed research:</strong> Caffeine half-life ~5–6h (NIH); 400mg+ within 12h of bedtime clinically disrupts sleep (Oxford Sleep, 2024); Heavy meals within 3h of bedtime increase poor sleep odds by 2.73x (Frontiers Nutrition, 2024); Even 2 alcoholic drinks reduce REM sleep by 10–15 min (Sleep Medicine Reviews, 2024).
+    </div>
+  </div>
+
+  <!-- NAP -->
+  <div class="screen" id="screen-nap">
+    <div class="screen-header">
+      <div class="greet-name" style="margin-bottom:4px">Nap Advisor</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Find your ideal nap length</div>
+    </div>
+    <div class="nap-hero">
+      <div class="nap-lbl">Recommended nap</div>
+      <div class="nap-time" id="nap-rec-time">—</div>
+      <div class="nap-sub" id="nap-rec-sub">Loading your data...</div>
+    </div>
+    <div class="sec-title">Choose a nap type</div>
+    <div class="nap-grid">
+      <div class="nap-opt sel" onclick="selNap(this,'10–20 min','Boosts alertness fast')"><div class="nap-opt-time">10–20m</div><div class="nap-opt-label">Power nap</div><div class="nap-opt-desc">No grogginess, fast boost</div></div>
+      <div class="nap-opt" onclick="selNap(this,'20–30 min','Deeper recovery, slight inertia')"><div class="nap-opt-time">20–30m</div><div class="nap-opt-label">Full rest</div><div class="nap-opt-desc">Deeper recovery</div></div>
+      <div class="nap-opt" onclick="selNap(this,'90 min','Complete sleep cycle, wake refreshed')"><div class="nap-opt-time">90m</div><div class="nap-opt-label">Full cycle</div><div class="nap-opt-desc">Includes REM sleep</div></div>
+      <div class="nap-opt" onclick="selNap(this,'No nap','Eyes closed, mind quiet')"><div class="nap-opt-time">0m</div><div class="nap-opt-label">Rest only</div><div class="nap-opt-desc">Eyes closed, relax</div></div>
+    </div>
+    <div class="sci-card">
+      <div class="sci-head">🔬 Why this works</div>
+      <div class="sci-body" id="sci-text">A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess.</div>
+    </div>
+  </div>
+
+  <!-- AI -->
+  <div class="screen" id="screen-ai">
+    <div class="screen-header">
+      <div class="greet-name" style="margin-bottom:4px">AI Advisor ✨</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500">Science-backed, personalised advice</div>
+    </div>
+    <div class="ai-intro">
+      <div class="ai-intro-title">🧠 Deep sleep science</div>
+      <div class="ai-intro-body">Your logs and profile are shared with the AI so it gives advice based on your real patterns — not generic tips.</div>
+    </div>
+    <div class="sec-title">Quick questions</div>
+    <div class="qbtns">
+      <button class="qbtn" onclick="sendQuick('Why do I feel tired even after 7+ hours of sleep?')"><div class="qbtn-ico">😴</div>Why am I tired after 7+ hours?</button>
+      <button class="qbtn" onclick="sendQuick('Based on my caffeine intake today, when is the best time to nap?')"><div class="qbtn-ico">☕</div>When should I nap given my caffeine?</button>
+      <button class="qbtn" onclick="sendQuick('Looking at my sleep history, what patterns do you notice?')"><div class="qbtn-ico">📊</div>What patterns do you see in my history?</button>
+      <button class="qbtn" onclick="sendQuick('How can I improve my sleep quality this week?')"><div class="qbtn-ico">🚀</div>How do I improve my sleep this week?</button>
+    </div>
+    <div class="sec-title">Chat</div>
+    <div class="chat-area" id="chat-area"></div>
+    <div class="ai-disc">Responses may take a few seconds · Not medical advice</div>
+    <div class="chat-input-wrap">
+      <div class="chat-row">
+        <textarea class="chat-ta" id="chat-inp" placeholder="Ask anything about your sleep..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="chat-send" id="send-btn" onclick="sendMsg()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="bottom-nav">
+    <div class="nav-inner">
+      <button class="nav-btn active" onclick="goTo('home',this)">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
+      </button>
+      <button class="nav-btn" onclick="goTo('log',this)">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>Log
+      </button>
+      <button class="nav-btn" onclick="goTo('calendar',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Calendar
+      </button>
+      <button class="nav-btn" onclick="goTo('planet',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><ellipse cx="12" cy="12" rx="12" ry="4" fill="none"/></svg>Planet
+      </button>
+      <button class="nav-btn" onclick="goTo('analysis',this)">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Analysis
+      </button>
+      <button class="nav-btn" onclick="goTo('ai',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Advisor
+      </button>
+    </div>
+  </nav>
+
+  <button class="fab" id="fab-btn" onclick="openModal()">+</button>
+
+  <!-- MODAL -->
+  <div class="modal-overlay hidden" id="modal-overlay" onclick="closeBg(event)">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+      <div class="modal-title">Add entry</div>
+      <div class="modal-sec">
+        <div class="modal-lbl">Type</div>
+        <div class="chip-group" id="type-chips">
+          <div class="chip sel" onclick="selType(this,'consume')">Consumed</div>
+          <div class="chip" onclick="selType(this,'sleep')">Sleep</div>
+        </div>
+      </div>
+      <div id="consume-fields">
+        <div class="modal-sec">
+          <div class="modal-lbl">What did you have?</div>
+          <div class="chip-group" id="item-chips">
+            <div class="chip" onclick="selItem(this,'Coffee')">☕ Coffee</div>
+            <div class="chip" onclick="selItem(this,'Tea')">🍵 Tea</div>
+            <div class="chip" onclick="selItem(this,'Energy drink')">⚡ Energy drink</div>
+            <div class="chip" onclick="selItem(this,'Alcohol')">🍺 Alcohol</div>
+            <div class="chip" onclick="selItem(this,'Heavy meal')">🍲 Heavy meal</div>
+            <div class="chip" onclick="selItem(this,'Light meal')">🥗 Light meal</div>
+            <div class="chip" onclick="selItem(this,'Water')">💧 Water</div>
+            <div class="chip" onclick="selItem(this,'Melatonin')">💊 Melatonin</div>
+          </div>
+        </div>
+        <div class="modal-sec">
+          <div class="modal-lbl">Quantity</div>
+          <div class="amt-row">
+            <button class="amt-btn" onclick="chgAmt(-1)">−</button>
+            <span class="amt-val" id="amt-display">1</span>
+            <button class="amt-btn" onclick="chgAmt(1)">+</button>
+            <span style="font-size:13px;color:var(--muted);font-weight:500">serving(s)</span>
+          </div>
+        </div>
+        <div class="modal-sec">
+          <div class="modal-lbl">Time</div>
+          <input type="time" class="time-inp" id="consume-time">
+        </div>
+      </div>
+      <div id="sleep-fields" class="hidden">
+        <div class="modal-sec">
+          <div class="modal-lbl">Sleep window</div>
+          <div class="sleep-row">
+            <div class="sleep-field"><label>Bedtime</label><input type="time" class="time-inp" id="bed-time"></div>
+            <div class="sleep-field"><label>Wake time</label><input type="time" class="time-inp" id="wake-time"></div>
+          </div>
+        </div>
+        <div class="modal-sec">
+          <div class="modal-lbl">Quality</div>
+          <div class="chip-group" id="quality-chips">
+            <div class="chip" onclick="selQuality(this,'Restless')">😴 Restless</div>
+            <div class="chip" onclick="selQuality(this,'Okay')">😐 Okay</div>
+            <div class="chip sel" onclick="selQuality(this,'Good')">😊 Good</div>
+            <div class="chip" onclick="selQuality(this,'Great')">🌟 Great</div>
+          </div>
+        </div>
+      </div>
+      <button class="save-btn" id="save-btn" onclick="saveEntry()">Save Entry</button>
+    </div>
+  </div>
+
+  <!-- PLANET NAME MODAL -->
+  <div class="pname-modal hidden" id="pname-modal">
+    <div class="pname-box">
+      <div class="pname-title">Name your planet 🪐</div>
+      <input class="pname-inp" id="pname-inp" type="text" placeholder="e.g. Nova, Zephyr, Lumis..." maxlength="20">
+      <button class="pname-save" onclick="savePlanetName()">Save name</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// =============================================
+// SUPABASE CONFIG
+// =============================================
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// =============================================
+// ITEM DEFINITIONS
+// =============================================
+const ITEMS={
+  'Coffee':{caf:95,effect:'neg',label:'Delays sleep ~1h',alcUnits:0},
+  'Tea':{caf:40,effect:'neg',label:'Mild stimulant',alcUnits:0},
+  'Energy drink':{caf:160,effect:'neg',label:'Disrupts deep sleep',alcUnits:0},
+  'Alcohol':{caf:0,effect:'neg',label:'Fragments REM sleep',alcUnits:2},
+  'Heavy meal':{caf:0,effect:'neg',label:'May disrupt sleep',alcUnits:0},
+  'Light meal':{caf:0,effect:'pos',label:'Stable energy',alcUnits:0},
+  'Water':{caf:0,effect:'pos',label:'Aids recovery',alcUnits:0},
+  'Melatonin':{caf:0,effect:'pos',label:'Promotes sleep onset',alcUnits:0},
+};
+
+// =============================================
+// STATE
+// =============================================
+let currentUser=null;
+let profile={display_name:'',sleep_goal_hours:8,age_group:'',work_schedule:'',main_goal:'',caffeine_sensitivity:'medium'};
+let sleepHistory=[];
+let allSleepData={};
+let todayLog=[];
+let planetData={name:'',color1:'#7C5CFC',color2:'#A78BFA',totalXP:0,level:0,xpLog:[]};
+let state={selectedItem:null,selectedType:'consume',selectedQuality:'Good',amount:1,chatHistory:[],aiLoading:false};
+let calViewDate=new Date();
+
+// =============================================
+// AUTO THEME — switches based on time
+// =============================================
+function applyAutoTheme(){
+  const h=new Date().getHours();
+  // Night mode: 8pm (20) to 7am (7)
+  const isNight=(h>=20||h<7);
+  const theme=isNight?'dark':'light';
+  document.documentElement.setAttribute('data-theme',theme);
+}
+// Check every minute
+applyAutoTheme();
+setInterval(applyAutoTheme,60000);
+
+// =============================================
+// TOAST
+// =============================================
+function showToast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// =============================================
+// INIT
+// =============================================
+async function init(){
+  const{data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='auth.html';return;}
+  currentUser=session.user;
+  await loadProfile();
+  await loadTodayData();
+  await loadAllSleepData();
+  loadPlanetData();
+  document.getElementById('loading-screen').style.display='none';
+  setupHeader();
+  updateDash();
+}
+
+// =============================================
+// LOAD PROFILE
+// =============================================
+async function loadProfile(){
+  const{data,error}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+  if(error||!data){
+    const local=localStorage.getItem('slumber_profile');
+    if(local){
+      try{
+        const p=JSON.parse(local);
+        await sb.from('profiles').upsert({
+          id:currentUser.id,display_name:p.display_name,
+          sleep_goal_hours:p.sleep_goal_hours,age_group:p.age_group,
+          work_schedule:p.work_schedule,main_goal:p.main_goal,
+          caffeine_sensitivity:p.caffeine_sensitivity,onboarding_complete:true
+        });
+        profile=p;
+      }catch(e){}
+    } else {window.location.href='onboarding.html';}
+  } else {
+    profile=data;
+    if(!data.onboarding_complete)window.location.href='onboarding.html';
+  }
+}
+
+// =============================================
+// LOAD TODAY DATA
+// =============================================
+async function loadTodayData(){
+  const today=new Date().toISOString().split('T')[0];
+  const{data:sleepData}=await sb.from('sleep_entries').select('*').eq('user_id',currentUser.id).eq('entry_date',today).order('created_at',{ascending:false});
+  const{data:consumeData}=await sb.from('consumption_entries').select('*').eq('user_id',currentUser.id).eq('entry_date',today).order('consumed_at',{ascending:true});
+  const sevenDaysAgo=new Date();sevenDaysAgo.setDate(sevenDaysAgo.getDate()-6);
+  const fromDate=sevenDaysAgo.toISOString().split('T')[0];
+  const{data:historyData}=await sb.from('sleep_entries').select('*').eq('user_id',currentUser.id).gte('entry_date',fromDate).order('entry_date',{ascending:true});
+  const sleepEntries=(sleepData||[]).map(s=>({type:'sleep',bedtime:s.bedtime?.slice(0,5)||'',waketime:s.wake_time?.slice(0,5)||'',hours:s.hours_slept,quality:s.quality,id:s.id}));
+  const consumeEntries=(consumeData||[]).map(c=>({type:'consume',item:c.item_name,amount:c.quantity,time:c.consumed_at?.slice(0,5)||'',id:c.id}));
+  todayLog=[...sleepEntries,...consumeEntries];
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  sleepHistory=(historyData||[]).map(s=>({date:days[new Date(s.entry_date+'T12:00:00').getDay()],hours:s.hours_slept,quality:s.quality,entry_date:s.entry_date}));
+  if(sleepHistory.length===0){sleepHistory=[{date:days[new Date().getDay()],hours:0,quality:'Good',entry_date:today}];}
+}
+
+// =============================================
+// LOAD ALL SLEEP DATA FOR CALENDAR
+// =============================================
+async function loadAllSleepData(){
+  const{data}=await sb.from('sleep_entries').select('entry_date,hours_slept,quality').eq('user_id',currentUser.id).order('entry_date',{ascending:true});
+  allSleepData={};
+  (data||[]).forEach(s=>{allSleepData[s.entry_date]={hours:s.hours_slept,quality:s.quality};});
+}
+
+// =============================================
+// PLANET DATA (stored in localStorage)
+// =============================================
+function loadPlanetData(){
+  const key=`slumber_planet_${currentUser.id}`;
+  const saved=localStorage.getItem(key);
+  if(saved){
+    try{planetData=JSON.parse(saved);}catch(e){}
+  } else {
+    // Assign random planet colors
+    const palettes=[
+      ['#7C5CFC','#A78BFA'],['#00C87A','#5DECB8'],['#E8504A','#FF8B87'],
+      ['#E8A020','#FFD07A'],['#3B82F6','#7CB9FF'],['#EC4899','#F9A8D4'],
+      ['#14B8A6','#5EEAD4'],['#F97316','#FDBA74']
+    ];
+    const p=palettes[Math.floor(Math.random()*palettes.length)];
+    planetData={name:'',color1:p[0],color2:p[1],totalXP:0,level:0,xpLog:[]};
+    savePlanetDataLocal();
+  }
+}
+function savePlanetDataLocal(){
+  const key=`slumber_planet_${currentUser.id}`;
+  localStorage.setItem(key,JSON.stringify(planetData));
+}
+
+// =============================================
+// XP SYSTEM (based on sleep science)
+// =============================================
+function calcXPForNight(hours,quality,cafMg,hasHeavyMeal,alcUnits,goal){
+  let xp=0;
+  // Base XP from sleep duration
+  if(hours>=goal){xp+=50;}
+  else if(hours>=goal-1){xp+=30;}
+  else if(hours>=goal-2){xp+=15;}
+  else{xp-=20;}
+  // Quality bonus/penalty
+  const qMap={Great:20,Good:10,Okay:0,Restless:-15};
+  xp+=(qMap[quality]||0);
+  // Caffeine penalty (research: 400mg+ within 12h significantly disrupts sleep)
+  if(cafMg>400){xp-=25;}
+  else if(cafMg>200){xp-=10;}
+  else if(cafMg>0){xp-=3;}
+  // Heavy meal penalty (research: 2.73x odds of poor sleep within 3h of bed)
+  if(hasHeavyMeal){xp-=10;}
+  // Alcohol penalty (research: even 2 drinks reduces REM by 10-15min)
+  if(alcUnits>=5){xp-=30;}
+  else if(alcUnits>=2){xp-=15;}
+  else if(alcUnits>0){xp-=8;}
+  return xp;
+}
+
+function applyXPFromLastNight(){
+  const lastSleep=todayLog.find(e=>e.type==='sleep');
+  if(!lastSleep)return;
+  const cafMg=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  const hasHeavyMeal=todayLog.some(e=>e.item==='Heavy meal');
+  const alcUnits=todayLog.filter(e=>e.item==='Alcohol').reduce((a,e)=>a+(ITEMS['Alcohol'].alcUnits||2)*e.amount,0);
+  const xp=calcXPForNight(lastSleep.hours,lastSleep.quality,cafMg,hasHeavyMeal,alcUnits,profile.sleep_goal_hours||8);
+  const today=new Date().toISOString().split('T')[0];
+  const alreadyApplied=planetData.xpLog.some(l=>l.date===today);
+  if(alreadyApplied)return;
+  planetData.totalXP=Math.max(0,planetData.totalXP+xp);
+  planetData.xpLog.unshift({date:today,xp,hours:lastSleep.hours,quality:lastSleep.quality});
+  if(planetData.xpLog.length>20)planetData.xpLog=planetData.xpLog.slice(0,20);
+  planetData.level=Math.floor(planetData.totalXP/100);
+  savePlanetDataLocal();
+}
+
+// =============================================
+// PLANET SVG RENDERING
+// =============================================
+function renderPlanet(svgEl,c1,c2,size=160,level=0){
+  const cx=size/2,cy=size/2,r=size*0.35;
+  const ringRx=r*1.55,ringRy=r*0.35;
+  const spots=generatePlanetSpots(c1,c2,level);
+  // Darker shade for ring
+  const ringColor=shadeColor(c1,-20);
+  svgEl.innerHTML=`
+    <defs>
+      <radialGradient id="pg" cx="38%" cy="35%" r="65%">
+        <stop offset="0%" stop-color="${lightenColor(c2,40)}"/>
+        <stop offset="45%" stop-color="${c1}"/>
+        <stop offset="100%" stop-color="${darkenColor(c1,35)}"/>
+      </radialGradient>
+      <radialGradient id="sg" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.3)"/>
+        <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+      </radialGradient>
+      <clipPath id="pc"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
+      <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <!-- Planet body -->
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#pg)"/>
+    <!-- Surface spots -->
+    ${spots}
+    <!-- Shine -->
+    <ellipse cx="${cx-r*0.2}" cy="${cy-r*0.25}" rx="${r*0.35}" ry="${r*0.22}" fill="url(#sg)" opacity="0.7"/>
+    <!-- Ring back half -->
+    <ellipse cx="${cx}" cy="${cy+r*0.05}" rx="${ringRx}" ry="${ringRy}" fill="none" stroke="${ringColor}" stroke-width="${size*0.05}" opacity="0.55" clip-path="url(#pc)"/>
+    <!-- Ring front half -->
+    <ellipse cx="${cx}" cy="${cy+r*0.05}" rx="${ringRx}" ry="${ringRy}" fill="none" stroke="${ringColor}" stroke-width="${size*0.05}" opacity="0.8" clip-path="inset(${cy+r*0.05}px 0 0 0)"/>
+    <!-- Small moon -->
+    <circle cx="${cx+r*1.45}" cy="${cy-r*0.6}" r="${r*0.13}" fill="${lightenColor(c2,20)}" opacity="0.9"/>
+  `;
+  // Set glow CSS var
+  svgEl.style.setProperty('--planet-glow',`${c1}80`);
+}
+
+function generatePlanetSpots(c1,c2,level){
+  const spots=[];
+  const count=Math.min(3+Math.floor(level/2),8);
+  const positions=[
+    [0.2,0.3,0.12],[0.5,0.55,0.08],[-0.15,0.1,0.09],
+    [0.3,-0.2,0.07],[-0.2,0.4,0.06],[0.1,0.15,0.05],
+    [-0.3,-0.1,0.08],[0.4,0.1,0.06]
+  ];
+  for(let i=0;i<count;i++){
+    const[dx,dy,dr]=positions[i];
+    const x=80+dx*56,y=80+dy*56,r=dr*56;
+    spots.push(`<circle cx="${x}" cy="${y}" r="${r}" fill="${shadeColor(c2,-15)}" opacity="0.4" clip-path="url(#pc)"/>`);
+  }
+  return spots.join('');
+}
+
+function shadeColor(col,pct){
+  const n=parseInt(col.slice(1),16);
+  const t=pct<0?0:255,p=Math.abs(pct)/100;
+  const R=(n>>16),G=(n>>8&0x00FF),B=(n&0x0000FF);
+  return `#${(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1)}`;
+}
+function lightenColor(col,pct){return shadeColor(col,pct);}
+function darkenColor(col,pct){return shadeColor(col,-pct);}
+
+// =============================================
+// RENDER PLANET SCREEN
+// =============================================
+function renderPlanetScreen(){
+  applyXPFromLastNight();
+  const svg=document.getElementById('planet-svg');
+  renderPlanet(svg,planetData.color1,planetData.color2,160,planetData.level);
+  const nameEl=document.getElementById('planet-name-display');
+  nameEl.textContent=planetData.name?`${planetData.name} ✏️`:'Tap to name ✏️';
+  const xpInLevel=planetData.totalXP%100;
+  document.getElementById('planet-lv-badge').textContent=`Lv. ${planetData.level}`;
+  document.getElementById('planet-xp-bar').style.width=`${xpInLevel}%`;
+  document.getElementById('planet-xp-label').textContent=`${xpInLevel} / 100 XP`;
+  document.getElementById('planet-total-xp').textContent=planetData.totalXP;
+  const goodNights=planetData.xpLog.filter(l=>l.xp>0).length;
+  document.getElementById('planet-good-nights').textContent=goodNights;
+  // Streak
+  let streak=0;
+  for(let i=0;i<planetData.xpLog.length;i++){
+    if(planetData.xpLog[i].xp>0)streak++;else break;
+  }
+  document.getElementById('planet-streak').textContent=streak;
+  // XP Log
+  const logEl=document.getElementById('xp-log');
+  if(!planetData.xpLog.length){
+    logEl.innerHTML='<div class="lv-history-title">Recent XP activity</div><div style="font-size:13px;color:var(--muted);font-weight:500">Log sleep to earn XP for your planet!</div>';
+  } else {
+    logEl.innerHTML='<div class="lv-history-title">Recent XP activity</div>'+
+    planetData.xpLog.slice(0,7).map(l=>{
+      const icon=l.xp>0?'⭐':'💔';
+      const cls=l.xp>0?'pos':'neg';
+      return `<div class="lv-log-item"><div class="lv-log-icon">${icon}</div><div class="lv-log-text">${l.date} · ${l.hours}h sleep · ${l.quality}</div><div class="lv-log-xp ${cls}">${l.xp>0?'+':''}${l.xp} XP</div></div>`;
+    }).join('');
+  }
+  renderLeaderboard();
+}
+
+// =============================================
+// LEADERBOARD (shared via Supabase storage)
+// =============================================
+async function renderLeaderboard(){
+  const lb=document.getElementById('lb-wrap');
+  // Build my entry
+  const myEntry={
+    user_id:currentUser.id,
+    display_name:profile.display_name||'You',
+    planet_name:planetData.name||'Unknown',
+    level:planetData.level,
+    total_xp:planetData.totalXP,
+    color1:planetData.color1,
+    color2:planetData.color2,
+  };
+  // Save my planet data to profiles table (add planet columns if they exist)
+  try{
+    await sb.from('profiles').update({
+      planet_name:planetData.name,
+      planet_level:planetData.level,
+      planet_xp:planetData.totalXP,
+      planet_color1:planetData.color1,
+      planet_color2:planetData.color2,
+    }).eq('id',currentUser.id);
+  }catch(e){}
+  // Fetch all users' planet data
+  let users=[];
+  try{
+    const{data}=await sb.from('profiles').select('id,display_name,planet_name,planet_level,planet_xp,planet_color1,planet_color2').not('planet_xp','is',null).order('planet_xp',{ascending:false}).limit(20);
+    users=data||[];
+  }catch(e){
+    // If planet columns don't exist yet, just show current user
+    users=[{id:currentUser.id,display_name:profile.display_name,planet_name:planetData.name,planet_level:planetData.level,planet_xp:planetData.totalXP,planet_color1:planetData.color1,planet_color2:planetData.color2}];
+  }
+  if(!users.length){
+    lb.innerHTML='<div style="font-size:13px;color:var(--muted);font-weight:500;padding:0">No players yet. Be the first!</div>';
+    return;
+  }
+  const rankIcons=['🥇','🥈','🥉'];
+  const rankClasses=['gold','silver','bronze'];
+  lb.innerHTML=users.map((u,i)=>{
+    const isYou=u.id===currentUser.id;
+    const rankDisplay=i<3?rankIcons[i]:`${i+1}`;
+    const rankCls=i<3?rankClasses[i]:'';
+    const c1=u.planet_color1||'#7C5CFC';
+    const c2=u.planet_color2||'#A78BFA';
+    const miniSvg=generateMiniPlanetSVG(c1,c2);
+    return `<div class="lb-item${isYou?' you':''}">
+      <div class="lb-rank ${rankCls}">${rankDisplay}</div>
+      <svg class="lb-planet-mini" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">${miniSvg}</svg>
+      <div class="lb-info">
+        <div class="lb-name">${u.display_name||'Unknown'}${isYou?' (You)':''}</div>
+        <div class="lb-planet-name">${u.planet_name||'Unnamed planet'}</div>
+      </div>
+      <div class="lb-lv">Lv. ${u.planet_level||0}</div>
+    </div>`;
+  }).join('');
+}
+
+function generateMiniPlanetSVG(c1,c2){
+  const r=16,cx=22,cy=22;
+  const ringColor=shadeColor(c1,-20);
+  return `<defs><radialGradient id="mpg${c1.replace('#','')}" cx="38%" cy="35%" r="65%"><stop offset="0%" stop-color="${lightenColor(c2,40)}"/><stop offset="100%" stop-color="${darkenColor(c1,35)}"/></radialGradient></defs>
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#mpg${c1.replace('#','')})"/>
+  <ellipse cx="${cx}" cy="${cy+2}" rx="${r*1.5}" ry="${r*0.32}" fill="none" stroke="${ringColor}" stroke-width="2.5" opacity="0.7"/>`;
+}
+
+// =============================================
+// PLANET NAME MODAL
+// =============================================
+function openPlanetNameModal(){
+  document.getElementById('pname-inp').value=planetData.name||'';
+  document.getElementById('pname-modal').classList.remove('hidden');
+}
+function savePlanetName(){
+  const name=document.getElementById('pname-inp').value.trim();
+  if(!name){showToast('Please enter a name','err');return;}
+  planetData.name=name;
+  savePlanetDataLocal();
+  document.getElementById('pname-modal').classList.add('hidden');
+  renderPlanetScreen();
+  showToast('✅ Planet named!');
+}
+
+// =============================================
+// ANALYSIS ENGINE (science-based)
+// =============================================
+function runAnalysis(){
+  const goal=profile.sleep_goal_hours||8;
+  const cafSens=profile.caffeine_sensitivity||'medium';
+  const lastSleep=todayLog.find(e=>e.type==='sleep');
+  const hours=lastSleep?.hours||0;
+  const quality=lastSleep?.quality||'Good';
+  // Caffeine total
+  const totalCaf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  // Late caffeine (after 2pm = 14:00)
+  const lateCaf=todayLog.filter(e=>e.type==='consume'&&(ITEMS[e.item]?.caf||0)>0).filter(e=>{
+    const h=parseInt((e.time||'00:00').split(':')[0]);
+    return h>=14;
+  }).reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  // Alcohol
+  const alcUnits=todayLog.filter(e=>e.item==='Alcohol').reduce((a,e)=>a+(ITEMS['Alcohol'].alcUnits||2)*e.amount,0);
+  // Heavy meal
+  const heavyMealCount=todayLog.filter(e=>e.item==='Heavy meal').reduce((a,e)=>a+e.amount,0);
+  // Late heavy meal (after 7pm = 19:00)
+  const lateHeavyMeal=todayLog.some(e=>e.item==='Heavy meal'&&parseInt((e.time||'00:00').split(':')[0])>=19);
+
+  // ---- SCORE CALCULATION ----
+  // Factor 1: Sleep duration (max 40 points)
+  let sleepScore=0;
+  if(hours>=goal)sleepScore=40;
+  else if(hours>=goal-0.5)sleepScore=35;
+  else if(hours>=goal-1)sleepScore=28;
+  else if(hours>=goal-2)sleepScore=18;
+  else if(hours>0)sleepScore=8;
+  else sleepScore=0;
+
+  // Factor 2: Caffeine impact (max 25 points)
+  // Based on: 400mg+ within 12h disrupts sleep (Oxford Sleep 2024)
+  // Sensitivity adjustments
+  const cafLimit=cafSens==='high'?200:cafSens==='low'?600:400;
+  const lateCafLimit=cafSens==='high'?50:cafSens==='low'?200:100;
+  let cafScore=25;
+  if(totalCaf>cafLimit)cafScore-=15;
+  else if(totalCaf>cafLimit*0.75)cafScore-=8;
+  else if(totalCaf>cafLimit*0.5)cafScore-=3;
+  if(lateCaf>lateCafLimit)cafScore-=10;
+  else if(lateCaf>0)cafScore-=4;
+  cafScore=Math.max(0,cafScore);
+
+  // Factor 3: Meal timing (max 20 points)
+  // Based on: eating within 3h of bed = 2.73x poor sleep odds (Frontiers 2024)
+  let mealScore=20;
+  if(lateHeavyMeal)mealScore-=14;
+  else if(heavyMealCount>2)mealScore-=7;
+  mealScore=Math.max(0,mealScore);
+
+  // Factor 4: Alcohol (max 15 points)
+  // Based on: 2 drinks reduces REM 10-15min (Sleep Medicine Reviews 2024)
+  let alcScore=15;
+  if(alcUnits>=5)alcScore=0;
+  else if(alcUnits>=3)alcScore=4;
+  else if(alcUnits>=2)alcScore=8;
+  else if(alcUnits>0)alcScore=11;
+  alcScore=Math.max(0,alcScore);
+
+  // Quality bonus (incorporated into final score)
+  const qualBonus={Great:5,Good:3,Okay:1,Restless:0};
+  const qBonus=qualBonus[quality]||0;
+
+  // Total score
+  const rawScore=sleepScore+cafScore+mealScore+alcScore+qBonus;
+  const maxScore=40+25+20+15+5;
+  const finalScore=Math.min(100,Math.round((rawScore/maxScore)*100));
+
+  // Factor percentages for bars
+  const sleepPct=Math.round((sleepScore/40)*100);
+  const cafPct=Math.round((cafScore/25)*100);
+  const mealPct=Math.round((mealScore/20)*100);
+  const alcPct=Math.round((alcScore/15)*100);
+  const qualPct=Math.round((qBonus/5)*100);
+
+  // ---- WARNINGS ----
+  const warnings=[];
+  // Caffeine warnings
+  if(totalCaf>400){warnings.push({type:'alert',icon:'⚡',title:'Caffeine overload',body:`You've consumed ${totalCaf}mg of caffeine today — above the 400mg daily limit recommended by health authorities. Research shows this level within 12 hours of bedtime clinically disrupts sleep onset and reduces total sleep time.`});}
+  else if(totalCaf>200&&cafSens==='high'){warnings.push({type:'warn',icon:'☕',title:'High caffeine for your sensitivity',body:`At ${totalCaf}mg and high caffeine sensitivity, your sleep quality may be affected. Your body metabolises caffeine more slowly, meaning it stays active in your system longer.`});}
+  if(lateCaf>100){warnings.push({type:'alert',icon:'🕒',title:'Late caffeine detected',body:`${lateCaf}mg consumed after 2pm. Caffeine has a half-life of 5–6 hours, so it will still be circulating at bedtime. Research shows coffee consumed 8+ hours before bed can reduce total sleep time by up to 45 minutes.`});}
+  else if(lateCaf>0){warnings.push({type:'warn',icon:'🕒',title:'Afternoon caffeine',body:`You had ${lateCaf}mg of caffeine after 2pm. Depending on your metabolism, trace amounts may still be active at bedtime. Consider switching to decaf after noon.`});}
+  // Meal warnings
+  if(lateHeavyMeal){warnings.push({type:'alert',icon:'🍲',title:'Late heavy meal',body:'Eating a heavy meal within 3 hours of bedtime increases odds of poor sleep by 2.73x according to a 2024 Frontiers in Nutrition study. Your body\'s core temperature stays elevated during digestion, suppressing melatonin production.'});}
+  else if(heavyMealCount>2){warnings.push({type:'warn',icon:'🍽',title:'Multiple heavy meals',body:'Multiple heavy meals today may keep your digestive system active longer, potentially affecting sleep quality. Try to keep your last meal light and at least 3 hours before bed.'});}
+  // Alcohol warnings
+  if(alcUnits>=5){warnings.push({type:'alert',icon:'🍺',title:'High alcohol intake',body:`${alcUnits} standard drinks today. Research from Sleep Medicine Reviews (2024) shows high doses of alcohol severely fragment REM sleep, causing a rebound effect in the second half of the night — leaving you feeling unrestored despite sleeping.`});}
+  else if(alcUnits>=2){warnings.push({type:'warn',icon:'🍺',title:'Alcohol may disrupt REM sleep',body:`Even ${alcUnits} standard drinks can reduce REM sleep by 10–15 minutes. While alcohol helps you fall asleep faster, it suppresses the restorative REM cycles that consolidate memory and regulate mood.`});}
+  // Positive feedback
+  if(warnings.length===0&&hours>=goal){warnings.push({type:'info',icon:'🌟',title:'Excellent sleep hygiene today',body:'No major sleep disruptors detected. Your caffeine intake, meal timing, and sleep duration are all within optimal ranges. Keep it up!'});}
+
+  return{finalScore,sleepPct,cafPct,mealPct,alcPct,qualPct,warnings,hours,quality};
+}
+
+function renderAnalysis(){
+  const{finalScore,sleepPct,cafPct,mealPct,alcPct,qualPct,warnings,hours,quality}=runAnalysis();
+  // Score card
+  let scoreCls,scoreLabel,scoreSub;
+  if(finalScore>=90){scoreCls='great';scoreLabel='Excellent';scoreSub='Your sleep conditions are optimal tonight.';}
+  else if(finalScore>=70){scoreCls='good';scoreLabel='Good';scoreSub='Minor factors affecting sleep quality.';}
+  else if(finalScore>=50){scoreCls='warn';scoreLabel='Fair';scoreSub='Several factors are disrupting your sleep.';}
+  else{scoreCls='alert';scoreLabel='Poor';scoreSub='Multiple sleep disruptors detected today.';}
+
+  document.getElementById('analysis-score-wrap').innerHTML=`
+    <div class="analysis-score-card ${scoreCls}">
+      <div class="analysis-score-row">
+        <div class="analysis-big-score ${scoreCls}">${finalScore}%</div>
+        <div class="analysis-right">
+          <div class="analysis-title">${scoreLabel} sleep conditions</div>
+          <div class="analysis-sub">${scoreSub}${hours?` Last night: ${fmtH(hours)} (${quality}).`:' Log your sleep to see your full score.'}</div>
+        </div>
+      </div>
+    </div>`;
+
+  // Warnings
+  document.getElementById('warnings-wrap').innerHTML=warnings.map(w=>`
+    <div class="warning-card ${w.type}">
+      <div class="warning-icon">${w.icon}</div>
+      <div class="warning-content">
+        <div class="warning-title">${w.title}</div>
+        <div class="warning-body">${w.body}</div>
+      </div>
+    </div>`).join('');
+
+  // Factor bars
+  const setBar=(id,vid,pct,color)=>{
+    const el=document.getElementById(id);
+    el.style.width=pct+'%';
+    el.style.background=color;
+    document.getElementById(vid).textContent=pct+'%';
+    document.getElementById(vid).style.color=pct>=70?'var(--green)':pct>=40?'var(--amber)':'var(--coral)';
+  };
+  const barColor=(pct)=>pct>=70?'linear-gradient(135deg,#00E5A0,#00B87A)':pct>=40?'linear-gradient(135deg,#E8A020,#FF8C00)':'linear-gradient(135deg,#E8504A,#E63946)';
+  setBar('fb-sleep','fv-sleep',sleepPct,barColor(sleepPct));
+  setBar('fb-caf','fv-caf',cafPct,barColor(cafPct));
+  setBar('fb-meal','fv-meal',mealPct,barColor(mealPct));
+  setBar('fb-alc','fv-alc',alcPct,barColor(alcPct));
+  setBar('fb-qual','fv-qual',qualPct,barColor(qualPct));
+}
+
+// =============================================
+// SAVE TO SUPABASE
+// =============================================
+async function saveSleepToSupabase(entry){
+  const today=new Date().toISOString().split('T')[0];
+  const{data,error}=await sb.from('sleep_entries').insert({
+    user_id:currentUser.id,entry_date:today,
+    bedtime:entry.bedtime,wake_time:entry.waketime,
+    hours_slept:entry.hours,quality:entry.quality,
+    sleep_debt_minutes:Math.round((entry.hours-(profile.sleep_goal_hours||8))*60)
+  }).select().single();
+  if(error){showToast('Failed to save sleep entry','err');return null;}
+  allSleepData[today]={hours:entry.hours,quality:entry.quality};
+  showToast('✅ Sleep entry saved!');return data;
+}
+async function saveConsumeToSupabase(entry){
+  const today=new Date().toISOString().split('T')[0];
+  const info=ITEMS[entry.item]||{};
+  const{data,error}=await sb.from('consumption_entries').insert({
+    user_id:currentUser.id,entry_date:today,
+    item_name:entry.item,quantity:entry.amount,
+    caffeine_mg:(info.caf||0)*entry.amount,
+    effect_type:info.effect||'neu',consumed_at:entry.time
+  }).select().single();
+  if(error){showToast('Failed to save entry','err');return null;}
+  showToast('✅ Entry saved!');return data;
+}
+async function signOut(){
+  await sb.auth.signOut();
+  localStorage.removeItem('slumber_profile');
+  window.location.href='auth.html';
+}
+
+// =============================================
+// HEADER
+// =============================================
+function setupHeader(){
+  const h=new Date().getHours();
+  document.getElementById('greet-lbl').textContent=h<12?'Good morning ☀️':h<17?'Good afternoon 🌤':'Good evening 🌙';
+  const n=profile.display_name||'there';
+  document.getElementById('greet-name').textContent='Hey, '+n+' 🌙';
+  document.getElementById('profile-avatar').textContent=n.charAt(0).toUpperCase();
+  document.getElementById('profile-name').textContent=n;
+  document.getElementById('profile-goal').textContent='Sleep goal: '+(profile.sleep_goal_hours||8)+'h · '+(profile.age_group||'');
+  document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  const t=new Date();t.setMinutes(0,0,0);
+  document.getElementById('consume-time').value=t.toTimeString().slice(0,5);
+  const bt=new Date(t);bt.setHours(bt.getHours()-8);
+  document.getElementById('bed-time').value=bt.toTimeString().slice(0,5);
+  document.getElementById('wake-time').value=t.toTimeString().slice(0,5);
+}
+
+// =============================================
+// NAVIGATION
+// =============================================
+function goTo(name,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('fab-btn').style.display=(name==='log'||name==='home')?'flex':'none';
+  if(name==='calendar')renderCalendar();
+  if(name==='planet')renderPlanetScreen();
+  if(name==='analysis')renderAnalysis();
+  if(name==='nap')updateNapRec();
+  if(name==='home')updateDash();
+  if(name==='log')renderLogScreen();
+}
+
+// =============================================
+// ENERGY
+// =============================================
+function calcEnergy(){
+  const goal=profile.sleep_goal_hours||8;
+  const avg=sleepHistory.length?sleepHistory.reduce((a,d)=>a+d.hours,0)/sleepHistory.length:0;
+  const last=sleepHistory.length?sleepHistory[sleepHistory.length-1].hours:0;
+  const pct=last?Math.min(100,Math.round((last/goal)*100)):0;
+  const debt=last?Math.round((last-goal)*60):0;
+  const napMins=debt<0?Math.min(90,Math.abs(debt)):0;
+  return{avg,last,pct,debt,napMins,goal};
+}
+function fmtH(h){if(!h)return'—';const hr=Math.floor(h);const m=Math.round((h-hr)*60);return m>0?`${hr}h ${m}m`:`${hr}h`;}
+
+// =============================================
+// DASHBOARD
+// =============================================
+function updateDash(){
+  const{avg,last,pct,debt,napMins}=calcEnergy();
+  document.getElementById('energy-ring').setAttribute('stroke-dashoffset',(276.5*(1-pct/100)).toFixed(1));
+  document.getElementById('energy-pct').textContent=pct+'%';
+  document.getElementById('dash-sleep').textContent=fmtH(last);
+  document.getElementById('dash-avg').textContent=fmtH(avg);
+  const de=document.getElementById('dash-debt');
+  de.textContent=last?(debt>=0?`+${debt}m`:`${debt}m`):'—';
+  de.style.color=debt>=0?'var(--green)':'var(--coral)';
+  document.getElementById('dash-nap').textContent=last?(napMins>0?`${napMins} min`:'None needed'):'—';
+  const badge=document.getElementById('profile-badge');
+  if(debt>=0){badge.textContent='On track';badge.style.background='var(--green-dim)';badge.style.color='var(--green)';}
+  else{badge.textContent='Sleep debt';badge.style.background='var(--coral-dim)';badge.style.color='var(--coral)';}
+  const caf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  document.getElementById('stat-caf').textContent=caf;
+  document.getElementById('stat-items').textContent=todayLog.length;
+  const list=document.getElementById('dash-log-list');
+  if(!todayLog.length){list.innerHTML='<span>No entries yet — tap + to log something.</span>';return;}
+  list.innerHTML=todayLog.slice(-3).map(e=>{
+    const icon=e.type==='sleep'?'😴':(ITEMS[e.item]?.effect==='pos'?'✅':'⚠️');
+    const label=e.type==='sleep'?`Slept ${fmtH(e.hours)} (${e.quality})`:`${e.item} ×${e.amount} at ${e.time}`;
+    return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:13px;font-weight:500"><span>${icon}</span><span style="color:var(--text)">${label}</span></div>`;
+  }).join('');
+}
+
+// =============================================
+// LOG SCREEN
+// =============================================
+function renderLogScreen(){
+  const c=document.getElementById('log-entries');
+  if(!todayLog.length){c.innerHTML='<div style="margin:0 16px;color:var(--muted);font-size:13px;font-weight:500">Nothing logged yet. Tap + to add.</div>';return;}
+  const g={consume:[],sleep:[]};todayLog.forEach(e=>g[e.type].push(e));
+  const icons={'Coffee':'☕','Tea':'🍵','Energy drink':'⚡','Alcohol':'🍺','Heavy meal':'🍲','Light meal':'🥗','Water':'💧','Melatonin':'💊'};
+  let html='';
+  if(g.sleep.length){
+    html+='<div class="sec-title">Sleep</div><div class="log-group">';
+    g.sleep.forEach(e=>{html+=`<div class="log-item"><div class="log-ico" style="background:var(--purple-dim)">😴</div><div class="log-info"><div class="log-name">${fmtH(e.hours)} sleep</div><div class="log-time">${e.bedtime} → ${e.waketime} · ${e.quality}</div></div><span class="log-badge badge-sleep">Sleep</span></div>`;});
+    html+='</div>';
+  }
+  if(g.consume.length){
+    html+='<div class="sec-title">Consumed</div><div class="log-group">';
+    g.consume.forEach(e=>{
+      const info=ITEMS[e.item]||{};
+      const cls=info.effect==='pos'?'badge-good':info.effect==='neg'?'badge-bad':'badge-neu';
+      html+=`<div class="log-item"><div class="log-ico" style="background:var(--green-dim)">${icons[e.item]||'🍽'}</div><div class="log-info"><div class="log-name">${e.item} ×${e.amount}</div><div class="log-time">${e.time} · ${info.label||''}</div></div><span class="log-badge ${cls}">${info.caf?info.caf+'mg':info.effect==='pos'?'Good':'Note'}</span></div>`;
+    });
+    html+='</div>';
+  }
+  c.innerHTML=html;
+}
+
+// =============================================
+// CALENDAR
+// =============================================
+function calcScore(hours,quality,goal){
+  if(!hours)return 0;
+  const s=Math.min(100,Math.round((hours/goal)*100));
+  const qMap={Great:10,Good:5,Okay:0,Restless:-10};
+  return Math.min(100,Math.max(0,s+(qMap[quality]||0)));
+}
+function scoreClass(score){return score>=90?'great':score>=70?'good':score>=50?'mid':'low';}
+function changeMonth(dir){calViewDate.setMonth(calViewDate.getMonth()+dir);renderCalendar();}
+
+function renderCalendar(){
+  const year=calViewDate.getFullYear(),month=calViewDate.getMonth();
+  const today=new Date(),todayStr=today.toISOString().split('T')[0];
+  const goal=profile.sleep_goal_hours||8;
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent=months[month]+' '+year;
+  const firstDay=new Date(year,month,1).getDay(),daysInMonth=new Date(year,month+1,0).getDate();
+  let html='',scores=[],curStreak=0,bestStreak=0;
+  for(let i=0;i<firstDay;i++)html+=`<div class="cal-cell empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=dateStr===todayStr,isFuture=new Date(dateStr+'T12:00:00')>today;
+    const data=allSleepData[dateStr];
+    if(isFuture){html+=`<div class="cal-cell future${isToday?' today':''}"><div class="cal-date">${d}</div></div>`;continue;}
+    if(data){
+      const score=calcScore(data.hours,data.quality,goal);
+      scores.push(score);curStreak++;bestStreak=Math.max(bestStreak,curStreak);
+      html+=`<div class="cal-cell ${scoreClass(score)}${isToday?' today':''}" onclick="showCalDetail('${dateStr}',${data.hours},'${data.quality}',${score})"><div class="cal-date">${d}</div><div class="cal-pct">${score}%</div></div>`;
+    } else {
+      curStreak=0;
+      html+=`<div class="cal-cell no-data${isToday?' today':''}" onclick="hideCalDetail()"><div class="cal-date">${d}</div><div class="cal-pct">—</div></div>`;
+    }
+  }
+  document.getElementById('cal-grid').innerHTML=html;
+  const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
+  document.getElementById('cal-avg-score').textContent=scores.length?avg+'%':'—';
+  document.getElementById('cal-best-streak').textContent=bestStreak||'—';
+}
+function showCalDetail(dateStr,hours,quality,score){
+  const d=document.getElementById('cal-detail');
+  const date=new Date(dateStr+'T12:00:00');
+  document.getElementById('cal-detail-date').textContent=date.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('cal-detail-hours').textContent=fmtH(hours);
+  document.getElementById('cal-detail-quality').textContent=quality;
+  document.getElementById('cal-detail-score').textContent=score+'%';
+  document.getElementById('cal-detail-score').style.color=score>=70?'var(--green)':score>=50?'var(--amber)':'var(--coral)';
+  d.classList.add('show');
+}
+function hideCalDetail(){document.getElementById('cal-detail').classList.remove('show');}
+
+// =============================================
+// NAP ADVISOR
+// =============================================
+const SCI={'10–20 min':'A 10–20 min nap keeps you in stage 1–2 light sleep. You wake before slow-wave sleep begins — just sharpened focus with no grogginess. Drinking coffee right before maximises the effect: caffeine kicks in exactly as you wake.','20–30 min':'At 20–30 min you may enter stage 2 sleep more deeply. You might feel mild sleep inertia for a few minutes, but memory consolidation and motor learning improve significantly.','90 min':'A full 90-min cycle includes light sleep, deep sleep, and REM. Waking at the end of a full cycle means you surface naturally — refreshed without grogginess. Best for severe sleep debt.','No nap':'Even lying still with eyes closed reduces cortisol and gives your brain a reset. Mental fatigue is reduced and focus can return within 10 minutes.'};
+function updateNapRec(){
+  const{napMins}=calcEnergy();
+  let rec,sub;
+  if(napMins===0){rec='None needed';sub='Your sleep debt is low — you\'re in good shape!';}
+  else if(napMins<=20){rec='10–20 min';sub='A power nap will restore your alertness';}
+  else if(napMins<=30){rec='20–30 min';sub='Moderate debt — a fuller rest helps';}
+  else{rec='90 min';sub='High sleep debt — a full sleep cycle is best';}
+  document.getElementById('nap-rec-time').textContent=rec;
+  document.getElementById('nap-rec-sub').textContent=sub;
+}
+function selNap(el,time,desc){
+  document.querySelectorAll('.nap-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('nap-rec-time').textContent=time;
+  document.getElementById('nap-rec-sub').textContent=desc;
+  document.getElementById('sci-text').textContent=SCI[time]||SCI['No nap'];
+}
+
+// =============================================
+// MODAL
+// =============================================
+function openModal(){
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  state.selectedItem=null;state.amount=1;state.selectedType='consume';state.selectedQuality='Good';
+  document.getElementById('amt-display').textContent='1';
+  document.querySelectorAll('#item-chips .chip').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('sel'));
+  document.querySelector('#quality-chips .chip:nth-child(3)').classList.add('sel');
+  document.querySelectorAll('#type-chips .chip').forEach((c,i)=>c.classList.toggle('sel',i===0));
+  switchFields('consume');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.add('hidden');}
+function closeBg(e){if(e.target.id==='modal-overlay')closeModal();}
+function selType(el,t){document.querySelectorAll('#type-chips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');state.selectedType=t;switchFields(t);}
+function switchFields(t){document.getElementById('consume-fields').classList.toggle('hidden',t==='sleep');document.getElementById('sleep-fields').classList.toggle('hidden',t==='consume');}
+function selItem(el,name){document.querySelectorAll('#item-chips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');state.selectedItem=name;}
+function selQuality(el,q){document.querySelectorAll('#quality-chips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');state.selectedQuality=q;}
+function chgAmt(d){state.amount=Math.max(1,Math.min(10,state.amount+d));document.getElementById('amt-display').textContent=state.amount;}
+
+// =============================================
+// SAVE ENTRY
+// =============================================
+async function saveEntry(){
+  const btn=document.getElementById('save-btn');
+  btn.disabled=true;btn.textContent='Saving...';
+  if(state.selectedType==='consume'){
+    if(!state.selectedItem){showToast('Please select an item','err');btn.disabled=false;btn.textContent='Save Entry';return;}
+    const time=document.getElementById('consume-time').value||'12:00';
+    const entry={type:'consume',item:state.selectedItem,amount:state.amount,time};
+    const saved=await saveConsumeToSupabase(entry);
+    if(saved){entry.id=saved.id;todayLog.push(entry);}
+  } else {
+    const bed=document.getElementById('bed-time').value,wake=document.getElementById('wake-time').value;
+    if(!bed||!wake){showToast('Please enter bed and wake times','err');btn.disabled=false;btn.textContent='Save Entry';return;}
+    const bM=parseInt(bed.split(':')[0])*60+parseInt(bed.split(':')[1]);
+    let wM=parseInt(wake.split(':')[0])*60+parseInt(wake.split(':')[1]);
+    if(wM<bM)wM+=1440;
+    const hours=parseFloat(((wM-bM)/60).toFixed(1));
+    const entry={type:'sleep',bedtime:bed,waketime:wake,hours,quality:state.selectedQuality};
+    const saved=await saveSleepToSupabase(entry);
+    if(saved){
+      entry.id=saved.id;todayLog.push(entry);
+      const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const today=days[new Date().getDay()];
+      const ex=sleepHistory.findIndex(d=>d.date===today);
+      if(ex>=0)sleepHistory[ex]={date:today,hours,quality:state.selectedQuality};
+      else sleepHistory.push({date:today,hours,quality:state.selectedQuality});
+      if(sleepHistory.length>7)sleepHistory.shift();
+    }
+  }
+  btn.disabled=false;btn.textContent='Save Entry';
+  closeModal();renderLogScreen();updateDash();
+}
+
+// =============================================
+// AI ADVISOR
+// =============================================
+function buildCtx(){
+  const{avg,last,debt,napMins,goal}=calcEnergy();
+  const analysis=runAnalysis();
+  const caf=todayLog.filter(e=>e.type==='consume').reduce((a,e)=>a+(ITEMS[e.item]?.caf||0)*e.amount,0);
+  const cl=todayLog.filter(e=>e.type==='consume').map(e=>`${e.item} x${e.amount} at ${e.time}`).join(', ')||'none';
+  const sl=todayLog.filter(e=>e.type==='sleep').map(e=>`${fmtH(e.hours)} (${e.quality})`).join(', ')||'none today';
+  const hist=sleepHistory.map(d=>`${d.date}:${d.hours}h(${d.quality})`).join(', ')||'no history yet';
+  return `You are an expert sleep science advisor. Deep knowledge of sleep physiology, circadian rhythms, adenosine, REM cycles, caffeine pharmacology, sleep debt, and productivity. Warm, personalised, science-backed advice. Be concise. Never diagnose medically.\n\nUSER PROFILE:\n- Name: ${profile.display_name}\n- Age group: ${profile.age_group}\n- Sleep goal: ${goal}h/night\n- Work schedule: ${profile.work_schedule}\n- Main goal: ${profile.main_goal}\n- Caffeine sensitivity: ${profile.caffeine_sensitivity}\n\nTODAY'S ANALYSIS:\n- Sleep score: ${analysis.finalScore}%\n- Last night: ${fmtH(last)}\n- 7d avg: ${fmtH(avg)}\n- Sleep debt: ${debt}min\n- Caffeine: ${caf}mg\n- Consumed: ${cl}\n- Sleep logged: ${sl}\n- 7d history: ${hist}\n- Planet level: ${planetData.level} (${planetData.totalXP} XP)`;
+}
+function appendMsg(role,text){
+  const d=document.createElement('div');d.className=`msg ${role}`;d.textContent=text;
+  document.getElementById('chat-area').appendChild(d);d.scrollIntoView({behavior:'smooth',block:'end'});return d;
+}
+function showTyping(){
+  const d=document.createElement('div');d.className='msg typing';d.id='typing';
+  d.innerHTML='<div class="dots"><span></span><span></span><span></span></div>';
+  document.getElementById('chat-area').appendChild(d);d.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function rmTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+async function sendMsg(){
+  const inp=document.getElementById('chat-inp');
+  const text=inp.value.trim();
+  if(!text||state.aiLoading)return;
+  inp.value='';inp.style.height='auto';
+  state.chatHistory.push({role:'user',content:text});
+  appendMsg('user',text);await callAI();
+}
+async function sendQuick(text){
+  if(state.aiLoading)return;
+  state.chatHistory.push({role:'user',content:text});
+  appendMsg('user',text);await callAI();
+}
+async function callAI(){
+  state.aiLoading=true;document.getElementById('send-btn').disabled=true;showTyping();
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildCtx(),messages:state.chatHistory})});
+    const d=await r.json();
+    const reply=d.content?.find(b=>b.type==='text')?.text||'Sorry, could not generate a response.';
+    rmTyping();appendMsg('ai',reply);state.chatHistory.push({role:'assistant',content:reply});
+  }catch{rmTyping();appendMsg('ai','Connection error. Please try again.');}
+  state.aiLoading=false;document.getElementById('send-btn').disabled=false;
+}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
+
+// =============================================
+// START
+// =============================================
+init();
+</script>
+</body>
+</html>
